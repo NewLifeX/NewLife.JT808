@@ -1,0 +1,20 @@
+<Project Sdk="Microsoft.NET.Sdk">
+
+	<PropertyGroup>
+		<TargetFramework>net7.0</TargetFramework>
+		<VersionPrefix>1.0</VersionPrefix>
+		<VersionSuffix>$([System.DateTime]::Now.ToString(`yyyy.MMdd`))</VersionSuffix>
+		<Version>$(VersionPrefix).$(VersionSuffix)</Version>
+		<FileVersion>$(Version)</FileVersion>
+		<AssemblyVersion>$(VersionPrefix).*</AssemblyVersion>
+		<Deterministic>false</Deterministic>
+		<!--<GenerateDocumentationFile>True</GenerateDocumentationFile>-->
+		<LangVersion>latest</LangVersion>
+		<ImplicitUsings>enable</ImplicitUsings>
+	</PropertyGroup>
+
+	<ItemGroup>
+	  <PackageReference Include="NewLife.Core" Version="10.2.2023.401" />
+	</ItemGroup>
+
+</Project>
