@@ -1,4 +1,6 @@
 ﻿using Newlife.JT808.Protocols;
+using Newlife.JT808.TModels;
+using Newlife.JT808.UtilTool;
 using NewLife;
 using NewLife.Serialization;
 

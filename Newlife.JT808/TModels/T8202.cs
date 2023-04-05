@@ -1,4 +1,6 @@
-﻿namespace Newlife.JT808.Models;
+﻿using Newlife.JT808.Protocols;
+
+namespace Newlife.JT808.Models;
 
 /// <summary>
 /// 临时位置跟踪控制
