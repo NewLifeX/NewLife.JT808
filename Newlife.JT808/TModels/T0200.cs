@@ -1,0 +1,111 @@
+﻿using System.Globalization;
+using Newlife.JT808.Protocols;
+using Newlife.JT808.UtilTool;
+using NewLife;
+using NewLife.Serialization;
+
+namespace Newlife.JT808.TModels
+{
+    /// <summary>位置信息汇报</summary>
+    [MessageKind(MessageKinds.位置信息汇报)]
+    public class T0200 : IAccessor
+    {
+        /// <summary>报警标志 </summary>
+        public PositionAlarms Alarm { get; set; }
+
+        /// <summary>状态位标志</summary>
+        public PositionStatus Status { get; set; }
+
+        /// <summary>纬度。百万分之一度</summary>
+        public Int32 Latitude { get; set; }
+
+        /// <summary>经度。百万分之一度</summary>
+        public Int32 Longitude { get; set; }
+
+        /// <summary>海拔高度，单位为米</summary>
+        public UInt16 Altitude { get; set; }
+
+        /// <summary>速度 1/10km/h</summary>
+        public UInt16 Speed { get; set; }
+
+        /// <summary>方向 0-359，正北为 0，顺时针</summary>
+        public UInt16 Direction { get; set; }
+
+        /// <summary>GPS时间</summary>
+        public DateTime GPSTime { get; set; }
+
+        /// <summary>附加信息</summary>
+        public IDictionary<AdditionalKinds, Object> Additionals { get; set; }
+
+        /// <summary>读取消息</summary>
+        /// <param name="stream"></param>
+        /// <param name="context"></param>
+        /// <returns></returns>
+        public Boolean Read(Stream stream, Object context)
+        {
+            var reader = context as Binary ?? Helper.CreateReader(stream);
+
+            Alarm = (PositionAlarms)reader.ReadUInt32();
+            Status = (PositionStatus)reader.ReadUInt32();
+
+            // 南纬
+            if (Status.Has(PositionStatus.Latitude))
+                Latitude = (Int32)reader.ReadUInt32();
+            else
+                Latitude = reader.ReadInt32();
+
+            // 西经
+            if (Status.Has(PositionStatus.Longitude))
+                Longitude = (Int32)reader.ReadUInt32();
+            else
+                Longitude = reader.ReadInt32();
+
+            Altitude = reader.ReadUInt16();
+            Speed = reader.ReadUInt16();
+            Direction = reader.ReadUInt16();
+            //GPSTime = reader.ReadBCD(6);
+
+            var str = reader.ReadBCD(6);
+            if (DateTime.TryParseExact(str, "yyMMddHHmmss", null, DateTimeStyles.None, out var dt))
+                GPSTime = dt;
+
+            // 位置附加信息
+            Additionals = reader.ReadAdditional();
+
+            return true;
+        }
+
+        /// <summary>序列化消息</summary>
+        /// <param name="stream"></param>
+        /// <param name="context"></param>
+        /// <returns></returns>
+        /// <exception cref="Exception"></exception>
+        public Boolean Write(Stream stream, Object context)
+        {
+            var writer = context as Binary ?? Helper.CreateWriter(stream);
+
+            writer.WriteUInt32((UInt32)Alarm);
+            writer.WriteUInt32((UInt32)Status);
+
+            if (Status.Has(PositionStatus.Latitude))
+                writer.WriteUInt32((UInt32)Latitude);
+            else
+                writer.WriteInt32(Latitude);
+
+            if (Status.Has(PositionStatus.Longitude))
+                writer.WriteUInt32((UInt32)Longitude);
+            else
+                writer.WriteInt32(Longitude);
+
+            writer.WriteUInt16(Altitude);
+            writer.WriteUInt16(Speed);
+            writer.WriteUInt16(Direction);
+            writer.WriteBCD(GPSTime.ToString("yyMMddHHmmss"), 6);
+
+            // 位置附加信息
+            writer.WriteAdditional(Additionals);
+
+            return true;
+        }
+    }
+}

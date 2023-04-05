@@ -2,34 +2,22 @@
 
 namespace Newlife.JT808.TModels
 {
-    /// <summary>
-    /// 返回结果
-    /// </summary>
+    /// <summary>返回结果</summary>
     public enum ResultKinds : byte
     {
-        /// <summary>
-        /// 成功/确认
-        /// </summary>
+        /// <summary>成功/确认</summary>
         Success = 0x00,
 
-        /// <summary>
-        /// 失败
-        /// </summary>
+        /// <summary>失败</summary>
         Failure = 0x01,
 
-        /// <summary>
-        /// 消息有误
-        /// </summary>
+        /// <summary>消息有误</summary>
         Error = 0x02,
 
-        /// <summary>
-        /// 不支持
-        /// </summary>
+        /// <summary>不支持</summary>
         NotSupport = 0x03,
 
-        /// <summary>
-        /// 报警处理确认
-        /// </summary>
+        /// <summary>报警处理确认</summary>
         Alarm = 0x04
     }
 

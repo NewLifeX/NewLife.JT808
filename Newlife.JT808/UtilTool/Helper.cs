@@ -2,7 +2,7 @@
 using NewLife.Serialization;
 using System.Text;
 
-namespace JT808
+namespace Newlife.JT808.UtilTool
 {
     /// <summary>
     /// 序列化助手

@@ -28,9 +28,7 @@ namespace Newlife.JT808.TModels
         /// </summary>
         public byte[] Data { get; set; }
 
-        /// <summary>
-        /// 读取
-        /// </summary>
+        /// <summary>读取</summary>
         /// <param name="stream"></param>
         /// <param name="context"></param>
         /// <returns></returns>
@@ -51,9 +49,7 @@ namespace Newlife.JT808.TModels
             return true;
         }
 
-        /// <summary>
-        /// 写入
-        /// </summary>
+        /// <summary>写入</summary>
         /// <param name="stream"></param>
         /// <param name="context"></param>
         /// <returns></returns>
