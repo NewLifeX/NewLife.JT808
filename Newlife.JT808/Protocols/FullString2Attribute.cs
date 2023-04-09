@@ -2,7 +2,7 @@
 using NewLife.Reflection;
 using NewLife.Serialization;
 
-namespace Newlife.JT808.Protocols
+namespace NewLife.JT808.Protocols
 {
     /// <summary>完全字符串序列化特性。指示数据流剩下部分全部作为字符串读写</summary>
     [AttributeUsage(AttributeTargets.Property | AttributeTargets.Field)]

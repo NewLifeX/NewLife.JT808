@@ -1,6 +1,6 @@
 ﻿using System;
 
-namespace Newlife.JT808.UtilTool
+namespace NewLife.JT808.UtilTool
 {
     /// <summary>位置数据种类</summary>
     [Flags]

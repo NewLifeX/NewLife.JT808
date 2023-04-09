@@ -1,10 +1,10 @@
 ﻿using System.Collections.Concurrent;
 using System.Reflection;
-using Newlife.JT808.UtilTool;
+using NewLife.JT808.UtilTool;
 using NewLife.Reflection;
 using NewLife.Serialization;
 
-namespace Newlife.JT808.Protocols
+namespace NewLife.JT808.Protocols
 {
     /// <summary>消息工厂</summary>
     public class MessageFactory

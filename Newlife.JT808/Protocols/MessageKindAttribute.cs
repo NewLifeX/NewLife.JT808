@@ -1,6 +1,6 @@
 ﻿using System;
 
-namespace Newlife.JT808.Protocols
+namespace NewLife.JT808.Protocols
 {
     /// <summary>消息类型特性</summary>
     public class MessageKindAttribute : Attribute

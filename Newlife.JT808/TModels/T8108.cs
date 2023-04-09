@@ -1,7 +1,7 @@
-﻿using Newlife.JT808.Protocols;
+﻿using NewLife.JT808.Protocols;
 using NewLife.Serialization;
 
-namespace Newlife.JT808.Models
+namespace NewLife.JT808.Models
 {
     /// <summary>升级类型</summary>
     public enum UpgradeType : Byte

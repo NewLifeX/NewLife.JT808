@@ -1,7 +1,7 @@
-﻿using Newlife.JT808.Protocols;
+﻿using NewLife.JT808.Protocols;
 using NewLife.Serialization;
 
-namespace Newlife.JT808.Models
+namespace NewLife.JT808.Models
 {
     /// <summary>补传分包请求</summary>
     [MessageKind(MessageKinds.补传分包请求)]

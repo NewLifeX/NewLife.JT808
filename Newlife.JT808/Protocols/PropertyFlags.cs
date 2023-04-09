@@ -1,6 +1,6 @@
 ﻿using System;
 
-namespace Newlife.JT808.Protocols
+namespace NewLife.JT808.Protocols
 {
     /// <summary>属性标记</summary>
     [Flags]

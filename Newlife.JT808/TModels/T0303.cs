@@ -1,6 +1,6 @@
-﻿using Newlife.JT808.Protocols;
+﻿using NewLife.JT808.Protocols;
 
-namespace Newlife.JT808.TModels
+namespace NewLife.JT808.TModels
 {
     /// <summary>
     /// 信息点播/取消

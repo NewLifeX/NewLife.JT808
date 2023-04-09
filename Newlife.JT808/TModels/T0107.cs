@@ -1,9 +1,9 @@
-﻿using Newlife.JT808.Protocols;
-using Newlife.JT808.UtilTool;
+﻿using NewLife.JT808.Protocols;
+using NewLife.JT808.UtilTool;
 using NewLife;
 using NewLife.Serialization;
 
-namespace Newlife.JT808.TModels
+namespace NewLife.JT808.TModels
 {
     [Flags]
     public enum T0107_Types : UInt16

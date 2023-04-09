@@ -1,6 +1,6 @@
-﻿using Newlife.JT808.Protocols;
+﻿using NewLife.JT808.Protocols;
 
-namespace Newlife.JT808.TModels
+namespace NewLife.JT808.TModels
 {
     /// <summary>终端升级结果通知</summary>
     [MessageKind(MessageKinds.终端升级结果通知)]

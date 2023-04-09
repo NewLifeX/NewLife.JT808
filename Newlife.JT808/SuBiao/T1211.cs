@@ -1,6 +1,6 @@
-﻿using Newlife.JT808.Protocols;
+﻿using NewLife.JT808.Protocols;
 
-namespace Newlife.JT808.SuBiao
+namespace NewLife.JT808.SuBiao
 {
     /// <summary>文件类型</summary>
     public enum T1211_FileTypes : Byte

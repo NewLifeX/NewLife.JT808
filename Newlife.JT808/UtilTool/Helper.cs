@@ -1,8 +1,8 @@
-﻿using Newlife.JT808.Protocols;
+﻿using NewLife.JT808.Protocols;
 using NewLife.Serialization;
 using System.Text;
 
-namespace Newlife.JT808.UtilTool
+namespace NewLife.JT808.UtilTool
 {
     /// <summary>序列化助手</summary>
     public static class Helper

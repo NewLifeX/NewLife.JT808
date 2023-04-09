@@ -2,7 +2,7 @@
 using NewLife.Reflection;
 using NewLife.Serialization;
 
-namespace Newlife.JT808.Serialization
+namespace NewLife.JT808.Serialization
 {
     /// <summary>BCD字符串序列化特性</summary>
     [AttributeUsage(AttributeTargets.Property | AttributeTargets.Field)]

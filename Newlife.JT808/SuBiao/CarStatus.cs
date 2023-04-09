@@ -1,4 +1,4 @@
-﻿namespace Newlife.JT808.SuBiao
+﻿namespace NewLife.JT808.SuBiao
 {
     /// <summary>车辆状态</summary>
     [Flags]

@@ -1,4 +1,4 @@
-﻿namespace Newlife.JT808.UtilTool
+﻿namespace NewLife.JT808.UtilTool
 {
     /// <summary>终端参数</summary>
     public enum ParameterKinds : uint

@@ -1,8 +1,8 @@
-﻿using Newlife.JT808.Protocols;
-using Newlife.JT808.UtilTool;
+﻿using NewLife.JT808.Protocols;
+using NewLife.JT808.UtilTool;
 using NewLife.Serialization;
 
-namespace Newlife.JT808.Models
+namespace NewLife.JT808.Models
 {
     /// <summary>Can属性</summary>
     public struct CanProperty

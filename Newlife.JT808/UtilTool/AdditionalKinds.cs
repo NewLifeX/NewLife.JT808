@@ -1,6 +1,6 @@
 ﻿using System;
 
-namespace Newlife.JT808.UtilTool
+namespace NewLife.JT808.UtilTool
 {
     /// <summary>位置报文附加信息种类</summary>
     public enum AdditionalKinds : byte

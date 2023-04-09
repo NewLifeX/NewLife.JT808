@@ -1,8 +1,8 @@
-﻿using Newlife.JT808.Protocols;
-using Newlife.JT808.UtilTool;
+﻿using NewLife.JT808.Protocols;
+using NewLife.JT808.UtilTool;
 using NewLife;
 
-namespace Newlife.JT808.TModels
+namespace NewLife.JT808.TModels
 {
     /// <summary>查询终端参数应答</summary>
     [MessageKind(MessageKinds.查询终端参数应答)]

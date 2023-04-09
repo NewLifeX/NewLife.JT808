@@ -1,7 +1,7 @@
-﻿using Newlife.JT808.Protocols;
-using Newlife.JT808.TModels;
+﻿using NewLife.JT808.Protocols;
+using NewLife.JT808.TModels;
 
-namespace Newlife.JT808.Models
+namespace NewLife.JT808.Models
 {
     /// <summary>
     /// 多媒体数据上传

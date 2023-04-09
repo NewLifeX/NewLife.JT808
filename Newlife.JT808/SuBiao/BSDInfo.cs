@@ -1,6 +1,6 @@
-﻿using Newlife.JT808.Serialization;
+﻿using NewLife.JT808.Serialization;
 
-namespace Newlife.JT808.SuBiao
+namespace NewLife.JT808.SuBiao
 {
     /// <summary>BSD告警类型</summary>
     public enum BSDKinds : Byte

@@ -1,6 +1,6 @@
-﻿using Newlife.JT808.Serialization;
+﻿using NewLife.JT808.Serialization;
 
-namespace Newlife.JT808.SuBiao
+namespace NewLife.JT808.SuBiao
 {
     /// <summary>胎压监测系统报警信息</summary>
     public class TPMSInfo

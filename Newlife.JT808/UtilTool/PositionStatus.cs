@@ -1,6 +1,6 @@
 ﻿using System;
 
-namespace Newlife.JT808.UtilTool
+namespace NewLife.JT808.UtilTool
 {
     /// <summary>位置状态</summary>
     [Flags]

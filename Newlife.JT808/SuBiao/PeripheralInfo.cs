@@ -1,4 +1,4 @@
-﻿namespace Newlife.JT808.SuBiao
+﻿namespace NewLife.JT808.SuBiao
 {
     /// <summary>外设系统信息</summary>
     public class PeripheralInfo

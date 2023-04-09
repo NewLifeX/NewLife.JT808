@@ -1,4 +1,4 @@
-﻿namespace Newlife.JT808.SuBiao
+﻿namespace NewLife.JT808.SuBiao
 {
     /// <summary>码流</summary>
     public enum BitStreams : Byte

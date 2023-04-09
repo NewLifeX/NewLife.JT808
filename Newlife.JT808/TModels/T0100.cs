@@ -1,8 +1,8 @@
-﻿using Newlife.JT808.Protocols;
-using Newlife.JT808.UtilTool;
+﻿using NewLife.JT808.Protocols;
+using NewLife.JT808.UtilTool;
 using NewLife.Serialization;
 
-namespace Newlife.JT808.TModels
+namespace NewLife.JT808.TModels
 {
     /// <summary>终端注册</summary>
     [MessageKind(MessageKinds.终端注册)]

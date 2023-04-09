@@ -1,6 +1,6 @@
-﻿using Newlife.JT808.Protocols;
+﻿using NewLife.JT808.Protocols;
 
-namespace Newlife.JT808.Models
+namespace NewLife.JT808.Models
 {
     /// <summary>单条存储多媒体数据检索上传命令</summary>
     [MessageKind(MessageKinds.单条存储多媒体数据检索上传命令)]

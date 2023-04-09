@@ -3,7 +3,7 @@ using NewLife.Data;
 using NewLife.Log;
 using NewLife.Serialization;
 
-namespace Newlife.JT808.SuBiao
+namespace NewLife.JT808.SuBiao
 {
     /// <summary>文件信息</summary>
     public class FileMessage : IAccessor

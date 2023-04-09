@@ -1,6 +1,6 @@
 ﻿using NewLife.Serialization;
 
-namespace Newlife.JT808.Protocols
+namespace NewLife.JT808.Protocols
 {
     /// <summary>仅JT/T2019使用的字段</summary>
     /// <remarks>版本不是2019时，返回true告知上层处理已完成，即跳过了该字段的处理</remarks>

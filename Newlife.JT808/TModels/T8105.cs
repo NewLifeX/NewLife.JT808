@@ -1,7 +1,7 @@
-﻿using Newlife.JT808.Protocols;
+﻿using NewLife.JT808.Protocols;
 using NewLife.Serialization;
 
-namespace Newlife.JT808.Models
+namespace NewLife.JT808.Models
 {
     /// <summary>终端控制</summary>
     [MessageKind(MessageKinds.终端控制)]

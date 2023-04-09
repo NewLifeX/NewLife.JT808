@@ -1,9 +1,9 @@
 ﻿using System.Globalization;
-using Newlife.JT808.Protocols;
-using Newlife.JT808.UtilTool;
+using NewLife.JT808.Protocols;
+using NewLife.JT808.UtilTool;
 using NewLife.Serialization;
 
-namespace Newlife.JT808.Models
+namespace NewLife.JT808.Models
 {
     /// <summary>插拔状态</summary>
     public enum CardStatus : Byte

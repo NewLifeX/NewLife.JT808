@@ -1,7 +1,7 @@
-﻿using Newlife.JT808.Protocols;
+﻿using NewLife.JT808.Protocols;
 using NewLife.Serialization;
 
-namespace Newlife.JT808.Models
+namespace NewLife.JT808.Models
 {
     /// <summary>电话回拨</summary>
     [MessageKind(MessageKinds.电话回拨)]

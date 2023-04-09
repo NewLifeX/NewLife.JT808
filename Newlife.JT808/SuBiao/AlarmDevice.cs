@@ -1,7 +1,7 @@
 ﻿using System.Globalization;
 using NewLife.Serialization;
 
-namespace Newlife.JT808.SuBiao
+namespace NewLife.JT808.SuBiao
 {
     /// <summary>报警标识号</summary>
     public class AlarmDevice : IAccessor

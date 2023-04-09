@@ -1,4 +1,4 @@
-﻿namespace Newlife.JT808.UtilTool
+﻿namespace NewLife.JT808.UtilTool
 {
     /// <summary>电话本联系人标志</summary>
     public enum ContactType : byte

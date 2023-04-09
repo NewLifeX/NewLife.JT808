@@ -1,7 +1,7 @@
-﻿using Newlife.JT808.Protocols;
-using Newlife.JT808.UtilTool;
+﻿using NewLife.JT808.Protocols;
+using NewLife.JT808.UtilTool;
 
-namespace Newlife.JT808.Models
+namespace NewLife.JT808.Models
 {
     /// <summary>
     /// 存储多媒体数据检索应答

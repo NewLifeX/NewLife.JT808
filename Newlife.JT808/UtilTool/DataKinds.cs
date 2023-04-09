@@ -1,4 +1,4 @@
-﻿namespace Newlife.JT808.UtilTool
+﻿namespace NewLife.JT808.UtilTool
 {
     /// <summary>透传消息数据类型</summary>
     public enum DataKinds : byte

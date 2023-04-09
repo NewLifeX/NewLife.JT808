@@ -1,9 +1,9 @@
-﻿using Newlife.JT808.Protocols;
-using Newlife.JT808.TModels;
-using Newlife.JT808.UtilTool;
+﻿using NewLife.JT808.Protocols;
+using NewLife.JT808.TModels;
+using NewLife.JT808.UtilTool;
 using NewLife.Serialization;
 
-namespace Newlife.JT808.Models
+namespace NewLife.JT808.Models
 {
     /// <summary>定位数据批量上传</summary>
     [MessageKind(MessageKinds.定位数据批量上传)]

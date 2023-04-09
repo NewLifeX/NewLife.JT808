@@ -3,7 +3,7 @@ using System.IO;
 using System.Linq;
 using System.Reflection;
 using System.Runtime.Serialization;
-using Newlife.JT808.UtilTool;
+using NewLife.JT808.UtilTool;
 using NewLife;
 using NewLife.Collections;
 using NewLife.Data;
@@ -11,7 +11,7 @@ using NewLife.Log;
 using NewLife.Messaging;
 using NewLife.Serialization;
 
-namespace Newlife.JT808.Protocols
+namespace NewLife.JT808.Protocols
 {
     /// <summary>JT808报文消息</summary>
     public class JTMessage : IMessage, IAccessor

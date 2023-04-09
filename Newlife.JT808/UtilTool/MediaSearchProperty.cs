@@ -1,4 +1,4 @@
-﻿namespace Newlife.JT808.UtilTool
+﻿namespace NewLife.JT808.UtilTool
 {
     /// <summary>多媒体属性</summary>
     public struct MediaSearchProperty

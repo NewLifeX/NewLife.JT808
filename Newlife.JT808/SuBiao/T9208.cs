@@ -1,7 +1,7 @@
-﻿using Newlife.JT808.Protocols;
+﻿using NewLife.JT808.Protocols;
 using NewLife.Serialization;
 
-namespace Newlife.JT808.SuBiao
+namespace NewLife.JT808.SuBiao
 {
     /// <summary>报警附件上传</summary>
     [MessageKind(MessageKinds.报警附件上传)]

@@ -1,8 +1,8 @@
-﻿using Newlife.JT808.UtilTool;
+﻿using NewLife.JT808.UtilTool;
 using NewLife;
 using NewLife.Serialization;
 
-namespace Newlife.JT808.SuBiao
+namespace NewLife.JT808.SuBiao
 {
     /// <summary>外设助手</summary>
     public static class PeripheralHelper

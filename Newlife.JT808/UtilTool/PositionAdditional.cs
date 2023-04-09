@@ -1,8 +1,8 @@
-﻿using Newlife.JT808.Protocols;
+﻿using NewLife.JT808.Protocols;
 using NewLife;
 using NewLife.Serialization;
 
-namespace Newlife.JT808.UtilTool;
+namespace NewLife.JT808.UtilTool;
 
 /// <summary>位置报文附加信息</summary>
 public static class PositionAdditional
