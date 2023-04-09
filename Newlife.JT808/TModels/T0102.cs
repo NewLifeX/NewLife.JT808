@@ -5,7 +5,7 @@ namespace Newlife.JT808.TModels
 {
     /// <summary>终端鉴权</summary>
     [MessageKind(MessageKinds.终端鉴权)]
-    public class T0102 //: IAccessor
+    public class T0102 
     {
         /// <summary>
         /// 鉴权码

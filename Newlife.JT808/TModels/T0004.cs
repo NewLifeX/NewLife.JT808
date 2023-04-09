@@ -1,4 +1,5 @@
 ﻿using Newlife.JT808.Protocols;
+using Newlife.JT808.Serialization;
 
 namespace Newlife.JT808.TModels
 {

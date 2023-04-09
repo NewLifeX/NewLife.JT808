@@ -1,5 +1,6 @@
 ﻿using System.Collections.Concurrent;
 using System.Reflection;
+using Newlife.JT808.UtilTool;
 using NewLife.Reflection;
 using NewLife.Serialization;
 
@@ -28,7 +29,6 @@ namespace Newlife.JT808.Protocols
         /// <summary>初始化，加载内部</summary>
         public void Init()
         {
-            //var ns = typeof(PingMessage).Namespace;
             foreach (var item in GetType().Assembly.GetTypes())
             {
                 //if (item.Namespace == ns)

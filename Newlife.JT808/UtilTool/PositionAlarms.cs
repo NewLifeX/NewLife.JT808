@@ -1,6 +1,4 @@
-﻿using System;
-
-namespace Newlife.JT808.UtilTool
+﻿namespace Newlife.JT808.UtilTool
 {
     /// <summary>位置报警</summary>
     [Flags]
