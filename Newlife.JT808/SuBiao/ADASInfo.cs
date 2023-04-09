@@ -1,5 +1,4 @@
-﻿using JT808.SuBiao;
-using Newlife.JT808.Serialization;
+﻿using Newlife.JT808.Serialization;
 
 namespace Newlife.JT808.SuBiao
 {
