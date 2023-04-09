@@ -16,9 +16,7 @@ namespace Newlife.JT808.Models
         /// </summary>
         public Byte Flag { get; set; }
 
-        /// <summary>
-        /// 问题内容长度
-        /// </summary>
+        /// <summary>问题内容长度</summary>
         public Byte IssueContentLength { get; set; }
 
         /// <summary>
@@ -27,25 +25,21 @@ namespace Newlife.JT808.Models
         /// </summary>
         public String Issue { get; set; }
 
-        /// <summary>
-        /// 候选答案列表 
-        /// </summary>
+        /// <summary>候选答案列表</summary>
         public List<Answer> Answers { get; set; }
 
-        /// <summary>
-        /// 候选答案信息
-        /// </summary>
+        /// <summary>候选答案信息</summary>
         public class Answer
         {
-            /// <summary>
-            /// 答案 ID
-            /// </summary>
+            /// <summary>答案 ID</summary>
             public Byte Id { get; set; }
+
             /// <summary>
             /// 答案内容长度
             /// 答案内容字段字节长度
             /// </summary>
             public UInt16 ContentLength { get; set; }
+
             /// <summary>
             /// 答案内容 
             /// 答案内容，经 GBK 编码

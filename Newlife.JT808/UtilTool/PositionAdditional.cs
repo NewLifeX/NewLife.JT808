@@ -52,53 +52,5 @@ public static class PositionAdditional
 
         var klvs = KLV.Convert(dic);
         KLV.Write(writer.Stream, klvs);
-
-        //foreach (var item in dic)
-        //{
-        //    writer.Write((Byte)item.Key);
-        //    if (item.Value == null)
-        //        writer.Write(0);
-        //    else if (item.Value is Byte[] dt)
-        //    {
-        //        writer.Write((Byte)dt.Length);
-        //        writer.Write(dt, 0, dt.Length);
-        //    }
-        //    else if (item.Value is Byte b)
-        //    {
-        //        writer.Write(1);
-        //        writer.Write(new[] { b }, 0, 1);
-        //    }
-        //    else if (item.Value is UInt16 m)
-        //    {
-        //        writer.Write(2);
-        //        writer.Write(m.GetBytes(false), 0, 2);
-        //    }
-        //    else if (item.Value is UInt32 n)
-        //    {
-        //        writer.Write(4);
-        //        writer.Write(n.GetBytes(false), 0, 4);
-        //    }
-        //    else
-        //    {
-        //        //var data = item.Key switch
-        //        //{
-        //        //    AdditionalKinds.里程 => 4,
-        //        //    AdditionalKinds.油量 => 2,
-        //        //    AdditionalKinds.速度 => 2,
-        //        //    AdditionalKinds.报警事件 => 2,
-        //        //    AdditionalKinds.胎压 => 30,
-        //        //    AdditionalKinds.车厢温度 => 2,
-        //        //    AdditionalKinds.扩展车辆信号 => 4,
-        //        //    AdditionalKinds.IO状态 => 2,
-        //        //    AdditionalKinds.模拟量 => 4,
-        //        //    AdditionalKinds.信号强度 => 1,
-        //        //    AdditionalKinds.卫星数 => 2,
-        //        //    _ => -1,
-        //        //};
-        //        //writer.Write((Byte)item.Value.Length);
-        //        //writer.Write(item.Value, 0, item.Value.Length);
-        //        throw new Exception($"不支持的类型[{item.Value.GetType()}]");
-        //    }
-        //}
     }
-}                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                       
+}

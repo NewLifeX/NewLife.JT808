@@ -15,16 +15,12 @@ namespace Newlife.JT808.TModels
         [FieldSize(0, Version = "2019")]
         public String Code { get; set; }
 
-        /// <summary>
-        /// 终端IMEI  长度15 2019版本
-        /// </summary>
+        /// <summary>终端IMEI  长度15 2019版本</summary>
         [JT2019]
         [FieldSize(15)]
         public String IMEI { get; set; }
 
-        /// <summary>
-        /// 软件版本号 长度20 后补 "0x00" 2019版本
-        /// </summary>
+        /// <summary>软件版本号 长度20 后补 "0x00" 2019版本</summary>
         [JT2019]
         [FieldSize(20)]
         public String Version { get; set; }

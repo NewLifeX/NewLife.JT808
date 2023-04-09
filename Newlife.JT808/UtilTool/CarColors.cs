@@ -1,10 +1,6 @@
-﻿using System;
-
-namespace Newlife.JT808.UtilTool
+﻿namespace Newlife.JT808.UtilTool
 {
-    /// <summary>
-    /// 车牌颜色
-    /// </summary>
+    /// <summary>车牌颜色</summary>
     public enum CarColors : byte
     {
         /// <summary>蓝色</summary>

@@ -6,64 +6,40 @@ namespace Newlife.JT808.UtilTool
     [Flags]
     public enum PositionAlarms : uint
     {
-        /// <summary>
-        /// 紧急报瞥触动报警开关后触发
-        /// </summary>
+        /// <summary>紧急报瞥触动报警开关后触发</summary>
         紧急报瞥 = 1 << 0,
 
-        /// <summary>
-        /// 超速报警
-        /// </summary>
+        /// <summary>超速报警</summary>
         超速报警 = 1 << 1,
 
-        /// <summary>
-        /// 疲劳驾驶报警
-        /// </summary>
+        /// <summary>疲劳驾驶报警</summary>
         疲劳驾驶报警 = 1 << 2,
 
-        /// <summary>
-        /// 危险驾驶行为报警
-        /// </summary>
+        /// <summary>危险驾驶行为报警</summary>
         危险驾驶行为报警 = 1 << 3,
 
-        /// <summary>
-        /// GNSS模块发生故障
-        /// </summary>
+        /// <summary>GNSS模块发生故障</summary>
         GNSS模块故障 = 1 << 4,
 
-        /// <summary>
-        /// GNSS天线未接或被剪断
-        /// </summary>
+        /// <summary>GNSS天线未接或被剪断</summary>
         GNSS天线未接 = 1 << 5,
 
-        /// <summary>
-        /// GNSS天线短路
-        /// </summary>
+        /// <summary>GNSS天线短路</summary>
         GNSS天线短路 = 1 << 6,
 
-        /// <summary>
-        /// 终端主电源欠压
-        /// </summary>
+        /// <summary>终端主电源欠压</summary>
         电源欠压报警 = 1 << 7,
 
-        /// <summary>
-        /// 终端主电源掉电
-        /// </summary>
+        /// <summary>终端主电源掉电</summary>
         电源掉电报警 = 1 << 8,
 
-        /// <summary>
-        /// 终端LCD或显示器故障
-        /// </summary>
+        /// <summary>终端LCD或显示器故障</summary>
         显示器故障 = 1 << 9,
 
-        /// <summary>
-        /// TTS模块故障
-        /// </summary>
+        /// <summary>TTS模块故障</summary>
         TTS故障 = 1 << 10,
 
-        /// <summary>
-        /// 摄像头故障
-        /// </summary>
+        /// <summary>摄像头故障</summary>
         摄像头故障 = 1 << 11,
 
         /// <summary>IC卡故障</summary>
@@ -122,8 +98,5 @@ namespace Newlife.JT808.UtilTool
 
         /// <summary>侧翻预警</summary>
         侧翻预警 = 1 << 30,
-
-        ///// <summary>保留</summary>
-        //Keep31 = 1 << 31,
     }
-}                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                           
+}

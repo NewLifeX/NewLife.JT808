@@ -1,122 +1,53 @@
 ﻿using Newlife.JT808.Protocols;
 using NewLife.Serialization;
 
-namespace Newlife.JT808.Models;
-
-/// <summary>
-/// 升级类型
-/// </summary>
-public enum UpgradeType : Byte
+namespace Newlife.JT808.Models
 {
-    /// <summary>
-    /// 终端
-    /// </summary>
-    终端 = 0,
-    /// <summary>
-    /// 道路运输证IC卡读卡器
-    /// </summary>
-    道路运输证IC卡读卡器 = 0x0C,
-    /// <summary>
-    /// 北斗卫星定位模块
-    /// </summary>
-    北斗卫星定位模块 = 0x34,
-    /// <summary>
-    /// 粤标主动安全-高级驾驶辅助系统
-    /// </summary>
-    高级驾驶辅助系统 = 0x64,
-    /// <summary>
-    /// 粤标主动安全-驾驶状态监控系统
-    /// </summary>
-    驾驶状态监控系统 = 0x65,
-    /// <summary>
-    /// 粤标主动安全-胎压监测系统
-    /// </summary>
-    胎压监测系统 = 0x66,
-    /// <summary>
-    /// 粤标主动安全-盲点监测系统
-    /// </summary>
-    盲点监测系统 = 0x67,
-}
+    /// <summary>升级类型</summary>
+    public enum UpgradeType : Byte
+    {
+        /// <summary>终端</summary>
+        终端 = 0,
 
-/// <summary>
-/// 下发终端升级包
-/// </summary>
-[MessageKind(MessageKinds.下发终端升级包)]
-public class T8108 //: IAccessor
-{
-    /// <summary>
-    /// 升级类型
-    /// </summary>
-    public UpgradeType UpgradeType { get; set; }
+        /// <summary>道路运输证IC卡读卡器</summary>
+        道路运输证IC卡读卡器 = 0x0C,
 
-    /// <summary>
-    /// 制造商 ID
-    /// 2013版本 5 个字节，终端制造商编码
-    /// 2019版本 11 个字节，终端制造商编码
-    /// </summary>
-    [FieldSize(5, Version = "2013")]
-    [FieldSize(11, Version = "2019")]
-    public String MakerId { get; set; }
+        /// <summary>北斗卫星定位模块</summary>
+        北斗卫星定位模块 = 0x34,
 
-    /// <summary>
-    /// 版本号
-    /// </summary>
-    public String Version { get; set; }
+        /// <summary>粤标主动安全-高级驾驶辅助系统</summary>
+        高级驾驶辅助系统 = 0x64,
 
-    /// <summary>
-    /// 升级数据包
-    /// </summary>
-    public Byte[] Data { get; set; }
+        /// <summary>粤标主动安全-驾驶状态监控系统</summary>
+        驾驶状态监控系统 = 0x65,
 
-    ///// <summary>
-    ///// 读取
-    ///// </summary>
-    ///// <param name="stream"></param>
-    ///// <param name="context"></param>
-    ///// <returns></returns>
-    //public Boolean Read(Stream stream, Object context)
-    //{
-    //    var header = context as JTMessage;
-    //    var reader = Helper.CreateReader(stream);
+        /// <summary>粤标主动安全-胎压监测系统</summary>
+        胎压监测系统 = 0x66,
 
-    //    UpgradeType = (UpgradeType)reader.ReadByte();
+        /// <summary>粤标主动安全-盲点监测系统</summary>
+        盲点监测系统 = 0x67,
+    }
 
-    //    if (header != null && header.Version > 0)
-    //        MakerId = reader.ReadFixedString(11);
-    //    else
-    //        MakerId = reader.ReadFixedString(5);
+    /// <summary>下发终端升级包</summary>
+    [MessageKind(MessageKinds.下发终端升级包)]
+    public class T8108 //: IAccessor
+    {
+        /// <summary>升级类型</summary>
+        public UpgradeType UpgradeType { get; set; }
 
-    //    Version = reader.ReadString();
+        /// <summary>
+        /// 制造商 ID
+        /// 2013版本 5 个字节，终端制造商编码
+        /// 2019版本 11 个字节，终端制造商编码
+        /// </summary>
+        [FieldSize(5, Version = "2013")]
+        [FieldSize(11, Version = "2019")]
+        public String MakerId { get; set; }
 
-    //    var len = reader.ReadInt32();
-    //    Data = reader.ReadBytes(len);
+        /// <summary>版本号</summary>
+        public String Version { get; set; }
 
-    //    return true;
-    //}
-
-    ///// <summary>
-    ///// 写入
-    ///// </summary>
-    ///// <param name="stream"></param>
-    ///// <param name="context"></param>
-    ///// <returns></returns>
-    //public Boolean Write(Stream stream, Object context)
-    //{
-    //    var header = context as JTMessage;
-    //    var writer = Helper.CreateWriter(stream);
-
-    //    writer.WriteByte((Byte)UpgradeType);
-    //    if (header != null && header.Version > 0)
-    //        writer.WriteFixedString(MakerId, 11);
-    //    else
-    //        writer.WriteFixedString(MakerId, 5);
-
-    //    writer.WriteString(Version);
-
-    //    var len = Data?.Length ?? 0;
-    //    writer.Write(len);
-    //    if (len > 0) writer.Write(Data);
-
-    //    return true;
-    //}
+        /// <summary>升级数据包</summary>
+        public Byte[] Data { get; set; }
+    }
 }
