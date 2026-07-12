@@ -1,4 +1,5 @@
 using NewLife.Data;
+using NewLife.Messaging;
 
 namespace NewLife.JT808.Protocols;
 
@@ -19,11 +20,11 @@ public class JTCodec
     /// <summary>编码消息为数据包（分配流水号并转为Packet）</summary>
     /// <param name="message">消息</param>
     /// <returns>数据包</returns>
-    public virtual Packet Encode(JTMessage message)
+    public virtual IPacket Encode(JTMessage message)
     {
         if (message.Sequence == 0) message.Sequence = GetSequence();
 
-        return (Packet)message.ToPacket();
+        return message.ToPacket();
     }
 
     /// <summary>解码数据包为消息列表（处理粘包）</summary>
@@ -34,7 +35,7 @@ public class JTCodec
         if (pk is not Packet packet) packet = new Packet(pk.ToArray());
 
         // 将新数据追加到缓冲区
-        packet.CopyTo(_buffer);
+        if (packet != null) packet.CopyTo(_buffer);
 
         return ParseBuffer();
     }
@@ -46,7 +47,7 @@ public class JTCodec
         var list = new List<JTMessage>();
         if (_buffer.Length == 0) return list;
 
-        var data = new Packet(_buffer.ToArray());
+        IPacket data = new ArrayPacket(_buffer.ToArray());
 
         while (data.Total > 0)
         {
@@ -62,7 +63,7 @@ public class JTCodec
             // 提取完整帧
             var frame = data.Slice(startIdx, frameLen);
             var msg = new JTMessage();
-            if (msg.Read(frame))
+            if (((IMessage)msg).Read(frame))
                 list.Add(msg);
 
             // 移动到下一帧
@@ -72,7 +73,7 @@ public class JTCodec
         // 保留未处理完的数据
         _buffer.SetLength(0);
         if (data.Total > 0)
-            data.CopyTo(_buffer);
+            PacketHelper.CopyTo(data, _buffer);
 
         return list;
     }

@@ -221,7 +221,7 @@ public class JT808Client : DisposeBase
         try
         {
             Received += handler;
-            _client.Send((Packet)pk);
+            _client.Send(pk);
 
             using var cts = new CancellationTokenSource(timeout);
             cts.Token.Register(() => tcs.TrySetCanceled());

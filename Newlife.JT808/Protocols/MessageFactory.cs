@@ -3,6 +3,7 @@ using System.Reflection;
 using NewLife.Data;
 using NewLife.JT808.UtilTool;
 using NewLife.Reflection;
+using NewLife.Data;
 using NewLife.Serialization;
 
 namespace NewLife.JT808.Protocols

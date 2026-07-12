@@ -75,11 +75,11 @@ namespace NewLife.JT808.SuBiao
         /// <summary>读取数据包</summary>
         /// <param name="pk"></param>
         /// <returns></returns>
-        public Boolean Read(Packet pk) => Read(pk.GetStream(), null);
+        public Boolean Read(IPacket pk) => Read(pk.GetStream(), null);
 
         /// <summary>转数据包</summary>
         /// <returns></returns>
-        public Packet ToPacket()
+        public IPacket ToPacket()
         {
             try
             {
@@ -87,7 +87,7 @@ namespace NewLife.JT808.SuBiao
                 if (!Write(ms, null)) return null;
 
                 ms.Position = 0;
-                return new Packet(ms);
+                return new ArrayPacket(ms);
             }
             catch (Exception ex)
             {

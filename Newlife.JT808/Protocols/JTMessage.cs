@@ -1,5 +1,6 @@
 ﻿using System.Reflection;
 using System.Runtime.Serialization;
+using NewLife.Buffers;
 using NewLife.Collections;
 using NewLife.Data;
 using NewLife.JT808.UtilTool;
@@ -128,11 +129,11 @@ public class JTMessage : IMessage, IAccessor
             var retain = ms.Length - ms.Position;
             if (length > retain)
             {
-                Payload = new Packet(reader.ReadBytes((int)retain));
+                Payload = (ArrayPacket)reader.ReadBytes((int)retain);
                 return false;
             }
 
-            Payload = new Packet(reader.ReadBytes(length));
+            Payload = (ArrayPacket)reader.ReadBytes(length);
         }
 
         // 异或校验。从消息头首字节开始。考虑到TCP/UDP本身有校验，这里不再判断
@@ -266,7 +267,7 @@ public class JTMessage : IMessage, IAccessor
             if (!Write(ms, null)) return null;
 
             ms.Position = 0;
-            return new Packet(ms);
+            return new ArrayPacket(ms);
         }
         catch (Exception ex)
         {
@@ -368,7 +369,7 @@ public class JTMessage : IMessage, IAccessor
             rs = Helper.CreateWriter(ms, this).Write(model);
 
         ms.Position = 0;
-        Payload = new Packet(ms);
+        Payload = new ArrayPacket(ms);
 
         return rs;
     }
@@ -391,13 +392,15 @@ public class JTMessage : IMessage, IAccessor
     /// <summary>获取数据包长度</summary>
     /// <param name="pk"></param>
     /// <returns></returns>
-    public static int GetLength(Packet pk)
+    public static int GetLength(IPacket pk)
     {
         //（头）1+（消息 ID ）2+（消息体属性）2+（终端手机号）6+（消息流水号）2+（检验码 ）1+（尾）1
         if (pk.Total < 15) return 0;
 
         // 属性位
-        var property = pk.Data.ToUInt16(pk.Offset + 3, false);
+        var reader = new SpanReader(pk) { IsLittleEndian = false };
+        reader.Advance(3);
+        var property = reader.ReadUInt16();
         var flag = (PropertyFlags)property;
 
         // 头部长度，区分2019
