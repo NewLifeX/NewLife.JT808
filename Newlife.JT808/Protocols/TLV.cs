@@ -32,7 +32,7 @@ namespace NewLife.JT808.Protocols
                 var count = stream.Read(data, 0, len);
                 if (count > 0)
                 {
-                    list.Add(new TLV { Type = (byte)kind, Value = data });
+                    list.Add(new TLV { Type = kind, Value = data });
                 }
             }
 
@@ -77,7 +77,7 @@ namespace NewLife.JT808.Protocols
                 stream.Write(item.Type.GetBytes(false));
 
                 var len = item.Value?.Length ?? 0;
-                stream.WriteByte(0);
+                stream.WriteByte((Byte)len);
 
                 if (len > 0) stream.Write(item.Value);
             }

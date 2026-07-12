@@ -79,7 +79,7 @@ namespace NewLife.JT808.Protocols
                 stream.WriteByte(item.Kind);
 
                 var len = item.Value?.Length ?? 0;
-                stream.WriteByte(0);
+                stream.WriteByte((Byte)len);
 
                 if (len > 0) stream.Write(item.Value);
             }
