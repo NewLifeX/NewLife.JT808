@@ -1,5 +1,37 @@
 # NewLife.JT808 版本更新记录
 
+## v1.1.2026.0713 (2026-07-13)
+
+### Web API 管理接口
+- **统一下发指令**：POST /api/jt808/command 向终端下发任意协议消息体
+- **会话管理**：GET /api/jt808/sessions 在线终端列表及详情，DELETE 强制移除会话
+- **黑名单管理**：BlacklistManager 文件持久化 + 运行时热更新，HTTP API 增删查
+- **Token 鉴权**：JT808Auth Bearer Token 鉴权，环境变量配置，可选启用
+
+### 消息队列抽象
+- **消息生产/消费接口**：IMsgProducer/IMsgConsumer 解耦消息处理与业务逻辑
+- **会话通知接口**：ISessionProducer/ISessionConsumer 在线/离线状态通知
+- **下行消息处理接口**：IDownMessageHandler 外部指令统一处理
+- **默认内存实现**：DefaultMsgQueue&lt;T&gt; 基于 Channel 的内存队列
+
+### 跨服务器指令下发
+- **ICommandBus 接口**：统一本地/远程指令下发抽象，支持 Stardust 事件总线广播
+- **SessionManager 增强**：实现 ICommandBus，支持 CommandReceived 事件
+- **Server 集成**：StarCommandBus 本地优先执行 + 远程集群广播
+
+### 客户端增强
+- **自动重连**：AutoReconnect 可配置重连次数和间隔，断线自动恢复
+- **心跳管理**：HeartbeatInterval 内置心跳线程，可独立配置
+- **统计计数器**：SentCount/ReceivedCount 发送接收实时统计
+
+### 重构与优化
+- **协议类结构重组**：提取 Interfaces/Attributes/Enums 子目录，统一命名空间风格
+
+### 测试与质量
+- **39/39 测试通过**：全部单元测试通过，覆盖核心协议、序列化、消息体
+
+---
+
 ## v1.0.2026.0712 (2026-07-12)
 
 ### 初始版本

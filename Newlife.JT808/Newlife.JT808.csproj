@@ -7,7 +7,7 @@
 		<Description>JT/T 808车辆定位协议完整实现，支持2011/2013/2019版本</Description>
 		<Company>新生命开发团队</Company>
 		<Copyright>©2002-2026 新生命开发团队</Copyright>
-		<VersionPrefix>1.0</VersionPrefix>
+		<VersionPrefix>1.1</VersionPrefix>
 		<VersionSuffix>$([System.DateTime]::Now.ToString(`yyyy.MMdd`))</VersionSuffix>
 		<Version>$(VersionPrefix).$(VersionSuffix)</Version>
 		<FileVersion>$(Version)</FileVersion>
@@ -28,7 +28,7 @@
 		<RepositoryUrl>https://github.com/NewLifeX/NewLife.JT808</RepositoryUrl>
 		<RepositoryType>git</RepositoryType>
 		<PackageTags>物联网;IoT;车联网;GPS;北斗;JT808;JT/T808;新生命团队;NewLife;$(AssemblyName)</PackageTags>
-		<PackageReleaseNotes>初始版本：JT/T 808-2013/2019 消息帧解析、65+ 标准消息体、双版本兼容、TLV/KLV、苏标扩展</PackageReleaseNotes>
+		<PackageReleaseNotes>新增 Web API 管理接口（统一下发指令/会话管理/黑名单/Token 鉴权）；新增消息队列抽象接口与默认内存实现；新增跨服务器指令下发（Stardust 事件总线）；新增客户端自动重连与心跳管理；重组协议类结构（提取 Interfaces/Attributes/Enums 子目录）；39/39 测试全部通过</PackageReleaseNotes>
 		<PackageLicenseExpression>MIT</PackageLicenseExpression>
 		<PublishRepositoryUrl>true</PublishRepositoryUrl>
 		<EmbedUntrackedSources>true</EmbedUntrackedSources>

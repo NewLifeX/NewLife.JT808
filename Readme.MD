@@ -24,9 +24,12 @@ Nuget：[NewLife.JT808](https://www.nuget.org/packages/NewLife.JT808)
 - **苏标扩展**：支持 ADAS/DSM/TPMS/BSD 主动安全报警信息，外设状态/信息解析，报警附件协议
 - **音视频基础**：JT/T 1078 音视频消息体模型和枚举定义
 - **行车记录仪**：JT/T 19056 上下行数据包编解码
-- **苏标扩展**：支持 ADAS/DSM/TPMS/BSD 主动安全报警信息，外设状态/信息解析，报警附件协议
 - **BCD 编码**：BCD 字符串和时间自定义序列化特性，适配协议特有编码格式
 - **GBK 编码**：内置 GBK 中文字符串编解码，自动注册 `CodePagesEncodingProvider`
+- **Web API 管理**：支持统一下发指令、在线会话管理、黑名单管理、Token 鉴权，方便集成到后台系统
+- **消息队列抽象**：IMsgProducer/IMsgConsumer/ISessionProducer 等接口解耦消息处理，内置 DefaultMsgQueue 内存实现
+- **跨服务器指令下发**：ICommandBus 接口 + Stardust 事件总线，支持集群广播指令到指定终端
+- **客户端增强**：自动重连、可配心跳、收发统计计数器，提升生产环境可靠性
 - **多框架支持**：`net45 / net461 / netstandard2.0 / netstandard2.1`
 
 ## 支持的协议版本
