@@ -5,6 +5,10 @@
     <ProjectReference Include="..\JT808.Data\JT808.Data.csproj" />
   </ItemGroup>
 
+  <ItemGroup>
+    <PackageReference Include="NewLife.Stardust" Version="3.9.2026.708" />
+  </ItemGroup>
+
   <PropertyGroup>
     <OutputType>Exe</OutputType>
     <TargetFramework>net8.0</TargetFramework>

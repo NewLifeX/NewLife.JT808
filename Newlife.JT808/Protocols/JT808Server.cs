@@ -35,6 +35,9 @@ public class JT808Server : NetServer<JT808Session>
     /// <summary>会话管理器</summary>
     public SessionManager Manager { get; set; } = new();
 
+    /// <summary>指令总线。支持本地和跨服务器指令下发，为空时使用 Manager 的默认本地下发</summary>
+    public ICommandBus? CommandBus { get; set; }
+
     /// <summary>日志</summary>
     public ILog Log { get; set; } = Logger.Null;
     #endregion
@@ -130,6 +133,33 @@ public class JT808Server : NetServer<JT808Session>
         }
 
         return null;
+    }
+    #endregion
+
+    #region 指令下发
+    /// <summary>向指定终端发送指令</summary>
+    /// <remarks>
+    /// 使用 <see cref="CommandBus"/> 下发（支持跨服务器广播）；
+    /// 未设置 CommandBus 时使用 <see cref="Manager"/> 的本地默认下发。
+    /// </remarks>
+    /// <param name="mobile">终端手机号</param>
+    /// <param name="body">消息体对象</param>
+    /// <returns>是否成功发送</returns>
+    public Boolean SendCommand(String mobile, Object body)
+    {
+        var bus = CommandBus ?? Manager;
+        return bus.Send(mobile, body);
+    }
+
+    /// <summary>向指定终端发送指令并等待响应</summary>
+    /// <typeparam name="TResult">响应消息体类型</typeparam>
+    /// <param name="mobile">终端手机号</param>
+    /// <param name="body">请求消息体</param>
+    /// <returns>响应消息体</returns>
+    public Task<TResult?> SendCommandAsync<TResult>(String mobile, Object body) where TResult : class, new()
+    {
+        var bus = CommandBus ?? Manager;
+        return bus.SendAsync<TResult>(mobile, body);
     }
     #endregion
 
