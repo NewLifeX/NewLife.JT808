@@ -1,6 +1,6 @@
 using System.ComponentModel;
 using System.Text;
-using NewLife.JT808.Serialization;
+using NewLife.JT808.Protocols;
 
 namespace XUnitTest.Serialization;
 

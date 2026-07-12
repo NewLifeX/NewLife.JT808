@@ -1,5 +1,4 @@
-﻿namespace NewLife.JT808.UtilTool
-{
+﻿namespace NewLife.JT808.Protocols;
     /// <summary>车牌颜色</summary>
     public enum CarColors : byte
     {
@@ -18,4 +17,3 @@
         /// <summary>其他</summary>
         其他 = 9,
     }
-}

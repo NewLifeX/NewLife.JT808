@@ -1,5 +1,4 @@
-﻿namespace NewLife.JT808.UtilTool
-{
+﻿namespace NewLife.JT808.Protocols;
     /// <summary>位置报警</summary>
     [Flags]
     public enum PositionAlarms : uint
@@ -97,4 +96,3 @@
         /// <summary>侧翻预警</summary>
         侧翻预警 = 1 << 30,
     }
-}

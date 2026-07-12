@@ -1,7 +1,6 @@
 ﻿using System;
 
-namespace NewLife.JT808.UtilTool
-{
+namespace NewLife.JT808.Protocols;
     /// <summary>位置数据种类</summary>
     [Flags]
     public enum PositionKinds : byte
@@ -15,4 +14,3 @@ namespace NewLife.JT808.UtilTool
         /// <summary>正常</summary>
         正常 = 2,
     }
-}

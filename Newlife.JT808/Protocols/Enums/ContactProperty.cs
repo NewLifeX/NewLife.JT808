@@ -1,5 +1,4 @@
-﻿namespace NewLife.JT808.UtilTool
-{
+﻿namespace NewLife.JT808.Protocols;
     /// <summary>电话本联系人标志</summary>
     public enum ContactType : byte
     {
@@ -31,4 +30,3 @@
         /// <summary>联系人 经 GBK 编码</summary>
         public string Contact { get; set; }
     }
-}

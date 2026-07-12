@@ -1,5 +1,4 @@
-﻿namespace NewLife.JT808.UtilTool
-{
+﻿namespace NewLife.JT808.Protocols;
     /// <summary>透传消息数据类型</summary>
     public enum DataKinds : byte
     {
@@ -33,4 +32,3 @@
         /// <summary>信息查询。外设传感器的基本信息：公司信息、 产品代码、 版本号、 外设 ID、 客户代码。</summary>
         Info = 0xF8,
     }
-}

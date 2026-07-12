@@ -1,5 +1,4 @@
-﻿namespace NewLife.JT808.UtilTool
-{
+﻿namespace NewLife.JT808.Protocols;
     /// <summary>多媒体属性</summary>
     public struct MediaSearchProperty
     {
@@ -18,4 +17,3 @@
         /// <summary>联系人 经 GBK 编码</summary>
         public string Contact { get; set; }
     }
-}

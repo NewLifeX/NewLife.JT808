@@ -1,5 +1,4 @@
-﻿namespace NewLife.JT808.UtilTool
-{
+﻿namespace NewLife.JT808.Protocols;
     /// <summary>终端参数</summary>
     public enum ParameterKinds : uint
     {
@@ -119,4 +118,3 @@
         CAN2上传间隔 = 0x0103,
         CAN总线ID = 0x0110,
     }
-}

@@ -1,19 +1,13 @@
-﻿using System;
+﻿using NewLife;
 using NewLife.Reflection;
 using NewLife.Serialization;
 
-namespace NewLife.JT808.Serialization
-{
-    /// <summary>BCD字符串序列化特性</summary>
+namespace NewLife.JT808.Protocols;
+    /// <summary>完全字符串序列化特性。指示数据流剩下部分全部作为字符串读写</summary>
     [AttributeUsage(AttributeTargets.Property | AttributeTargets.Field)]
-    public class BCDStringAttribute : AccessorAttribute
+    public class FullString2Attribute : AccessorAttribute
     {
-        /// <summary>长度</summary>
-        public Int32 Length { get; set; }
-
-        /// <summary>BCD字符串序列化</summary>
-        /// <param name="length"></param>
-        public BCDStringAttribute(Int32 length) => Length = length;
+        public String Version { get; set; }
 
         /// <summary>从数据流中读取消息</summary>
         /// <param name="formatter">序列化</param>
@@ -21,9 +15,12 @@ namespace NewLife.JT808.Serialization
         /// <returns>是否成功</returns>
         public override Boolean Read(IFormatterX formatter, AccessorContext context)
         {
-            if (formatter is Binary bn)
+            if (formatter is Binary bn && bn.Version == Version)
             {
-                var str = bn.ReadBCD(Length);
+                var buf = bn.Stream.ReadBytes(-1);
+                var str = bn.Encoding.GetString(buf);
+                if (bn.TrimZero && str != null) str = str.Trim('\0');
+
                 context.Value.SetValue(context.Member, str);
 
                 return true;
@@ -37,15 +34,19 @@ namespace NewLife.JT808.Serialization
         /// <param name="context">上下文</param>
         public override Boolean Write(IFormatterX formatter, AccessorContext context)
         {
-            if (formatter is Binary bn)
+            if (formatter is Binary bn && bn.Version == Version)
             {
                 var str = context.Value.GetValue(context.Member) as String;
-                bn.WriteBCD(str, Length);
+                if (!str.IsNullOrEmpty())
+                {
+                    var buf = bn.Encoding.GetBytes(str);
+                    bn.Write(buf, 0, buf.Length);
+                }
 
                 return true;
             }
 
             return false;
         }
+
     }
-}

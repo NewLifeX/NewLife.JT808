@@ -1,10 +1,9 @@
-﻿using NewLife.JT808.Protocols;
-using NewLife.Serialization;
+﻿using NewLife.Serialization;
 using System.Text;
 
-namespace NewLife.JT808.UtilTool
-{
-    /// <summary>序列化助手</summary>
+namespace NewLife.JT808.Protocols;
+
+/// <summary>序列化助手</summary>
     public static class Helper
     {
         /// <summary>字符串编码</summary>
@@ -152,4 +151,3 @@ namespace NewLife.JT808.UtilTool
             return jw.GetString();
         }
     }
-}

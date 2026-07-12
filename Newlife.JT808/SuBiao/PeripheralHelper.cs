@@ -1,4 +1,4 @@
-﻿using NewLife.JT808.UtilTool;
+﻿using NewLife.JT808.Protocols;
 using NewLife;
 using NewLife.Serialization;
 

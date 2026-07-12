@@ -1,8 +1,7 @@
 using System.ComponentModel;
 using NewLife.JT808.Protocols;
-using NewLife.JT808.UtilTool;
 
-namespace XUnitTest.UtilTool;
+namespace XUnitTest.Protocols;
 
 /// <summary>Helper 工具类单元测试</summary>
 public class HelperTests

@@ -2,8 +2,8 @@ using System.ComponentModel;
 using NewLife;
 using NewLife.JT808.Protocols;
 using NewLife.JT808.Models;
-using NewLife.JT808.Serialization;
-using NewLife.JT808.UtilTool;
+using NewLife.JT808.Protocols;
+using NewLife.JT808.Protocols;
 
 namespace XUnitTest.Models;
 

@@ -1,7 +1,6 @@
 ﻿using System;
 
-namespace NewLife.JT808.UtilTool
-{
+namespace NewLife.JT808.Protocols;
     /// <summary>位置状态</summary>
     [Flags]
     public enum PositionStatus : uint
@@ -102,4 +101,3 @@ namespace NewLife.JT808.UtilTool
         /// <summary>保留</summary>
         Keep31 = 0x80000000,
     }
-}

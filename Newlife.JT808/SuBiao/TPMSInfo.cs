@@ -1,4 +1,4 @@
-﻿using NewLife.JT808.Serialization;
+﻿using NewLife.JT808.Protocols;
 
 namespace NewLife.JT808.SuBiao
 {

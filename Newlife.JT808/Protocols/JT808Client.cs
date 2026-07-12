@@ -4,9 +4,8 @@ using NewLife.Log;
 using NewLife.Net;
 using NewLife.Reflection;
 using NewLife.JT808.Protocols;
-using NewLife.JT808.UtilTool;
 
-namespace NewLife.JT808;
+namespace NewLife.JT808.Protocols;
 
 /// <summary>JT/T 808消息处理器委托</summary>
 /// <param name="session">会话</param>

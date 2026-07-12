@@ -1,5 +1,5 @@
 ﻿using NewLife.JT808.Protocols;
-using NewLife.JT808.UtilTool;
+using NewLife.JT808.Protocols;
 using NewLife.Serialization;
 
 namespace NewLife.JT808.SuBiao

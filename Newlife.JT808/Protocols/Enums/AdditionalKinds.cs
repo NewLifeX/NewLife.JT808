@@ -1,7 +1,6 @@
 ﻿using System;
 
-namespace NewLife.JT808.UtilTool
-{
+namespace NewLife.JT808.Protocols;
     /// <summary>位置报文附加信息种类</summary>
     public enum AdditionalKinds : byte
     {
@@ -92,4 +91,3 @@ namespace NewLife.JT808.UtilTool
         /// <summary>算法异常信息</summary>
         算法异常 = 0xF2,
     }
-}

@@ -3,7 +3,7 @@ using NewLife.Data;
 using NewLife.Log;
 using NewLife.JT808.Protocols;
 using NewLife.JT808.Models;
-using NewLife.JT808.UtilTool;
+using NewLife.JT808.Protocols;
 
 namespace Client;
 

@@ -1,7 +1,7 @@
 ﻿using System.Collections.Concurrent;
 using System.Reflection;
 using NewLife.Data;
-using NewLife.JT808.UtilTool;
+using NewLife.JT808.Protocols;
 using NewLife.Reflection;
 using NewLife.Data;
 using NewLife.Serialization;

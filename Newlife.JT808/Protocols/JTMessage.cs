@@ -3,7 +3,7 @@ using System.Runtime.Serialization;
 using NewLife.Buffers;
 using NewLife.Collections;
 using NewLife.Data;
-using NewLife.JT808.UtilTool;
+using NewLife.JT808.Protocols;
 using NewLife.Log;
 using NewLife.Messaging;
 using NewLife.Serialization;

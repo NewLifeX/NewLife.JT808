@@ -1,7 +1,6 @@
 ﻿using System;
 
-namespace NewLife.JT808.UtilTool
-{
+namespace NewLife.JT808.Protocols;
     /// <summary>车辆信号状态</summary>
     [Flags]
     public enum SignalStatus : uint
@@ -51,4 +50,3 @@ namespace NewLife.JT808.UtilTool
         /// <summary>离合器</summary>
         离合器 = 1 << 14,
     }
-}
