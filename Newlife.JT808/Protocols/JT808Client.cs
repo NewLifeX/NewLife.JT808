@@ -3,6 +3,7 @@ using NewLife.Data;
 using NewLife.Log;
 using NewLife.Net;
 using NewLife.Reflection;
+using NewLife.Threading;
 using NewLife.JT808.Protocols;
 
 namespace NewLife.JT808.Protocols;
@@ -17,6 +18,7 @@ public delegate Object MessageHandler(JT808Client session, JTMessage message);
 /// <remarks>
 /// 封装TCP连接管理、消息收发、处理器路由。
 /// 支持同步发送和异步等待响应，通过[MessageKind]特性自动路由消息到处理器。
+/// 内置自动重连和心跳保活机制。
 /// </remarks>
 public class JT808Client : DisposeBase
 {
@@ -51,6 +53,42 @@ public class JT808Client : DisposeBase
 
     /// <summary>性能追踪</summary>
     public ITracer Tracer { get; set; }
+
+    /// <summary>是否已连接</summary>
+    public Boolean Connected => _client != null && _client.Active;
+
+    #region 自动重连
+    /// <summary>是否启用自动重连。默认 true</summary>
+    public Boolean AutoReconnect { get; set; } = true;
+
+    /// <summary>重连间隔。默认 5000ms</summary>
+    public Int32 ReconnectInterval { get; set; } = 5_000;
+
+    /// <summary>最大重连次数。0 表示不限次数，默认 0</summary>
+    public Int32 MaxReconnect { get; set; }
+
+    private Int32 _reconnectCount;
+    private TimerX? _reconnectTimer;
+    #endregion
+
+    #region 心跳
+    /// <summary>心跳间隔。默认 30s，设为 0 禁用心跳</summary>
+    public Int32 HeartbeatInterval { get; set; } = 30;
+
+    private TimerX? _heartbeatTimer;
+    private Int32 _seq;
+    #endregion
+
+    #region 统计
+    /// <summary>已发送消息数</summary>
+    public Int64 SentCount { get; private set; }
+
+    /// <summary>已接收消息数</summary>
+    public Int64 ReceivedCount { get; private set; }
+
+    /// <summary>重连次数</summary>
+    public Int64 ReconnectCount { get; private set; }
+    #endregion
     #endregion
 
     #region 构造
@@ -66,10 +104,14 @@ public class JT808Client : DisposeBase
     {
         base.Dispose(disposing);
 
+        StopHeartbeat();
+        StopReconnect();
+
         if (_client != null)
         {
             _client.Received -= OnReceive;
             _client.TryDispose();
+            _client = null;
         }
     }
     #endregion
@@ -79,6 +121,14 @@ public class JT808Client : DisposeBase
     public virtual void Open()
     {
         MessageFactory.Instance.Init();
+
+        // 先关闭旧连接
+        if (_client != null)
+        {
+            _client.Received -= OnReceive;
+            _client.TryDispose();
+            _client = null;
+        }
 
         var client = Server.CreateRemote();
         client.Name = Name;
@@ -95,13 +145,45 @@ public class JT808Client : DisposeBase
         client.Open();
 
         _client = client;
+        _reconnectCount = 0;
+
+        // 启动心跳
+        StartHeartbeat();
     }
 
+    /// <summary>关闭连接</summary>
+    public virtual void Close()
+    {
+        StopHeartbeat();
+        StopReconnect();
+
+        if (_client != null)
+        {
+            _client.Received -= OnReceive;
+            _client.TryDispose();
+            _client = null;
+        }
+    }
+
+    /// <summary>检查连接状态，断开时自动重连</summary>
+    public virtual void EnsureConnected()
+    {
+        if (_client == null || !_client.Active)
+        {
+            Open();
+        }
+    }
+    #endregion
+
+    #region 接收处理
     /// <summary>接收消息回调</summary>
     /// <param name="sender"></param>
     /// <param name="e"></param>
     protected virtual void OnReceive(Object sender, ReceivedEventArgs e)
     {
+        // 统计接收
+        ReceivedCount++;
+
         // 使用JTCodec处理粘包，解码为JTMessage列表
         var list = Codec.Decode(e.Packet);
         if (list == null || list.Count == 0) return;
@@ -182,6 +264,7 @@ public class JT808Client : DisposeBase
 
         var pk = Codec.Encode(msg);
         _client.Send(pk);
+        SentCount++;
     }
 
     /// <summary>发送消息并等待响应</summary>
@@ -251,6 +334,116 @@ public class JT808Client : DisposeBase
 
         var pk = Codec.Encode(message);
         _client.Send(pk);
+    }
+    #endregion
+
+    #region 心跳管理
+    /// <summary>启动心跳</summary>
+    protected virtual void StartHeartbeat()
+    {
+        StopHeartbeat();
+
+        if (HeartbeatInterval <= 0) return;
+
+        _heartbeatTimer = new TimerX(DoHeartbeat, null, HeartbeatInterval * 1000, HeartbeatInterval * 1000)
+        {
+            Async = true,
+        };
+    }
+
+    /// <summary>停止心跳</summary>
+    protected virtual void StopHeartbeat()
+    {
+        _heartbeatTimer.TryDispose();
+        _heartbeatTimer = null;
+    }
+
+    private async Task DoHeartbeat(Object state)
+    {
+        // 连接断开时不发送心跳
+        if (_client == null || !_client.Active)
+        {
+            // 触发自动重连
+            if (AutoReconnect)
+            {
+                StartReconnect();
+            }
+            return;
+        }
+
+        try
+        {
+            var seq = (UInt16)Interlocked.Increment(ref _seq);
+            var msg = new JTMessage
+            {
+                Mobile = Mobile,
+                Version = Config?.Version == JT808Version.JT2019 ? (Byte)1 : (Byte)0,
+                Kind = MessageKinds.终端心跳,
+                Sequence = seq,
+            };
+
+            var pk = Codec.Encode(msg);
+            _client.Send(pk);
+            SentCount++;
+
+            WriteLog("心跳 => {0}", seq);
+        }
+        catch (Exception ex)
+        {
+            WriteLog("心跳异常：{0}", ex.Message);
+        }
+    }
+    #endregion
+
+    #region 自动重连
+    /// <summary>启动自动重连</summary>
+    protected virtual void StartReconnect()
+    {
+        if (!AutoReconnect) return;
+        if (_reconnectTimer != null) return;
+
+        if (MaxReconnect > 0 && _reconnectCount >= MaxReconnect)
+        {
+            WriteLog("已达到最大重连次数 {0}，停止重连", MaxReconnect);
+            return;
+        }
+
+        _reconnectTimer = new TimerX(DoReconnect, null, ReconnectInterval, ReconnectInterval)
+        {
+            Async = true,
+        };
+    }
+
+    /// <summary>停止自动重连</summary>
+    protected virtual void StopReconnect()
+    {
+        _reconnectTimer.TryDispose();
+        _reconnectTimer = null;
+    }
+
+    private async Task DoReconnect(Object state)
+    {
+        // 已连接则取消重连
+        if (_client != null && _client.Active)
+        {
+            StopReconnect();
+            _reconnectCount = 0;
+            return;
+        }
+
+        _reconnectCount++;
+        ReconnectCount++;
+
+        WriteLog("自动重连第 {0} 次...", _reconnectCount);
+
+        try
+        {
+            Open();
+        }
+        catch (Exception ex)
+        {
+            WriteLog("自动重连失败：{0}", ex.Message);
+        }
     }
     #endregion
 
