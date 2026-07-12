@@ -38,6 +38,9 @@ public class JT808Server : NetServer<JT808Session>
     /// <summary>指令总线。支持本地和跨服务器指令下发，为空时使用 Manager 的默认本地下发</summary>
     public ICommandBus? CommandBus { get; set; }
 
+    /// <summary>黑名单管理器</summary>
+    public BlacklistManager Blacklist { get; set; } = new();
+
     /// <summary>日志</summary>
     public ILog Log { get; set; } = Logger.Null;
     #endregion
