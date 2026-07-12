@@ -1,5 +1,6 @@
 ﻿using System.Collections.Concurrent;
 using System.Reflection;
+using NewLife.Data;
 using NewLife.JT808.UtilTool;
 using NewLife.Reflection;
 using NewLife.Serialization;
@@ -104,7 +105,7 @@ namespace NewLife.JT808.Protocols
             var msg = Create(message.Kind);
             if (msg == null) return null;
 
-            var pk = message.Payload;
+            var pk = (Packet)message.Payload;
             if (pk != null && pk.Total > 0)
             {
                 var ms = pk.GetStream();

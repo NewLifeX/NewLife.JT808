@@ -23,16 +23,18 @@ public class JTCodec
     {
         if (message.Sequence == 0) message.Sequence = GetSequence();
 
-        return message.ToPacket();
+        return (Packet)message.ToPacket();
     }
 
     /// <summary>解码数据包为消息列表（处理粘包）</summary>
     /// <param name="pk">原始数据包</param>
     /// <returns>解码后的消息列表</returns>
-    public virtual IList<JTMessage> Decode(Packet pk)
+    public virtual IList<JTMessage> Decode(IPacket pk)
     {
+        if (pk is not Packet packet) packet = new Packet(pk.ToArray());
+
         // 将新数据追加到缓冲区
-        pk.CopyTo(_buffer);
+        packet.CopyTo(_buffer);
 
         return ParseBuffer();
     }

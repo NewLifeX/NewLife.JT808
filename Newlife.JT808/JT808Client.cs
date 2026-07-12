@@ -208,7 +208,7 @@ public class JT808Client : DisposeBase
         var pk = Codec.Encode(msg);
 
         // 使用TaskCompletionSource等待响应
-        var tcs = new TaskCompletionSource<Packet>();
+        var tcs = new TaskCompletionSource<IPacket>();
         EventHandler<ReceivedEventArgs> handler = null;
         handler = (s, e) =>
         {
@@ -221,7 +221,7 @@ public class JT808Client : DisposeBase
         try
         {
             Received += handler;
-            _client.Send(pk);
+            _client.Send((Packet)pk);
 
             using var cts = new CancellationTokenSource(timeout);
             cts.Token.Register(() => tcs.TrySetCanceled());

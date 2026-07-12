@@ -1,4 +1,5 @@
-﻿using NewLife.JT808.Protocols;
+﻿using NewLife.Data;
+using NewLife.JT808.Protocols;
 using NewLife.JT808.Models;
 using NewLife.JT808.UtilTool;
 using NewLife.Serialization;
@@ -61,7 +62,7 @@ namespace NewLife.JT808.Models
                 {
                     var pk = item.ToPacket();
                     writer.Write((UInt16)pk.Total);
-                    writer.Write(pk.ReadBytes());
+                    writer.Write(((Packet)pk).ToArray());
                 }
             }
 

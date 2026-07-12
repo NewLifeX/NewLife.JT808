@@ -6,7 +6,7 @@
 ![Nuget](https://img.shields.io/nuget/v/newlife.jt808?logo=nuget)
 ![Nuget (with prereleases)](https://img.shields.io/nuget/vpre/newlife.jt808?label=dev%20nuget&logo=nuget)
 
-JT/T 808 车辆定位协议完整实现，支持 2011/2013/2019 三个版本，涵盖 65+ 标准消息体及苏标主动安全扩展。
+JT/T 808 车辆定位协议完整实现，支持 2011/2013/2019 三个版本，涵盖 70+ 标准消息体、苏标主动安全扩展、JT/T 1078 音视频基础消息及 JT/T 19056 行车记录仪协议。
 
 源码： https://github.com/NewLifeX/NewLife.JT808  
 Nuget：[NewLife.JT808](https://www.nuget.org/packages/NewLife.JT808)  
@@ -15,11 +15,15 @@ Nuget：[NewLife.JT808](https://www.nuget.org/packages/NewLife.JT808)
 
 ## 主要特点
 
-- **协议完整**：实现 JT/T 808-2013/2019 消息帧解析，支持 0x7E 帧边界、0x7D 转义、异或校验、分包处理
-- **消息体丰富**：覆盖 65+ 标准消息体（0x0001~0x8A00），终端上行 + 平台下行全覆盖
-- **双版本兼容**：通过 `Version` 字段 + `[JT2019]` 特性实现 2013/2019 版本自动适配，无需手写分支
+- **协议完整**：实现 JT/T 808-2011/2013/2019 消息帧解析，支持 0x7E 帧边界、0x7D 转义、异或校验、分包处理
+- **消息体丰富**：覆盖 70+ 标准消息体（0x0001~0x8A00），终端上行 + 平台下行全覆盖
+- **三版本兼容**：通过 `Version` 字段 + `[JT2011]`/`[JT2019]` 特性实现三版本字段自动适配
 - **双模式序列化**：简单消息体使用属性驱动反射序列化，复杂消息体实现 `IAccessor` 手动控制读写
 - **TLV/KLV 解析**：内置 Type-Length-Value 和 Kind-Length-Value 通用编解码，支持强类型字典转换
+- **网络通信层**：内置 TCP 粘包编解码器 `JTCodec` 和客户端 `JT808Client`，支持消息处理器自动路由
+- **苏标扩展**：支持 ADAS/DSM/TPMS/BSD 主动安全报警信息，外设状态/信息解析，报警附件协议
+- **音视频基础**：JT/T 1078 音视频消息体模型和枚举定义
+- **行车记录仪**：JT/T 19056 上下行数据包编解码
 - **苏标扩展**：支持 ADAS/DSM/TPMS/BSD 主动安全报警信息，外设状态/信息解析，报警附件协议
 - **BCD 编码**：BCD 字符串和时间自定义序列化特性，适配协议特有编码格式
 - **GBK 编码**：内置 GBK 中文字符串编解码，自动注册 `CodePagesEncodingProvider`

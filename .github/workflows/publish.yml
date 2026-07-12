@@ -26,4 +26,5 @@ jobs:
         dotnet pack -c Release -o out Newlife.JT808/NewLife.JT808.csproj
     - name: Publish
       run: |
+        # dotnet nuget push ./out/*.nupkg --skip-duplicate --source https://nuget.pkg.github.com/NewLifeX/index.json --api-key ${{ github.token }}
         dotnet nuget push ./out/*.nupkg --skip-duplicate --source https://api.nuget.org/v3/index.json --api-key ${{ secrets.nugetKey }}
