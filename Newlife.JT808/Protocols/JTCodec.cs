@@ -32,10 +32,8 @@ public class JTCodec
     /// <returns>解码后的消息列表</returns>
     public virtual IList<JTMessage> Decode(IPacket pk)
     {
-        if (pk is not Packet packet) packet = new Packet(pk.ToArray());
-
         // 将新数据追加到缓冲区
-        if (packet != null) packet.CopyTo(_buffer);
+        pk.CopyTo(_buffer);
 
         return ParseBuffer();
     }
@@ -73,7 +71,7 @@ public class JTCodec
         // 保留未处理完的数据
         _buffer.SetLength(0);
         if (data.Total > 0)
-            PacketHelper.CopyTo(data, _buffer);
+            data.CopyTo(_buffer);
 
         return list;
     }

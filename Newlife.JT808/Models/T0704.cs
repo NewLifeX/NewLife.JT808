@@ -62,7 +62,7 @@ namespace NewLife.JT808.Models
                 {
                     var pk = item.ToPacket();
                     writer.Write((UInt16)pk.Total);
-                    writer.Write(((Packet)pk).ToArray());
+                    writer.Write(pk.ToArray());
                 }
             }
 

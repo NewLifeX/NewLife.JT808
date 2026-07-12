@@ -125,7 +125,7 @@ public class JT808Server : NetServer<JT808Session>
         else
         {
             // 拷贝数据，避免网络缓冲区被重用导致数据损坏
-            message.Payload = new Packet(message.Payload.ToArray());
+            message.Payload = new ArrayPacket(message.Payload.ToArray());
             _mergeCache.Set(key, message, 60);
         }
 

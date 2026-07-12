@@ -1,6 +1,11 @@
+using NewLife.Cube;
+
 var builder = WebApplication.CreateBuilder(args);
+
+builder.Services.AddCube();
+
 var app = builder.Build();
 
-app.MapGet("/", () => "Hello World!");
+app.UseCube(app.Environment);
 
 app.Run();

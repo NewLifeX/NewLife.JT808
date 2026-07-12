@@ -10,6 +10,8 @@
     <Nullable>enable</Nullable>
     <UseWindowsForms>true</UseWindowsForms>
     <ImplicitUsings>enable</ImplicitUsings>
+    <LangVersion>latest</LangVersion>
+    <OutputPath>..\Bin\Client</OutputPath>
   </PropertyGroup>
 
 </Project>

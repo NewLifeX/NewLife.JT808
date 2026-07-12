@@ -38,7 +38,8 @@ namespace NewLife.JT808.UtilTool
             Stream = stream,
             Encoding = Encoding,
             IsLittleEndian = false,
-            UseFieldSize = true
+            UseFieldSize = true,
+            TrimZero = true,
         };
 
         /// <summary>创建读取器</summary>
@@ -64,6 +65,7 @@ namespace NewLife.JT808.UtilTool
             Encoding = Encoding,
             IsLittleEndian = false,
             UseFieldSize = true,
+            TrimZero = true,
 
             Version = message == null ? null : (message.Version > 0 ? "2019" : "2013"),
         };

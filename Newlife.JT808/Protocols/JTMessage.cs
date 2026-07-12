@@ -255,7 +255,7 @@ public class JTMessage : IMessage, IAccessor
         /// <summary>读取数据包</summary>
         /// <param name="pk"></param>
         /// <returns></returns>
-        public Boolean Read(Packet pk) => Read(pk.GetStream(), null);
+        public Boolean Read(IPacket pk) => Read(pk.GetStream(), null);
 
     /// <summary>转数据包</summary>
     /// <returns></returns>

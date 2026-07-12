@@ -106,7 +106,7 @@ namespace NewLife.JT808.Protocols
             var msg = Create(message.Kind);
             if (msg == null) return null;
 
-            var pk = (Packet)message.Payload;
+            var pk = message.Payload as IPacket;
             if (pk != null && pk.Total > 0)
             {
                 var ms = pk.GetStream();
