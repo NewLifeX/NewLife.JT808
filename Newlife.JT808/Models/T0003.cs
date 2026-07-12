@@ -1,6 +1,6 @@
 ﻿using NewLife.JT808.Protocols;
 
-namespace NewLife.JT808.TModels
+namespace NewLife.JT808.Models
 {
     /// <summary>终端注销请求</summary>
     [MessageKind(MessageKinds.终端注销)]

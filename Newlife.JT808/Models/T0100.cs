@@ -2,7 +2,7 @@
 using NewLife.JT808.UtilTool;
 using NewLife.Serialization;
 
-namespace NewLife.JT808.TModels
+namespace NewLife.JT808.Models
 {
     /// <summary>终端注册</summary>
     [MessageKind(MessageKinds.终端注册)]

@@ -1,5 +1,5 @@
 ﻿using NewLife.JT808.Protocols;
-using NewLife.JT808.TModels;
+using NewLife.JT808.Models;
 
 namespace NewLife.JT808.Models
 {

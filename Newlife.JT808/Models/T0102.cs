@@ -1,7 +1,7 @@
 ﻿using NewLife.JT808.Protocols;
 using NewLife.Serialization;
 
-namespace NewLife.JT808.TModels
+namespace NewLife.JT808.Models
 {
     /// <summary>终端鉴权</summary>
     [MessageKind(MessageKinds.终端鉴权)]

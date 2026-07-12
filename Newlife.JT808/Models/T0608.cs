@@ -1,6 +1,6 @@
 ﻿using NewLife.JT808.Protocols;
 
-namespace NewLife.JT808.TModels
+namespace NewLife.JT808.Models
 {
     /// <summary>查询区域或线路数据应答</summary>
     [MessageKind(MessageKinds.查询区域或线路数据应答)]

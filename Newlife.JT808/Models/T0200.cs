@@ -4,7 +4,7 @@ using NewLife.JT808.UtilTool;
 using NewLife;
 using NewLife.Serialization;
 
-namespace NewLife.JT808.TModels
+namespace NewLife.JT808.Models
 {
     /// <summary>位置信息汇报</summary>
     [MessageKind(MessageKinds.位置信息汇报)]

@@ -1,20 +1,65 @@
 <Project Sdk="Microsoft.NET.Sdk">
 
 	<PropertyGroup>
-		<TargetFramework>net7.0</TargetFramework>
+		<TargetFrameworks>netstandard2.1;netstandard2.0;net461;net45</TargetFrameworks>
+		<RootNamespace>NewLife.JT808</RootNamespace>
+		<AssemblyTitle>JT808协议</AssemblyTitle>
+		<Description>JT/T 808车辆定位协议完整实现，支持2011/2013/2019版本</Description>
+		<Company>新生命开发团队</Company>
+		<Copyright>©2002-2026 新生命开发团队</Copyright>
 		<VersionPrefix>1.0</VersionPrefix>
 		<VersionSuffix>$([System.DateTime]::Now.ToString(`yyyy.MMdd`))</VersionSuffix>
 		<Version>$(VersionPrefix).$(VersionSuffix)</Version>
 		<FileVersion>$(Version)</FileVersion>
 		<AssemblyVersion>$(VersionPrefix).*</AssemblyVersion>
 		<Deterministic>false</Deterministic>
-		<!--<GenerateDocumentationFile>True</GenerateDocumentationFile>-->
-		<LangVersion>latest</LangVersion>
+		<OutputPath>..\Bin</OutputPath>
+		<GenerateDocumentationFile>True</GenerateDocumentationFile>
+		<Nullable>enable</Nullable>
 		<ImplicitUsings>enable</ImplicitUsings>
+		<LangVersion>latest</LangVersion>
+	</PropertyGroup>
+
+	<PropertyGroup>
+		<PackageId>$(AssemblyName)</PackageId>
+		<Authors>$(Company)</Authors>
+		<PackageProjectUrl>https://newlifex.com</PackageProjectUrl>
+		<PackageIcon>leaf.png</PackageIcon>
+		<RepositoryUrl>https://github.com/NewLifeX/NewLife.JT808</RepositoryUrl>
+		<RepositoryType>git</RepositoryType>
+		<PackageTags>物联网;IoT;车联网;GPS;北斗;JT808;JT/T808;新生命团队;NewLife;$(AssemblyName)</PackageTags>
+		<PackageReleaseNotes>初始版本：JT/T 808-2013/2019 消息帧解析、65+ 标准消息体、双版本兼容、TLV/KLV、苏标扩展</PackageReleaseNotes>
+		<PackageLicenseExpression>MIT</PackageLicenseExpression>
+		<PublishRepositoryUrl>true</PublishRepositoryUrl>
+		<EmbedUntrackedSources>true</EmbedUntrackedSources>
+		<IncludeSymbols>true</IncludeSymbols>
+		<SymbolPackageFormat>snupkg</SymbolPackageFormat>
+		<PackageReadmeFile>Readme.MD</PackageReadmeFile>
 	</PropertyGroup>
 
 	<ItemGroup>
-	  <PackageReference Include="NewLife.Core" Version="10.2.2023.401" />
+		<PackageReference Include="Microsoft.SourceLink.GitHub" Version="10.0.300">
+			<PrivateAssets>all</PrivateAssets>
+			<IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
+		</PackageReference>
+	</ItemGroup>
+
+	<ItemGroup>
+		<PackageReference Include="NewLife.Core" Version="10.2.2023.401" />
+	</ItemGroup>
+
+	<ItemGroup Condition="'$(TargetFramework)'=='netstandard2.1' Or '$(TargetFramework)'=='netstandard2.0'">
+		<PackageReference Include="System.Text.Encoding.CodePages" Version="5.0.0" />
+	</ItemGroup>
+
+	<ItemGroup>
+		<Content Include="..\Doc\leaf.png" Link="leaf.png" PackagePath="\" />
+	</ItemGroup>
+	<ItemGroup>
+		<None Include="..\Readme.MD">
+			<Pack>True</Pack>
+			<PackagePath>\</PackagePath>
+		</None>
 	</ItemGroup>
 
 </Project>

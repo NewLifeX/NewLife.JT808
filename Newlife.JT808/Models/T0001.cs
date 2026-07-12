@@ -1,6 +1,6 @@
 ﻿using NewLife.JT808.Protocols;
 
-namespace NewLife.JT808.TModels
+namespace NewLife.JT808.Models
 {
     /// <summary>返回结果</summary>
     public enum ResultKinds : byte

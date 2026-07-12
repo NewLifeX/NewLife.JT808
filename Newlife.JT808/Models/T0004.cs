@@ -1,7 +1,7 @@
 ﻿using NewLife.JT808.Protocols;
 using NewLife.JT808.Serialization;
 
-namespace NewLife.JT808.TModels
+namespace NewLife.JT808.Models
 {
     /// <summary>
     /// 查询服务器时间请求

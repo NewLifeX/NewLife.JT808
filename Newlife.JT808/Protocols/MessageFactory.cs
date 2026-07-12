@@ -57,6 +57,35 @@ namespace NewLife.JT808.Protocols
             if (att != null) Register(att.Kind, type);
         }
 
+        /// <summary>从指定程序集扫描并注册所有带有[MessageKind]特性的类型</summary>
+        /// <param name="assembly">要扫描的程序集</param>
+        public void Register(Assembly assembly)
+        {
+            foreach (var type in assembly.GetTypes())
+            {
+                var att = type.GetCustomAttribute<MessageKindAttribute>();
+                if (att != null) Register(att.Kind, type);
+            }
+        }
+
+        /// <summary>注册自定义消息类型映射（可覆盖已有映射）</summary>
+        /// <typeparam name="T">消息体类型</typeparam>
+        public void SetMap<T>()
+        {
+            var type = typeof(T);
+            var att = type.GetCustomAttribute<MessageKindAttribute>();
+            if (att != null) _map1[att.Kind] = type;
+        }
+
+        /// <summary>注册自定义消息类型映射（可覆盖已有映射）</summary>
+        /// <param name="kind">消息类型</param>
+        /// <param name="type">消息体类型</param>
+        public void SetMap(MessageKinds kind, Type type)
+        {
+            _map1[kind] = type;
+            _map2[type] = kind;
+        }
+
         /// <summary>创建指定类型的模型对象</summary>
         /// <param name="kind"></param>
         /// <returns></returns>

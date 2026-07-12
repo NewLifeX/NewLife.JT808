@@ -3,7 +3,7 @@ using NewLife.JT808.UtilTool;
 using NewLife;
 using NewLife.Serialization;
 
-namespace NewLife.JT808.TModels
+namespace NewLife.JT808.Models
 {
     [Flags]
     public enum T0107_Types : UInt16

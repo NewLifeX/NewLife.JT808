@@ -1,6 +1,6 @@
 ﻿using NewLife.JT808.Protocols;
 
-namespace NewLife.JT808.TModels
+namespace NewLife.JT808.Models
 {
     /// <summary>位置信息查询应答</summary>
     [MessageKind(MessageKinds.位置信息查询应答)]

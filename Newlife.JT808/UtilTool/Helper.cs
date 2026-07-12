@@ -12,7 +12,9 @@ namespace NewLife.JT808.UtilTool
 
         static Helper()
         {
+#if !NETFRAMEWORK
             Encoding.RegisterProvider(CodePagesEncodingProvider.Instance);
+#endif
             Encoding = Encoding.GetEncoding("GBK");
         }
 
