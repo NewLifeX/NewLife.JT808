@@ -62,7 +62,7 @@
 - **JT/T 19056 行车记录仪**：CarDVR/UpPackage/DownPackage/UpBody/DownBody
 
 ### 项目工程
-- **Server**：控制台服务端示例（NormalHandler+PositionHandler）
+- **JT808.Server**：控制台服务端示例（NormalHandler+PositionHandler）
 - **Client**：WinForms 报文解调试器
 - **JT808.Data**：XCode 数据层（5 张核心表）
 - **JT808.Web**：Cube 魔方管理后台

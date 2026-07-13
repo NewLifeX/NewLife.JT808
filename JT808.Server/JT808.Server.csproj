@@ -15,7 +15,7 @@
     <ImplicitUsings>enable</ImplicitUsings>
     <Nullable>enable</Nullable>
     <LangVersion>latest</LangVersion>
-    <OutputPath>..\Bin\Server</OutputPath>
+    <OutputPath>..\Bin\JT808.Server</OutputPath>
   </PropertyGroup>
 
 </Project>

@@ -14,7 +14,7 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution 
 		.github\workflows\test.yml = .github\workflows\test.yml
 	EndProjectSection
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Server", "Server\Server.csproj", "{3A3B3F12-86C3-4230-AB1F-C707B0F99A8D}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "JT808.Server", "JT808.Server\JT808.Server.csproj", "{3A3B3F12-86C3-4230-AB1F-C707B0F99A8D}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Client", "Client\Client.csproj", "{3330ED59-8127-47C5-8A3E-27B46FD154B9}"
 EndProject
