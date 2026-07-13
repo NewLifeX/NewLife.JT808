@@ -24,6 +24,10 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "JT808.Web", "JT808.Web\JT80
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "XUnitTest", "XUnitTest\XUnitTest.csproj", "{12639125-C56E-4790-95F3-E599AB35CA62}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Client.Avalonia", "Client.Avalonia\Client.Avalonia.csproj", "{B61F4C7C-768D-43D8-9B73-0292AD147FB4}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Newlife.JT808", "Newlife.JT808", "{25A68DC7-7000-8991-F817-A849B18082EF}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -106,6 +110,18 @@ Global
 		{12639125-C56E-4790-95F3-E599AB35CA62}.Release|x64.Build.0 = Release|Any CPU
 		{12639125-C56E-4790-95F3-E599AB35CA62}.Release|x86.ActiveCfg = Release|Any CPU
 		{12639125-C56E-4790-95F3-E599AB35CA62}.Release|x86.Build.0 = Release|Any CPU
+		{B61F4C7C-768D-43D8-9B73-0292AD147FB4}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{B61F4C7C-768D-43D8-9B73-0292AD147FB4}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{B61F4C7C-768D-43D8-9B73-0292AD147FB4}.Debug|x64.ActiveCfg = Debug|Any CPU
+		{B61F4C7C-768D-43D8-9B73-0292AD147FB4}.Debug|x64.Build.0 = Debug|Any CPU
+		{B61F4C7C-768D-43D8-9B73-0292AD147FB4}.Debug|x86.ActiveCfg = Debug|Any CPU
+		{B61F4C7C-768D-43D8-9B73-0292AD147FB4}.Debug|x86.Build.0 = Debug|Any CPU
+		{B61F4C7C-768D-43D8-9B73-0292AD147FB4}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{B61F4C7C-768D-43D8-9B73-0292AD147FB4}.Release|Any CPU.Build.0 = Release|Any CPU
+		{B61F4C7C-768D-43D8-9B73-0292AD147FB4}.Release|x64.ActiveCfg = Release|Any CPU
+		{B61F4C7C-768D-43D8-9B73-0292AD147FB4}.Release|x64.Build.0 = Release|Any CPU
+		{B61F4C7C-768D-43D8-9B73-0292AD147FB4}.Release|x86.ActiveCfg = Release|Any CPU
+		{B61F4C7C-768D-43D8-9B73-0292AD147FB4}.Release|x86.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

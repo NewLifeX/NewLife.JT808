@@ -1,0 +1,68 @@
+<UserControl xmlns="https://github.com/avaloniaui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:c="using:Client.Avalonia.Converters"
+             x:Class="Client.Avalonia.Views.ConnectionView">
+  <UserControl.Resources>
+    <c:BoolToColorConverter x:Key="BoolToColor" />
+  </UserControl.Resources>
+  <ScrollViewer>
+    <StackPanel Margin="10" Spacing="10">
+      <Label FontSize="18" FontWeight="Bold">TCP 连接管理</Label>
+
+      <Border BorderBrush="{DynamicResource SystemControlForegroundBaseLowBrush}"
+              BorderThickness="1"
+              CornerRadius="4"
+              Padding="10">
+        <StackPanel Spacing="8">
+          <Label FontWeight="Bold" FontSize="14">服务端配置</Label>
+          <StackPanel Spacing="6">
+            <Grid ColumnDefinitions="Auto,*">
+              <Label Grid.Column="0" VerticalAlignment="Center" Margin="0,0,8,0">服务端地址:</Label>
+              <TextBox Grid.Column="1" Text="{Binding ServerAddress}" Watermark="127.0.0.1" />
+            </Grid>
+            <Grid ColumnDefinitions="Auto,*">
+              <Label Grid.Column="0" VerticalAlignment="Center" Margin="0,0,8,0">端口:</Label>
+              <TextBox Grid.Column="1" Text="{Binding ServerPort}" Watermark="808" />
+            </Grid>
+            <Grid ColumnDefinitions="Auto,*">
+              <Label Grid.Column="0" VerticalAlignment="Center" Margin="0,0,8,0">终端手机号:</Label>
+              <TextBox Grid.Column="1" Text="{Binding Mobile}" Watermark="013800123456" />
+            </Grid>
+          </StackPanel>
+        </StackPanel>
+      </Border>
+
+      <StackPanel Orientation="Horizontal" Spacing="8">
+        <Button Content="连接" Command="{Binding ConnectCommand}" />
+        <Button Content="断开" Command="{Binding DisconnectCommand}" />
+        <Ellipse Width="12" Height="12"
+                 Fill="{Binding IsConnected, Converter={StaticResource BoolToColor}}"
+                 VerticalAlignment="Center" />
+        <Label Content="{Binding StatusText}" VerticalAlignment="Center" />
+      </StackPanel>
+
+      <Border BorderBrush="{DynamicResource SystemControlForegroundBaseLowBrush}"
+              BorderThickness="1"
+              CornerRadius="4"
+              Padding="10">
+        <StackPanel Spacing="8">
+          <Label FontWeight="Bold" FontSize="14">统计信息</Label>
+          <StackPanel Orientation="Horizontal" Spacing="16">
+            <StackPanel Orientation="Horizontal" Spacing="4">
+              <Label FontWeight="Bold">已发送:</Label>
+              <Label Content="{Binding SentCount}" />
+            </StackPanel>
+            <StackPanel Orientation="Horizontal" Spacing="4">
+              <Label FontWeight="Bold">已接收:</Label>
+              <Label Content="{Binding ReceivedCount}" />
+            </StackPanel>
+            <StackPanel Orientation="Horizontal" Spacing="4">
+              <Label FontWeight="Bold">重连次数:</Label>
+              <Label Content="{Binding ReconnectCount}" />
+            </StackPanel>
+          </StackPanel>
+        </StackPanel>
+      </Border>
+    </StackPanel>
+  </ScrollViewer>
+</UserControl>

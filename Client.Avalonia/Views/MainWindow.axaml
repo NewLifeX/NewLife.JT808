@@ -1,0 +1,24 @@
+<Window xmlns="https://github.com/avaloniaui"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:vm="using:Client.Avalonia.ViewModels"
+        xmlns:v="using:Client.Avalonia.Views"
+        x:Class="Client.Avalonia.Views.MainWindow"
+        Title="{Binding Title}"
+        Width="1100"
+        Height="750"
+        WindowStartupLocation="CenterScreen">
+  <TabControl SelectedIndex="{Binding SelectedTab}">
+    <TabItem Header="连接管理">
+      <ContentControl Content="{Binding Connection}" />
+    </TabItem>
+    <TabItem Header="终端模拟">
+      <ContentControl Content="{Binding Device}" />
+    </TabItem>
+    <TabItem Header="消息日志">
+      <ContentControl Content="{Binding MessageLog}" />
+    </TabItem>
+    <TabItem Header="服务端管理">
+      <ContentControl Content="{Binding Server}" />
+    </TabItem>
+  </TabControl>
+</Window>

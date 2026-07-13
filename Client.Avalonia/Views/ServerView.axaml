@@ -1,0 +1,95 @@
+<UserControl xmlns="https://github.com/avaloniaui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             x:Class="Client.Avalonia.Views.ServerView">
+  <Grid RowDefinitions="Auto,*" Margin="10">
+    <StackPanel Grid.Row="0" Spacing="10">
+      <Label FontSize="18" FontWeight="Bold">服务端管理</Label>
+
+      <!-- API 配置 -->
+      <Border BorderBrush="{DynamicResource SystemControlForegroundBaseLowBrush}"
+              BorderThickness="1" CornerRadius="4" Padding="10">
+        <StackPanel Spacing="8">
+          <Label FontWeight="Bold" FontSize="14">Web API 配置</Label>
+          <StackPanel Spacing="6">
+            <Grid ColumnDefinitions="Auto,*">
+              <Label Grid.Column="0" Margin="0,0,8,0">API 地址:</Label>
+              <TextBox Grid.Column="1" Text="{Binding ApiAddress}" Watermark="http://127.0.0.1:5000" />
+            </Grid>
+            <Grid ColumnDefinitions="Auto,*">
+              <Label Grid.Column="0" Margin="0,0,8,0">Token:</Label>
+              <TextBox Grid.Column="1" Text="{Binding ApiToken}" Watermark="可选" />
+            </Grid>
+          </StackPanel>
+
+          <StackPanel Orientation="Horizontal" Spacing="8">
+            <Button Content="刷新统计" Command="{Binding RefreshStatsCommand}" />
+            <Button Content="刷新会话" Command="{Binding RefreshSessionsCommand}" />
+            <Button Content="刷新黑名单" Command="{Binding RefreshBlacklistCommand}" />
+            <Label Content="{Binding ApiStatus}" VerticalAlignment="Center" />
+          </StackPanel>
+        </StackPanel>
+      </Border>
+
+      <!-- 服务器统计 -->
+      <Border BorderBrush="{DynamicResource SystemControlForegroundBaseLowBrush}"
+              BorderThickness="1" CornerRadius="4" Padding="10">
+        <StackPanel Spacing="6">
+          <Label FontWeight="Bold" FontSize="14">服务器统计</Label>
+          <StackPanel Orientation="Horizontal" Spacing="16">
+            <StackPanel Orientation="Horizontal" Spacing="4">
+              <Label FontWeight="Bold">服务:</Label>
+              <Label Content="{Binding StatsServer}" />
+            </StackPanel>
+            <StackPanel Orientation="Horizontal" Spacing="4">
+              <Label FontWeight="Bold">运行状态:</Label>
+              <Label Content="{Binding StatsRunning}" />
+            </StackPanel>
+            <StackPanel Orientation="Horizontal" Spacing="4">
+              <Label FontWeight="Bold">启动时间:</Label>
+              <Label Content="{Binding StatsStarted}" />
+            </StackPanel>
+          </StackPanel>
+        </StackPanel>
+      </Border>
+    </StackPanel>
+
+    <!-- 会话与黑名单 TabControl -->
+    <TabControl Grid.Row="1">
+      <TabItem Header="在线会话">
+        <Grid RowDefinitions="Auto,*" Margin="4">
+          <TextBlock Grid.Row="0" Margin="0,0,0,4">
+            <Run FontWeight="Bold">在线会话 (共 </Run>
+            <Run Text="{Binding SessionTotal}" />
+            <Run> 个)</Run>
+          </TextBlock>
+          <ListBox Grid.Row="1" ItemsSource="{Binding Sessions}">
+            <ListBox.ItemTemplate>
+              <DataTemplate>
+                <Grid ColumnDefinitions="Auto,*,Auto" Margin="2">
+                  <Label Grid.Column="0" Content="{Binding Mobile}" FontWeight="Bold" />
+                  <Label Grid.Column="1" Content="{Binding Remote}" />
+                </Grid>
+              </DataTemplate>
+            </ListBox.ItemTemplate>
+          </ListBox>
+        </Grid>
+      </TabItem>
+      <TabItem Header="黑名单">
+        <Grid RowDefinitions="Auto,*,Auto" Margin="4">
+          <Label Grid.Row="0" FontWeight="Bold" Margin="0,0,0,4">黑名单管理</Label>
+          <ListBox Grid.Row="1" ItemsSource="{Binding Blacklist}">
+            <ListBox.ItemTemplate>
+              <DataTemplate>
+                <Label Content="{Binding}" />
+              </DataTemplate>
+            </ListBox.ItemTemplate>
+          </ListBox>
+          <Grid Grid.Row="2" ColumnDefinitions="*,Auto" Margin="0,4,0,0">
+            <TextBox Grid.Column="0" Text="{Binding NewBlacklistMobile}" Watermark="手机号" Margin="0,0,4,0" />
+            <Button Grid.Column="1" Content="添加黑名单" Command="{Binding AddBlacklistCommand}" />
+          </Grid>
+        </Grid>
+      </TabItem>
+    </TabControl>
+  </Grid>
+</UserControl>

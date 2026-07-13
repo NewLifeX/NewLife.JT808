@@ -1,0 +1,120 @@
+<UserControl xmlns="https://github.com/avaloniaui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             x:Class="Client.Avalonia.Views.DeviceView">
+  <ScrollViewer>
+    <StackPanel Margin="10" Spacing="10">
+      <Label FontSize="18" FontWeight="Bold">终端模拟</Label>
+
+      <!-- 注册与鉴权 -->
+      <Border BorderBrush="{DynamicResource SystemControlForegroundBaseLowBrush}"
+              BorderThickness="1" CornerRadius="4" Padding="10">
+        <StackPanel Spacing="8">
+          <Label FontWeight="Bold" FontSize="14">注册与鉴权</Label>
+          <StackPanel Spacing="6">
+            <Grid ColumnDefinitions="Auto,*">
+              <Label Grid.Column="0" Margin="0,0,8,0">省域ID:</Label>
+              <TextBox Grid.Column="1" Text="{Binding Province}" Watermark="44" />
+            </Grid>
+            <Grid ColumnDefinitions="Auto,*">
+              <Label Grid.Column="0" Margin="0,0,8,0">市县域ID:</Label>
+              <TextBox Grid.Column="1" Text="{Binding City}" Watermark="4403" />
+            </Grid>
+            <Grid ColumnDefinitions="Auto,*">
+              <Label Grid.Column="0" Margin="0,0,8,0">制造商:</Label>
+              <TextBox Grid.Column="1" Text="{Binding Manufacturer}" Watermark="NewLife" />
+            </Grid>
+            <Grid ColumnDefinitions="Auto,*">
+              <Label Grid.Column="0" Margin="0,0,8,0">终端型号:</Label>
+              <TextBox Grid.Column="1" Text="{Binding DeviceModel}" Watermark="JT808-Test" />
+            </Grid>
+            <Grid ColumnDefinitions="Auto,*">
+              <Label Grid.Column="0" Margin="0,0,8,0">终端ID:</Label>
+              <TextBox Grid.Column="1" Text="{Binding DeviceId}" Watermark="TEST001" />
+            </Grid>
+            <Grid ColumnDefinitions="Auto,*">
+              <Label Grid.Column="0" Margin="0,0,8,0">车牌号:</Label>
+              <TextBox Grid.Column="1" Text="{Binding PlateNo}" Watermark="粤B12345" />
+            </Grid>
+            <Grid ColumnDefinitions="Auto,*">
+              <Label Grid.Column="0" Margin="0,0,8,0">鉴权码:</Label>
+              <TextBox Grid.Column="1" Text="{Binding AuthCode}" Watermark="从注册应答获取" />
+            </Grid>
+          </StackPanel>
+
+          <StackPanel Orientation="Horizontal" Spacing="8">
+            <Button Content="发送注册" Command="{Binding SendRegisterCommand}" />
+            <Button Content="发送鉴权" Command="{Binding SendAuthCommand}" />
+            <Label Content="{Binding RegisterStatus}" VerticalAlignment="Center" />
+          </StackPanel>
+        </StackPanel>
+      </Border>
+
+      <!-- 位置上报 -->
+      <Border BorderBrush="{DynamicResource SystemControlForegroundBaseLowBrush}"
+              BorderThickness="1" CornerRadius="4" Padding="10">
+        <StackPanel Spacing="8">
+          <Label FontWeight="Bold" FontSize="14">位置上报</Label>
+          <StackPanel Spacing="6">
+            <Grid ColumnDefinitions="Auto,*">
+              <Label Grid.Column="0" Margin="0,0,8,0">纬度(百万分之一度):</Label>
+              <TextBox Grid.Column="1" Text="{Binding Latitude}" Watermark="22650000" />
+            </Grid>
+            <Grid ColumnDefinitions="Auto,*">
+              <Label Grid.Column="0" Margin="0,0,8,0">经度(百万分之一度):</Label>
+              <TextBox Grid.Column="1" Text="{Binding Longitude}" Watermark="114030000" />
+            </Grid>
+            <Grid ColumnDefinitions="Auto,*">
+              <Label Grid.Column="0" Margin="0,0,8,0">海拔(米):</Label>
+              <TextBox Grid.Column="1" Text="{Binding Altitude}" Watermark="50" />
+            </Grid>
+            <Grid ColumnDefinitions="Auto,*">
+              <Label Grid.Column="0" Margin="0,0,8,0">速度(1/10 km/h):</Label>
+              <TextBox Grid.Column="1" Text="{Binding Speed}" Watermark="0" />
+            </Grid>
+            <Grid ColumnDefinitions="Auto,*">
+              <Label Grid.Column="0" Margin="0,0,8,0">方向(度):</Label>
+              <TextBox Grid.Column="1" Text="{Binding Direction}" Watermark="180" />
+            </Grid>
+          </StackPanel>
+
+          <StackPanel Orientation="Horizontal" Spacing="8">
+            <Button Content="发送位置" Command="{Binding SendLocationCommand}" />
+            <Button Content="发送心跳" Command="{Binding SendHeartbeatCommand}" />
+            <CheckBox IsChecked="{Binding TimerEnabled}" Content="定时上报" />
+            <TextBox Text="{Binding TimerInterval}" Width="60" Watermark="30" />
+            <Label VerticalAlignment="Center">秒</Label>
+          </StackPanel>
+        </StackPanel>
+      </Border>
+
+      <!-- 通用消息发送 -->
+      <Border BorderBrush="{DynamicResource SystemControlForegroundBaseLowBrush}"
+              BorderThickness="1" CornerRadius="4" Padding="10">
+        <StackPanel Spacing="8">
+          <Label FontWeight="Bold" FontSize="14">通用消息发送</Label>
+          <StackPanel Spacing="6">
+            <Grid ColumnDefinitions="Auto,*">
+              <Label Grid.Column="0" Margin="0,0,8,0">消息类型:</Label>
+              <ComboBox Grid.Column="1"
+                        ItemsSource="{Binding MessageKindNames}"
+                        SelectedItem="{Binding SelectedMessageKind}" />
+            </Grid>
+            <Grid ColumnDefinitions="Auto,*">
+              <Label Grid.Column="0" Margin="0,0,8,0">消息体JSON:</Label>
+              <TextBox Grid.Column="1"
+                       Text="{Binding MessageBodyJson}"
+                       MinHeight="80"
+                       AcceptsReturn="True"
+                       Watermark='{}' />
+            </Grid>
+          </StackPanel>
+
+          <StackPanel Orientation="Horizontal" Spacing="8">
+            <Button Content="发送消息" Command="{Binding SendMessageCommand}" />
+            <CheckBox IsChecked="{Binding WaitResponse}" Content="等待响应" />
+          </StackPanel>
+        </StackPanel>
+      </Border>
+    </StackPanel>
+  </ScrollViewer>
+</UserControl>
