@@ -36,6 +36,9 @@ public class MainWindowViewModel : ViewModelBase
     /// <summary>服务端管理</summary>
     public ServerViewModel Server { get; }
 
+    /// <summary>指令解析</summary>
+    public ParserViewModel Parser { get; }
+
     public MainWindowViewModel(AppConfig config)
     {
         _config = config;
@@ -45,6 +48,7 @@ public class MainWindowViewModel : ViewModelBase
         Device = new DeviceViewModel(Connection, log);
         MessageLog = log;
         Server = new ServerViewModel(Connection, config);
+        Parser = new ParserViewModel();
     }
 
     /// <summary>保存配置到文件</summary>

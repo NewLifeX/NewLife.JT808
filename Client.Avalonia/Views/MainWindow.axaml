@@ -20,5 +20,8 @@
     <TabItem Header="服务端管理">
       <ContentControl Content="{Binding Server}" />
     </TabItem>
+    <TabItem Header="指令解析">
+      <ContentControl Content="{Binding Parser}" />
+    </TabItem>
   </TabControl>
 </Window>

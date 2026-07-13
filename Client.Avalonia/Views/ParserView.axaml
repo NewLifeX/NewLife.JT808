@@ -1,0 +1,92 @@
+<UserControl xmlns="https://github.com/avaloniaui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             x:Class="Client.Avalonia.Views.ParserView">
+  <Grid RowDefinitions="Auto,*,Auto" Margin="10">
+    <!-- 标题 -->
+    <Label Grid.Row="0" FontSize="18" FontWeight="Bold" Margin="0,0,0,8">指令解析</Label>
+
+    <!-- 主区域：上输入，下结果 -->
+    <Grid Grid.Row="1" RowDefinitions="2*,3*" Margin="0">
+      <!-- 上方输入区 -->
+      <Grid Grid.Row="0" RowDefinitions="Auto,*,Auto" Margin="0,0,0,8">
+        <Label Grid.Row="0" FontWeight="Bold">十六进制报文</Label>
+        <TextBox Grid.Row="1"
+                 Text="{Binding HexInput}"
+                 AcceptsReturn="True"
+                 Watermark="粘贴十六进制报文（支持空格、0x前缀、换行）&#x0a;例如: 7E 02 00 00 2A 01 38 00 01 23 45 67 89 00 07 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 ... 7E"
+                 FontFamily="Consolas"
+                 FontSize="12" />
+        <StackPanel Grid.Row="2" Orientation="Horizontal" Spacing="8" Margin="0,6,0,0">
+          <Button Content="解码" Command="{Binding DecodeCommand}" />
+          <Button Content="清空" Command="{Binding ClearCommand}" />
+          <Label Content="{Binding StatusText}" VerticalAlignment="Center" />
+        </StackPanel>
+      </Grid>
+
+      <!-- 下方结果区 -->
+      <Grid Grid.Row="1" IsVisible="{Binding HasResult}">
+        <TabControl>
+          <TabItem Header="基本信息">
+            <ScrollViewer>
+              <StackPanel Spacing="6" Margin="8">
+                <Grid ColumnDefinitions="Auto,*">
+                  <Label Grid.Column="0" FontWeight="Bold" Margin="0,0,12,0">消息ID:</Label>
+                  <Label Grid.Column="1" Content="{Binding ResultKind}" />
+                </Grid>
+                <Grid ColumnDefinitions="Auto,*">
+                  <Label Grid.Column="0" FontWeight="Bold" Margin="0,0,12,0">消息名称:</Label>
+                  <Label Grid.Column="1" Content="{Binding ResultKindName}" />
+                </Grid>
+                <Grid ColumnDefinitions="Auto,*">
+                  <Label Grid.Column="0" FontWeight="Bold" Margin="0,0,12,0">终端手机号:</Label>
+                  <Label Grid.Column="1" Content="{Binding ResultMobile}" />
+                </Grid>
+                <Grid ColumnDefinitions="Auto,*">
+                  <Label Grid.Column="0" FontWeight="Bold" Margin="0,0,12,0">流水号:</Label>
+                  <Label Grid.Column="1" Content="{Binding ResultSequence}" />
+                </Grid>
+                <Grid ColumnDefinitions="Auto,*">
+                  <Label Grid.Column="0" FontWeight="Bold" Margin="0,0,12,0">协议版本:</Label>
+                  <Label Grid.Column="1" Content="{Binding ResultVersion}" />
+                </Grid>
+                <Grid ColumnDefinitions="Auto,*">
+                  <Label Grid.Column="0" FontWeight="Bold" Margin="0,0,12,0" VerticalAlignment="Top">字段列表:</Label>
+                  <ScrollViewer Grid.Column="1" MaxHeight="120">
+                    <TextBlock Text="{Binding ResultFieldList}" FontFamily="Consolas" FontSize="11" />
+                  </ScrollViewer>
+                </Grid>
+              </StackPanel>
+            </ScrollViewer>
+          </TabItem>
+          <TabItem Header="JSON 消息体">
+            <ScrollViewer>
+              <TextBlock Text="{Binding ResultBody}"
+                         FontFamily="Consolas"
+                         FontSize="11"
+                         TextWrapping="Wrap"
+                         Margin="8" />
+            </ScrollViewer>
+          </TabItem>
+          <TabItem Header="十六进制负载">
+            <ScrollViewer>
+              <TextBlock Text="{Binding ResultHex}"
+                         FontFamily="Consolas"
+                         FontSize="11"
+                         TextWrapping="Wrap"
+                         Margin="8" />
+            </ScrollViewer>
+          </TabItem>
+          <TabItem Header="原始报文">
+            <ScrollViewer>
+              <TextBlock Text="{Binding ResultRaw}"
+                         FontFamily="Consolas"
+                         FontSize="11"
+                         TextWrapping="Wrap"
+                         Margin="8" />
+            </ScrollViewer>
+          </TabItem>
+        </TabControl>
+      </Grid>
+    </Grid>
+  </Grid>
+</UserControl>
