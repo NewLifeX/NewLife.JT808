@@ -1,4 +1,4 @@
-using System.Reflection;
+﻿using System.Reflection;
 using NewLife.Caching;
 using NewLife.Data;
 using NewLife.Log;
@@ -40,9 +40,6 @@ public class JT808Server : NetServer<JT808Session>
 
     /// <summary>黑名单管理器</summary>
     public BlacklistManager Blacklist { get; set; } = new();
-
-    /// <summary>日志</summary>
-    public ILog Log { get; set; } = Logger.Null;
     #endregion
 
     #region 构造

@@ -69,7 +69,16 @@ public class JT808Controller : ControllerBase
     [HttpGet("sessions")]
     public IActionResult GetSessions()
     {
-        return Ok(new { total = 0 });
+        var sessions = _server.Manager.GetAll();
+        var list = sessions.Select(e => new
+        {
+            mobile = e.Key,
+            sessionId = e.Value.ID,
+            remote = e.Value.Remote?.ToString(),
+            time = DateTime.UtcNow.ToString("yyyy-MM-dd HH:mm:ss"),
+        }).ToList();
+
+        return Ok(new { total = list.Count, items = list });
     }
 
     /// <summary>获取指定终端会话详情</summary>

@@ -6,16 +6,17 @@ using NewLife.Messaging;
 using NewLife.Serialization;
 using Stardust;
 
+XTrace.UseConsole();
+
 // 初始化消息工厂
 MessageFactory.Instance.Init();
-
-XTrace.UseConsole();
 
 // 创建服务端实例（先创建，后续事件总线需引用它）
 var server = new JT808Server
 {
     Port = 808,
     Log = XTrace.Log,
+    SessionLog = XTrace.Log,
     Tracer = DefaultTracer.Instance,
 };
 

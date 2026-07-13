@@ -126,6 +126,11 @@ public class ServerViewModel : ViewModelBase
             {
                 SessionTotal = list.Total;
                 _sessions.Clear();
+                if (list.Items != null)
+                {
+                    foreach (var item in list.Items)
+                        _sessions.Add(item);
+                }
                 ApiStatus = $"会话已刷新 (共 {list.Total} 个)";
             }
             else

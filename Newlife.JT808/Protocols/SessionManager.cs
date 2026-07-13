@@ -83,6 +83,16 @@ public class SessionManager : ICommandBus
     /// <param name="mobile">终端手机号</param>
     /// <returns>是否在线</returns>
     public Boolean IsOnline(String mobile) => Find(mobile) != null;
+
+    /// <summary>获取所有在线会话的列表</summary>
+    /// <returns>在线会话列表</returns>
+    public IDictionary<String, INetSession> GetAll()
+    {
+        var keys = _cache.Keys;
+        if (keys == null || keys.Count == 0) return new Dictionary<String, INetSession>();
+
+        return _cache.GetAll<INetSession>(keys);
+    }
     #endregion
 
     #region ICommandBus 实现

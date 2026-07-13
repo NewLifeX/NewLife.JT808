@@ -40,6 +40,9 @@ public class ServerStats
 public class SessionList
 {
     public Int32 Total { get; set; }
+
+    /// <summary>会话详情列表</summary>
+    public SessionInfo[]? Items { get; set; }
 }
 
 /// <summary>会话详情</summary>
