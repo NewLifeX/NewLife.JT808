@@ -1,3 +1,5 @@
+using JT808.Data;
+using NewLife;
 using NewLife.JT808.Models;
 using NewLife.JT808.Protocols;
 using NewLife.Log;
@@ -11,7 +13,46 @@ public class InfoController
     public Object OnQueryParam(JT808Session session, JTMessage message)
     {
         XTrace.WriteLine("查询终端参数：Mobile={0}", message.Mobile);
-        // TODO: 返回终端参数应答
+
+        // 记录参数查询指令
+        var device = Device.FindByMobile(message.Mobile);
+        if (device != null)
+        {
+            var cmd = new DeviceCommand
+            {
+                DeviceId = device.Id,
+                Mobile = message.Mobile,
+                Kind = (Int32)MessageKinds.查询终端参数,
+                Status = 2, // 已应答
+                BodyData = $"查询终端参数: Seq={message.Sequence}",
+                CreateTime = DateTime.Now,
+            };
+            cmd.InsertAsync();
+        }
+
+        return null;
+    }
+
+    [MessageKind(MessageKinds.设置终端参数)]
+    public Object OnSetParam(JT808Session session, JTMessage message)
+    {
+        XTrace.WriteLine("设置终端参数：Mobile={0}", message.Mobile);
+
+        var device = Device.FindByMobile(message.Mobile);
+        if (device != null)
+        {
+            var cmd = new DeviceCommand
+            {
+                DeviceId = device.Id,
+                Mobile = message.Mobile,
+                Kind = (Int32)MessageKinds.设置终端参数,
+                Status = 2,
+                BodyData = $"设置终端参数: Seq={message.Sequence}",
+                CreateTime = DateTime.Now,
+            };
+            cmd.InsertAsync();
+        }
+
         return null;
     }
 

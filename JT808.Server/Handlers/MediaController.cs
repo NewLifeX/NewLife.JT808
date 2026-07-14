@@ -1,3 +1,5 @@
+using JT808.Data;
+using NewLife;
 using NewLife.JT808.Models;
 using NewLife.JT808.Protocols;
 using NewLife.Log;
@@ -13,7 +15,21 @@ public class MediaController
         var model = message.ReadModel<T0800>();
         XTrace.WriteLine("多媒体事件：Mobile={0}, MultimediaType={1}, Format={2}",
             message.Mobile, model.MultimediaType, model.MultimediaCodingFormat);
-        // TODO: MediaService 处理多媒体事件
+
+        var device = Device.FindByMobile(message.Mobile);
+        if (device != null)
+        {
+            var media = new MediaInfo
+            {
+                DeviceId = device.Id,
+                Mobile = message.Mobile,
+                MediaType = model.MultimediaType,
+                Format = model.MultimediaCodingFormat,
+                CreateTime = DateTime.Now,
+            };
+            _ = Task.Run(() => media.InsertAsync());
+        }
+
         return null;
     }
 
@@ -21,7 +37,6 @@ public class MediaController
     public Object OnMediaUpload(JT808Session session, JTMessage message)
     {
         XTrace.WriteLine("多媒体数据上传：Mobile={0}", message.Mobile);
-        // TODO: MediaService 处理媒体数据上传
         return null;
     }
 

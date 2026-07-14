@@ -71,6 +71,15 @@ public class QueueService
         _bsd.Add(data);
     }
 
+    private IProducerConsumer<Object>? _rawData;
+    /// <summary>推送原始报文到 Redis Stream</summary>
+    public void AddRawData(Object data)
+    {
+        _rawData ??= _cacheProvider.GetQueue<Object>("RawData", "Group");
+        if (_rawData == null) return;
+        _rawData.Add(data);
+    }
+
     private IProducerConsumer<Object>? _command;
     /// <summary>推送指令到 Redis 队列（Web→Server 通道）</summary>
     public void AddCommand(Object data)
