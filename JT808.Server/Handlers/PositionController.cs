@@ -1,3 +1,5 @@
+using JT808.Data;
+using NewLife;
 using NewLife.JT808.Models;
 using NewLife.JT808.Protocols;
 using NewLife.Log;
@@ -18,7 +20,67 @@ public class PositionController
             model.Speed,
             model.Direction);
 
-        // TODO: DeviceService 保存位置 + 推入 Redis Stream
+        try
+        {
+            // 查找设备
+            var device = Device.FindByMobile(message.Mobile);
+            if (device == null) return null;
+
+            // 保存位置数据
+            var pos = new PositionData
+            {
+                DeviceId = device.Id,
+                Mobile = message.Mobile,
+                Alarm = (UInt32)model.Alarm,
+                Status = (UInt32)model.Status,
+                Latitude = model.Latitude,
+                Longitude = model.Longitude,
+                Altitude = (Int16)model.Altitude,
+                Speed = (Int16)model.Speed,
+                Direction = (Int16)model.Direction,
+                GPSTime = model.GPSTime,
+                CreateTime = DateTime.Now,
+            };
+            // 异步位置数据保存（不阻塞消息处理）
+            _ = Task.Run(() => pos.InsertAsync());
+
+            // 更新设备在线实时位置
+            var online = DeviceOnline.FindByDeviceId(device.Id);
+            if (online != null)
+            {
+                online.Latitude = model.Latitude;
+                online.Longitude = model.Longitude;
+                online.Speed = (Int16)model.Speed;
+                online.Direction = (Int16)model.Direction;
+                online.HeartbeatTime = DateTime.Now;
+                online.Update();
+            }
+
+            // 处理报警标志
+            if ((UInt32)model.Alarm != 0)
+            {
+                var alarm = new Alarm
+                {
+                    DeviceId = device.Id,
+                    Mobile = message.Mobile,
+                    AlarmType = (Int32)model.Alarm,
+                    AlarmTime = model.GPSTime,
+                    Latitude = model.Latitude,
+                    Longitude = model.Longitude,
+                    Speed = (Int16)model.Speed,
+                    Direction = (Int16)model.Direction,
+                    Altitude = (Int16)model.Altitude,
+                    Content = $"报警标志: 0x{(UInt32)model.Alarm:X8}",
+                    CreateTime = DateTime.Now,
+                };
+                _ = Task.Run(() => alarm.InsertAsync());
+            }
+        }
+        catch (Exception ex)
+        {
+            XTrace.WriteLine("位置数据处理异常：{0}", ex.Message);
+        }
+
         return null;
     }
 
