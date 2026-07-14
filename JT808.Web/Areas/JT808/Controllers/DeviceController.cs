@@ -58,10 +58,11 @@ public class DeviceController : EntityController<Device>
         var productId = p["productId"].ToInt(-1);
         var code = p["code"];
         var enable = p["enable"]?.ToBoolean();
+        var key = p["Q"];
 
         var start = p["dtStart"].ToDateTime();
         var end = p["dtEnd"].ToDateTime();
 
-        return Device.Search(plateNo, productId, code, enable, start, end, p["Q"], p);
+        return Device.Search(plateNo, productId, code, enable, start, end, key, p);
     }
 }
