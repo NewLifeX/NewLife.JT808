@@ -1,0 +1,172 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<EntityModel xmlns:xs="http://www.w3.org/2001/XMLSchema-instance" xs:schemaLocation="https://newlifex.com https://newlifex.com/Model202509.xsd" ModelVersion="2.0.2026.130" Document="https://newlifex.com/xcode/model" xmlns="https://newlifex.com/Model202509.xsd">
+  <Option>
+    <!--类名模板。其中{name}替换为Table.Name，如{name}Model/I{name}Dto等-->
+    <ClassNameTemplate />
+    <!--显示名模板。其中{displayName}替换为Table.DisplayName-->
+    <DisplayNameTemplate />
+    <!--基类。可能包含基类和接口，其中{name}替换为Table.Name-->
+    <BaseClass>Entity</BaseClass>
+    <!--命名空间-->
+    <Namespace>JT808.Data.Safety</Namespace>
+    <!--引用命名空间-->
+    <ExtendNameSpace />
+    <!--输出目录-->
+    <Output>..\Safety\</Output>
+    <!--是否使用中文文件名。默认false-->
+    <ChineseFileName>True</ChineseFileName>
+    <!--用于生成Copy函数的参数类型。例如{name}或I{name}-->
+    <ModelNameForCopy />
+    <!--带有索引器。实现IModel接口-->
+    <HasIModel>True</HasIModel>
+    <!--可为null上下文。生成String?等-->
+    <Nullable>True</Nullable>
+    <!--数据库连接名-->
+    <ConnName>Safety</ConnName>
+    <!--模型类模版。设置后生成模型类，用于接口数据传输，例如{name}Model-->
+    <ModelClass>{name}Model</ModelClass>
+    <!--模型类输出目录。默认当前目录的Models子目录-->
+    <ModelsOutput>..\Safety\Models\</ModelsOutput>
+    <!--模型接口模版。设置后生成模型接口，用于约束模型类和实体类，例如I{name}-->
+    <ModelInterface>I{name}</ModelInterface>
+    <!--模型接口输出目录。默认当前目录的Interfaces子目录-->
+    <InterfacesOutput>..\Safety\Interfaces\</InterfacesOutput>
+    <!--用户实体转为模型类的模型类。例如{name}或{name}DTO-->
+    <ModelNameForToModel />
+    <!--命名格式。Default/Upper/Lower/Underline-->
+    <NameFormat>Default</NameFormat>
+    <!--魔方区域显示名-->
+    <DisplayName>主动安全</DisplayName>
+    <!--魔方控制器输出目录-->
+    <CubeOutput>..\..\JT808.Web\Areas\Safety</CubeOutput>
+  </Option>
+  <Tables>
+    <Table Name="AlarmEvent" Description="报警事件。主动安全报警事件聚合">
+      <Columns>
+        <Column Name="Id" DataType="Int64" PrimaryKey="True" DataScale="time" Description="编号" />
+        <Column Name="DeviceId" DataType="Int32" Description="设备编号" />
+        <Column Name="Mobile" DataType="String" Length="20" Description="手机号" />
+        <Column Name="Kind" DataType="Int32" Description="报警类型。1-ADAS 2-DSM 3-BSD 4-TPMS" />
+        <Column Name="Code" DataType="Int32" Description="事件编码" />
+        <Column Name="Level" DataType="Int32" Description="报警级别。0-紧急 1-警告" />
+        <Column Name="Times" DataType="Int32" Description="累计次数" />
+        <Column Name="Flag" DataType="Int32" Description="标志。0-开始 1-结束 2-持续" />
+        <Column Name="Latitude" DataType="Int32" Description="纬度" />
+        <Column Name="Longitude" DataType="Int32" Description="经度" />
+        <Column Name="Speed" DataType="Int16" Description="速度" />
+        <Column Name="Direction" DataType="Int16" Description="方向" />
+        <Column Name="Altitude" DataType="Int16" Description="海拔" />
+        <Column Name="AlarmTime" DataType="DateTime" Description="报警时间" />
+        <Column Name="CreateTime" DataType="DateTime" DefaultValue="getdate()" Description="创建时间" />
+      </Columns>
+      <Indexes>
+        <Index Columns="DeviceId,AlarmTime" />
+        <Index Columns="Kind,Code" />
+      </Indexes>
+    </Table>
+    <Table Name="ADASAlarm" Description="ADAS报警。高级驾驶辅助报警">
+      <Columns>
+        <Column Name="Id" DataType="Int64" PrimaryKey="True" DataScale="time" Description="编号" />
+        <Column Name="DeviceId" DataType="Int32" Description="设备编号" />
+        <Column Name="Mobile" DataType="String" Length="20" Description="手机号" />
+        <Column Name="EventId" DataType="Int64" Description="报警事件编号" />
+        <Column Name="AlarmType" DataType="Int32" Description="报警类型。1-前向碰撞 2-车道偏离 3-车距过近 4-行人碰撞 5-标志识别" />
+        <Column Name="Level" DataType="Int32" Description="报警级别" />
+        <Column Name="Speed" DataType="Int16" Description="速度" />
+        <Column Name="Latitude" DataType="Int32" Description="纬度" />
+        <Column Name="Longitude" DataType="Int32" Description="经度" />
+        <Column Name="AlarmTime" DataType="DateTime" Description="报警时间" />
+        <Column Name="CreateTime" DataType="DateTime" DefaultValue="getdate()" Description="创建时间" />
+      </Columns>
+      <Indexes>
+        <Index Columns="DeviceId,AlarmTime" />
+        <Index Columns="AlarmType" />
+      </Indexes>
+    </Table>
+    <Table Name="DSMAlarm" Description="DSM报警。驾驶员状态监测报警">
+      <Columns>
+        <Column Name="Id" DataType="Int64" PrimaryKey="True" DataScale="time" Description="编号" />
+        <Column Name="DeviceId" DataType="Int32" Description="设备编号" />
+        <Column Name="Mobile" DataType="String" Length="20" Description="手机号" />
+        <Column Name="EventId" DataType="Int64" Description="报警事件编号" />
+        <Column Name="AlarmType" DataType="Int32" Description="报警类型。1-疲劳驾驶 2-打电话 3-抽烟 4-分神 5-探头遮挡" />
+        <Column Name="Level" DataType="Int32" Description="报警级别" />
+        <Column Name="Speed" DataType="Int16" Description="速度" />
+        <Column Name="Latitude" DataType="Int32" Description="纬度" />
+        <Column Name="Longitude" DataType="Int32" Description="经度" />
+        <Column Name="AlarmTime" DataType="DateTime" Description="报警时间" />
+        <Column Name="CreateTime" DataType="DateTime" DefaultValue="getdate()" Description="创建时间" />
+      </Columns>
+      <Indexes>
+        <Index Columns="DeviceId,AlarmTime" />
+        <Index Columns="AlarmType" />
+      </Indexes>
+    </Table>
+    <Table Name="BSDAlarm" Description="BSD报警。盲区监测报警">
+      <Columns>
+        <Column Name="Id" DataType="Int64" PrimaryKey="True" DataScale="time" Description="编号" />
+        <Column Name="DeviceId" DataType="Int32" Description="设备编号" />
+        <Column Name="Mobile" DataType="String" Length="20" Description="手机号" />
+        <Column Name="EventId" DataType="Int64" Description="报警事件编号" />
+        <Column Name="AlarmType" DataType="Int32" Description="报警类型" />
+        <Column Name="Level" DataType="Int32" Description="报警级别" />
+        <Column Name="Speed" DataType="Int16" Description="速度" />
+        <Column Name="Latitude" DataType="Int32" Description="纬度" />
+        <Column Name="Longitude" DataType="Int32" Description="经度" />
+        <Column Name="AlarmTime" DataType="DateTime" Description="报警时间" />
+        <Column Name="CreateTime" DataType="DateTime" DefaultValue="getdate()" Description="创建时间" />
+      </Columns>
+      <Indexes>
+        <Index Columns="DeviceId,AlarmTime" />
+      </Indexes>
+    </Table>
+    <Table Name="TPMSAlarm" Description="TPMS报警。胎压监测报警">
+      <Columns>
+        <Column Name="Id" DataType="Int64" PrimaryKey="True" DataScale="time" Description="编号" />
+        <Column Name="DeviceId" DataType="Int32" Description="设备编号" />
+        <Column Name="Mobile" DataType="String" Length="20" Description="手机号" />
+        <Column Name="EventId" DataType="Int64" Description="报警事件编号" />
+        <Column Name="AlarmType" DataType="Int32" Description="报警类型。1-胎压低 2-胎压高 3-胎温高 4-漏气" />
+        <Column Name="Level" DataType="Int32" Description="报警级别" />
+        <Column Name="TireNo" DataType="Int32" Description="轮胎编号" />
+        <Column Name="Pressure" DataType="Double" Description="胎压(Pa)" />
+        <Column Name="Temperature" DataType="Int16" Description="温度(℃)" />
+        <Column Name="AlarmTime" DataType="DateTime" Description="报警时间" />
+        <Column Name="CreateTime" DataType="DateTime" DefaultValue="getdate()" Description="创建时间" />
+      </Columns>
+      <Indexes>
+        <Index Columns="DeviceId,AlarmTime" />
+      </Indexes>
+    </Table>
+    <Table Name="AlarmFile" Description="报警附件。报警关联的图片/视频/音频文件">
+      <Columns>
+        <Column Name="Id" DataType="Int64" PrimaryKey="True" DataScale="time" Description="编号" />
+        <Column Name="DeviceId" DataType="Int32" Description="设备编号" />
+        <Column Name="Mobile" DataType="String" Length="20" Description="手机号" />
+        <Column Name="EventId" DataType="Int64" Description="报警事件编号" />
+        <Column Name="FileType" DataType="String" Length="20" Description="文件类型。image/video/audio" />
+        <Column Name="FileName" DataType="String" Length="200" Description="文件名" />
+        <Column Name="FilePath" DataType="String" Length="500" Description="文件路径" />
+        <Column Name="FileSize" DataType="Int32" Description="文件大小" />
+        <Column Name="CreateTime" DataType="DateTime" DefaultValue="getdate()" Description="创建时间" />
+      </Columns>
+      <Indexes>
+        <Index Columns="DeviceId,EventId" />
+      </Indexes>
+    </Table>
+    <Table Name="MediaResource" Description="媒体资源。主动安全多媒体资源索引">
+      <Columns>
+        <Column Name="Id" DataType="Int64" PrimaryKey="True" DataScale="time" Description="编号" />
+        <Column Name="DeviceId" DataType="Int32" Description="设备编号" />
+        <Column Name="Mobile" DataType="String" Length="20" Description="手机号" />
+        <Column Name="AlarmTime" DataType="DateTime" Description="报警时间" />
+        <Column Name="MediaType" DataType="Int32" Description="媒体类型" />
+        <Column Name="Url" DataType="String" Length="500" Description="资源地址" />
+        <Column Name="CreateTime" DataType="DateTime" DefaultValue="getdate()" Description="创建时间" />
+      </Columns>
+      <Indexes>
+        <Index Columns="DeviceId,AlarmTime" />
+      </Indexes>
+    </Table>
+  </Tables>
+</EntityModel>

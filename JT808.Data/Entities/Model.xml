@@ -1,0 +1,277 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<EntityModel xmlns:xs="http://www.w3.org/2001/XMLSchema-instance" xs:schemaLocation="https://newlifex.com https://newlifex.com/Model202509.xsd" ModelVersion="2.0.2026.130" Document="https://newlifex.com/xcode/model" xmlns="https://newlifex.com/Model202509.xsd">
+  <Option>
+    <!--类名模板。其中{name}替换为Table.Name，如{name}Model/I{name}Dto等-->
+    <ClassNameTemplate />
+    <!--显示名模板。其中{displayName}替换为Table.DisplayName-->
+    <DisplayNameTemplate />
+    <!--基类。可能包含基类和接口，其中{name}替换为Table.Name-->
+    <BaseClass>Entity</BaseClass>
+    <!--命名空间-->
+    <Namespace>JT808.Data</Namespace>
+    <!--引用命名空间-->
+    <ExtendNameSpace />
+    <!--输出目录-->
+    <Output>..\Entities\</Output>
+    <!--是否使用中文文件名。默认false-->
+    <ChineseFileName>True</ChineseFileName>
+    <!--用于生成Copy函数的参数类型。例如{name}或I{name}-->
+    <ModelNameForCopy />
+    <!--带有索引器。实现IModel接口-->
+    <HasIModel>True</HasIModel>
+    <!--可为null上下文。生成String?等-->
+    <Nullable>True</Nullable>
+    <!--数据库连接名-->
+    <ConnName>GPS</ConnName>
+    <!--模型类模版。设置后生成模型类，用于接口数据传输，例如{name}Model-->
+    <ModelClass>{name}Model</ModelClass>
+    <!--模型类输出目录。默认当前目录的Models子目录-->
+    <ModelsOutput>..\Entities\Models\</ModelsOutput>
+    <!--模型接口模版。设置后生成模型接口，用于约束模型类和实体类，例如I{name}-->
+    <ModelInterface>I{name}</ModelInterface>
+    <!--模型接口输出目录。默认当前目录的Interfaces子目录-->
+    <InterfacesOutput>..\Entities\Interfaces\</InterfacesOutput>
+    <!--用户实体转为模型类的模型类。例如{name}或{name}DTO-->
+    <ModelNameForToModel />
+    <!--命名格式。Default/Upper/Lower/Underline-->
+    <NameFormat>Default</NameFormat>
+    <!--魔方区域显示名-->
+    <DisplayName>核心管理</DisplayName>
+    <!--魔方控制器输出目录-->
+    <CubeOutput>..\..\JT808.Web\Areas\JT808</CubeOutput>
+  </Option>
+  <Tables>
+    <Table Name="Product" Description="产品。终端设备型号分类">
+      <Columns>
+        <Column Name="Id" DataType="Int32" Identity="True" PrimaryKey="True" Description="编号" />
+        <Column Name="Name" DataType="String" Master="True" Nullable="False" Description="名称" />
+        <Column Name="ManufacturerId" DataType="String" Length="11" Description="制造商ID" />
+        <Column Name="DeviceType" DataType="String" Length="30" Description="终端型号" />
+        <Column Name="Enable" DataType="Boolean" DefaultValue="True" Description="启用" />
+        <Column Name="CreateTime" DataType="DateTime" DefaultValue="getdate()" Description="创建时间" />
+        <Column Name="UpdateTime" DataType="DateTime" DefaultValue="getdate()" Description="更新时间" />
+      </Columns>
+    </Table>
+    <Table Name="Device" Description="终端设备。JT808终端设备信息">
+      <Columns>
+        <Column Name="Id" DataType="Int32" Identity="True" PrimaryKey="True" Description="编号" />
+        <Column Name="Mobile" DataType="String" Master="True" Length="20" Nullable="False" Description="手机号" />
+        <Column Name="PlateNo" DataType="String" Length="20" Description="车牌号" />
+        <Column Name="PlateColor" DataType="Int32" Description="车牌颜色" />
+        <Column Name="ProductId" DataType="Int32" Map="Product@Id@Name" Description="产品编号" />
+        <Column Name="GroupId" DataType="Int32" Description="分组编号" />
+        <Column Name="ProvinceId" DataType="Int16" Description="省域ID" />
+        <Column Name="CityId" DataType="Int16" Description="市县域ID" />
+        <Column Name="ManufacturerId" DataType="String" Length="11" Description="制造商ID" />
+        <Column Name="DeviceType" DataType="String" Length="30" Description="终端型号" />
+        <Column Name="DeviceId" DataType="String" Length="30" Description="终端ID" />
+        <Column Name="Version" DataType="String" Length="10" Description="协议版本" />
+        <Column Name="Code" DataType="String" Length="32" Description="鉴权码" />
+        <Column Name="Enable" DataType="Boolean" DefaultValue="True" Description="启用" />
+        <Column Name="Remark" DataType="String" Length="200" Description="备注" />
+        <Column Name="CreateTime" DataType="DateTime" DefaultValue="getdate()" Description="创建时间" />
+        <Column Name="UpdateTime" DataType="DateTime" DefaultValue="getdate()" Description="更新时间" />
+        <Column Name="CreateUser" DataType="String" Description="创建者" />
+      </Columns>
+      <Indexes>
+        <Index Columns="Mobile" Unique="True" />
+        <Index Columns="Code" Unique="True" />
+        <Index Columns="PlateNo" />
+        <Index Columns="ProductId" />
+      </Indexes>
+    </Table>
+    <Table Name="DeviceGroup" Description="设备分组。终端设备分组管理">
+      <Columns>
+        <Column Name="Id" DataType="Int32" Identity="True" PrimaryKey="True" Description="编号" />
+        <Column Name="Name" DataType="String" Master="True" Nullable="False" Description="名称" />
+        <Column Name="ParentId" DataType="Int32" Description="父级编号" />
+        <Column Name="Enable" DataType="Boolean" DefaultValue="True" Description="启用" />
+        <Column Name="CreateTime" DataType="DateTime" DefaultValue="getdate()" Description="创建时间" />
+        <Column Name="UpdateTime" DataType="DateTime" DefaultValue="getdate()" Description="更新时间" />
+      </Columns>
+    </Table>
+    <Table Name="DeviceOnline" Description="设备在线。终端设备在线会话信息">
+      <Columns>
+        <Column Name="Id" DataType="Int32" Identity="True" PrimaryKey="True" Description="编号" />
+        <Column Name="DeviceId" DataType="Int32" Map="Device@Id@Mobile" Description="设备编号" />
+        <Column Name="Mobile" DataType="String" Master="True" Length="20" Description="手机号" />
+        <Column Name="SessionId" DataType="String" Description="会话ID" />
+        <Column Name="RemoteEndPoint" DataType="String" Description="远程地址" />
+        <Column Name="Latitude" DataType="Int32" Description="纬度" />
+        <Column Name="Longitude" DataType="Int32" Description="经度" />
+        <Column Name="Speed" DataType="Int16" Description="速度" />
+        <Column Name="Direction" DataType="Int16" Description="方向" />
+        <Column Name="Address" DataType="String" Length="200" Description="地址" />
+        <Column Name="HeartbeatTime" DataType="DateTime" Description="最后心跳时间" />
+        <Column Name="Online" DataType="Boolean" DefaultValue="True" Description="在线状态" />
+        <Column Name="CreateTime" DataType="DateTime" DefaultValue="getdate()" Description="上线时间" />
+        <Column Name="UpdateTime" DataType="DateTime" DefaultValue="getdate()" Description="更新时间" />
+      </Columns>
+      <Indexes>
+        <Index Columns="DeviceId" Unique="True" />
+        <Index Columns="Mobile" Unique="True" />
+      </Indexes>
+    </Table>
+    <Table Name="DeviceHistory" Description="设备上下线历史">
+      <Columns>
+        <Column Name="Id" DataType="Int64" PrimaryKey="True" DataScale="time" Description="编号" />
+        <Column Name="DeviceId" DataType="Int32" Description="设备编号" />
+        <Column Name="Mobile" DataType="String" Length="20" Description="手机号" />
+        <Column Name="Action" DataType="String" Length="20" Description="动作。上线/下线" />
+        <Column Name="Remark" DataType="String" Length="200" Description="备注" />
+        <Column Name="CreateTime" DataType="DateTime" DefaultValue="getdate()" Description="创建时间" />
+      </Columns>
+      <Indexes>
+        <Index Columns="DeviceId,CreateTime" />
+      </Indexes>
+    </Table>
+    <Table Name="DeviceCommand" Description="指令记录。平台下发给终端的指令">
+      <Columns>
+        <Column Name="Id" DataType="Int64" PrimaryKey="True" DataScale="time" Description="编号" />
+        <Column Name="DeviceId" DataType="Int32" Description="设备编号" />
+        <Column Name="Mobile" DataType="String" Length="20" Description="手机号" />
+        <Column Name="Kind" DataType="Int32" Description="指令类型" />
+        <Column Name="Sequence" DataType="UInt16" Description="流水号" />
+        <Column Name="Status" DataType="Int32" Description="状态。0-待下发 1-已下发 2-已应答 3-超时" />
+        <Column Name="Result" DataType="String" Length="200" Description="结果" />
+        <Column Name="BodyType" DataType="String" Length="200" Description="消息体类型" />
+        <Column Name="BodyData" DataType="String" Length="-1" Description="消息体数据" />
+        <Column Name="CreateTime" DataType="DateTime" DefaultValue="getdate()" Description="创建时间" />
+        <Column Name="UpdateTime" DataType="DateTime" DefaultValue="getdate()" Description="更新时间" />
+      </Columns>
+      <Indexes>
+        <Index Columns="DeviceId,CreateTime" />
+        <Index Columns="Mobile,CreateTime" />
+      </Indexes>
+    </Table>
+    <Table Name="DeviceParameter" Description="设备参数。终端参数配置记录">
+      <Columns>
+        <Column Name="Id" DataType="Int32" Identity="True" PrimaryKey="True" Description="编号" />
+        <Column Name="DeviceId" DataType="Int32" Description="设备编号" />
+        <Column Name="ParamId" DataType="Int32" Description="参数ID" />
+        <Column Name="ParamValue" DataType="String" Length="200" Description="参数值" />
+        <Column Name="CreateTime" DataType="DateTime" DefaultValue="getdate()" Description="创建时间" />
+      </Columns>
+      <Indexes>
+        <Index Columns="DeviceId,ParamId" />
+      </Indexes>
+    </Table>
+    <Table Name="PositionData" Description="位置数据。终端上报的位置信息">
+      <Columns>
+        <Column Name="Id" DataType="Int64" PrimaryKey="True" DataScale="time" Description="编号" />
+        <Column Name="DeviceId" DataType="Int32" Description="设备编号" />
+        <Column Name="Mobile" DataType="String" Length="20" Description="手机号" />
+        <Column Name="Alarm" DataType="UInt32" Description="报警标志" />
+        <Column Name="Status" DataType="UInt32" Description="状态" />
+        <Column Name="Latitude" DataType="Int32" Description="纬度" />
+        <Column Name="Longitude" DataType="Int32" Description="经度" />
+        <Column Name="Altitude" DataType="Int16" Description="海拔高度" />
+        <Column Name="Speed" DataType="Int16" Description="速度(km/h)" />
+        <Column Name="Direction" DataType="Int16" Description="方向" />
+        <Column Name="Mileage" DataType="Double" Description="里程(km)" />
+        <Column Name="Fuel" DataType="Double" Description="油量(L)" />
+        <Column Name="LatitudeBD" DataType="Double" Description="百度纬度" />
+        <Column Name="LongitudeBD" DataType="Double" Description="百度经度" />
+        <Column Name="Extras" DataType="String" Length="-1" Description="附加信息JSON" />
+        <Column Name="GPSTime" DataType="DateTime" Description="GPS时间" />
+        <Column Name="CreateTime" DataType="DateTime" DefaultValue="getdate()" Description="接收时间" />
+      </Columns>
+      <Indexes>
+        <Index Columns="DeviceId,GPSTime" />
+        <Index Columns="Mobile,GPSTime" />
+      </Indexes>
+    </Table>
+    <Table Name="RawData" Description="原始报文。终端上传的原始数据">
+      <Columns>
+        <Column Name="Id" DataType="Int64" PrimaryKey="True" DataScale="time" Description="编号" />
+        <Column Name="DeviceId" DataType="Int32" Description="设备编号" />
+        <Column Name="Mobile" DataType="String" Length="20" Description="手机号" />
+        <Column Name="Kind" DataType="UInt16" Description="消息类型" />
+        <Column Name="HexData" DataType="String" Length="-1" Description="十六进制数据" />
+        <Column Name="Remark" DataType="String" Length="200" Description="备注" />
+        <Column Name="CreateTime" DataType="DateTime" DefaultValue="getdate()" Description="创建时间" />
+      </Columns>
+      <Indexes>
+        <Index Columns="DeviceId,CreateTime" />
+      </Indexes>
+    </Table>
+    <Table Name="Alarm" Description="报警信息。终端上报的报警事件">
+      <Columns>
+        <Column Name="Id" DataType="Int64" PrimaryKey="True" DataScale="time" Description="编号" />
+        <Column Name="DeviceId" DataType="Int32" Description="设备编号" />
+        <Column Name="Mobile" DataType="String" Length="20" Description="手机号" />
+        <Column Name="AlarmType" DataType="Int32" Description="报警类型" />
+        <Column Name="AlarmTime" DataType="DateTime" Description="报警时间" />
+        <Column Name="Latitude" DataType="Int32" Description="纬度" />
+        <Column Name="Longitude" DataType="Int32" Description="经度" />
+        <Column Name="Speed" DataType="Int16" Description="速度" />
+        <Column Name="Direction" DataType="Int16" Description="方向" />
+        <Column Name="Altitude" DataType="Int16" Description="海拔" />
+        <Column Name="Content" DataType="String" Length="2000" Description="报警内容" />
+        <Column Name="CreateTime" DataType="DateTime" DefaultValue="getdate()" Description="创建时间" />
+      </Columns>
+      <Indexes>
+        <Index Columns="DeviceId,AlarmTime" />
+      </Indexes>
+    </Table>
+    <Table Name="MediaInfo" Description="多媒体信息。终端多媒体文件信息">
+      <Columns>
+        <Column Name="Id" DataType="Int64" PrimaryKey="True" DataScale="time" Description="编号" />
+        <Column Name="DeviceId" DataType="Int32" Description="设备编号" />
+        <Column Name="Mobile" DataType="String" Length="20" Description="手机号" />
+        <Column Name="MediaType" DataType="Int32" Description="媒体类型。0-图像 1-音频 2-视频" />
+        <Column Name="Format" DataType="Int32" Description="格式编码" />
+        <Column Name="FileSize" DataType="Int32" Description="文件大小" />
+        <Column Name="FilePath" DataType="String" Length="500" Description="文件路径" />
+        <Column Name="CreateTime" DataType="DateTime" DefaultValue="getdate()" Description="创建时间" />
+      </Columns>
+      <Indexes>
+        <Index Columns="DeviceId,CreateTime" />
+      </Indexes>
+    </Table>
+    <Table Name="MediaRecord" Description="媒体记录。多媒体文件上传记录">
+      <Columns>
+        <Column Name="Id" DataType="Int64" PrimaryKey="True" DataScale="time" Description="编号" />
+        <Column Name="DeviceId" DataType="Int32" Description="设备编号" />
+        <Column Name="Mobile" DataType="String" Length="20" Description="手机号" />
+        <Column Name="MediaId" DataType="Int64" Description="多媒体编号" />
+        <Column Name="Status" DataType="Int32" Description="状态。0-上传中 1-已完成 2-失败" />
+        <Column Name="CreateTime" DataType="DateTime" DefaultValue="getdate()" Description="创建时间" />
+        <Column Name="UpdateTime" DataType="DateTime" DefaultValue="getdate()" Description="更新时间" />
+      </Columns>
+      <Indexes>
+        <Index Columns="DeviceId,CreateTime" />
+      </Indexes>
+    </Table>
+    <Table Name="Driver" Description="驾驶员信息">
+      <Columns>
+        <Column Name="Id" DataType="Int32" Identity="True" PrimaryKey="True" Description="编号" />
+        <Column Name="DeviceId" DataType="Int32" Description="设备编号" />
+        <Column Name="Name" DataType="String" Master="True" Length="20" Description="姓名" />
+        <Column Name="IDCard" DataType="String" Length="20" Description="身份证号" />
+        <Column Name="Qualification" DataType="String" Length="40" Description="从业资格证号" />
+        <Column Name="Mobile" DataType="String" Length="20" Description="手机号" />
+        <Column Name="CreateTime" DataType="DateTime" DefaultValue="getdate()" Description="创建时间" />
+        <Column Name="UpdateTime" DataType="DateTime" DefaultValue="getdate()" Description="更新时间" />
+      </Columns>
+      <Indexes>
+        <Index Columns="DeviceId" />
+      </Indexes>
+    </Table>
+    <Table Name="TirePressure" Description="胎压数据。轮胎压力和温度监测">
+      <Columns>
+        <Column Name="Id" DataType="Int64" PrimaryKey="True" DataScale="time" Description="编号" />
+        <Column Name="DeviceId" DataType="Int32" Description="设备编号" />
+        <Column Name="Mobile" DataType="String" Length="20" Description="手机号" />
+        <Column Name="TireNo" DataType="Int32" Description="轮胎编号" />
+        <Column Name="Pressure" DataType="Double" Description="胎压(Pa)" />
+        <Column Name="Temperature" DataType="Int16" Description="温度(℃)" />
+        <Column Name="Alarm" DataType="Boolean" Description="报警状态" />
+        <Column Name="CreateTime" DataType="DateTime" DefaultValue="getdate()" Description="创建时间" />
+      </Columns>
+      <Indexes>
+        <Index Columns="DeviceId,CreateTime" />
+      </Indexes>
+    </Table>
+  </Tables>
+</EntityModel>
