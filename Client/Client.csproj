@@ -1,6 +1,10 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk">
 
   <ItemGroup>
+    <PackageReference Include="NewLife.Stardust.Extensions" Version="3.9.2026.708" />
+  </ItemGroup>
+
+  <ItemGroup>
     <ProjectReference Include="..\Newlife.JT808\NewLife.JT808.csproj" />
   </ItemGroup>
 
