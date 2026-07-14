@@ -50,6 +50,14 @@ public class DeviceController : EntityController<Device>
             df.Target = "_blank";
             df.DataVisible = e => (e as Device)?.Enable == true;
         }
+
+        // 添加统计看板链接
+        {
+            var df = ListFields.AddListField("stats", null, "CreateTime");
+            df.DisplayName = "统计看板";
+            df.Url = "/JT808/Device/Stats";
+            df.Target = "_blank";
+        }
     }
 
     //private readonly ITracer _tracer;
@@ -106,6 +114,44 @@ public class DeviceController : EntityController<Device>
 <div style='margin-top:15px'><button type='submit' class='btn'>下发指令</button></div>
 </form>
 <p style='margin-top:20px;color:#888'>通过 Redis 队列发送到 JT808.Server，由服务器下发到终端设备。</p>
+</body></html>";
+        return Content(html, "text/html");
+    }
+    #endregion
+
+    #region 统计看板
+    /// <summary>设备统计看板</summary>
+    [EntityAuthorize(PermissionFlags.Detail)]
+    public ActionResult Stats()
+    {
+        var totalDevices = Device.FindCount();
+        var onlineDevices = DeviceOnline.FindCount(DeviceOnline._.Online == true);
+        var todayStart = DateTime.Today;
+        var todayPositions = PositionData.FindCount(PositionData._.CreateTime >= todayStart);
+        var todayAlarms = Alarm.FindCount(Alarm._.CreateTime >= todayStart);
+        var totalCommands = DeviceCommand.FindCount();
+
+        var html = $@"<html><head><meta charset='utf-8'/><title>设备统计看板</title>
+<style>body{{font-family:'Microsoft YaHei';margin:20px;background:#f5f5f5}}
+.card{{background:#fff;border-radius:8px;padding:20px;margin:15px;display:inline-block;min-width:200px;box-shadow:0 2px 8px rgba(0,0,0,.1)}}
+.card h3{{margin:0 0 10px;color:#666;font-size:14px}}
+.card .num{{font-size:36px;font-weight:bold;color:#337ab7}}
+.card .num.green{{color:#5cb85c}}
+.card .num.orange{{color:#f0ad4e}}
+.card .num.red{{color:#d9534f}}
+table{{border-collapse:collapse;width:100%;margin-top:20px}}
+td,th{{padding:8px 12px;text-align:left;border-bottom:1px solid #eee}}
+th{{background:#fafafa;font-weight:bold}}
+a{{color:#337ab7;text-decoration:none}}
+h2{{color:#333}}
+</style></head><body>
+<h2>📊 设备统计看板</h2>
+<div class='card'><h3>📱 设备总数</h3><div class='num'>{totalDevices}</div></div>
+<div class='card'><h3>🟢 在线设备</h3><div class='num green'>{onlineDevices}</div></div>
+<div class='card'><h3>📍 今日位置</h3><div class='num orange'>{todayPositions}</div></div>
+<div class='card'><h3>🚨 今日报警</h3><div class='num red'>{todayAlarms}</div></div>
+<div class='card'><h3>📨 指令总数</h3><div class='num'>{totalCommands}</div></div>
+<p style='margin-top:30px'><a href='/JT808/Device/Index'>← 返回设备列表</a></p>
 </body></html>";
         return Content(html, "text/html");
     }

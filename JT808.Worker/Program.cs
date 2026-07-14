@@ -41,8 +41,16 @@ services.AddSingleton<QueueService>();
 
 var host = services.BuildHost();
 
-// 注册后台 Worker
+// 注册后台 Worker（每个 Worker 对应一个 Redis Stream 消费组）
 host.Add<PositionWorker>();
+host.Add<SensorWorker>();
+host.Add<EventWorker>();
+host.Add<ADASAlarmWorker>();
+host.Add<DSMAlarmWorker>();
+host.Add<BSDAlarmWorker>();
+host.Add<TirePressureWorker>();
+
+XTrace.WriteLine("JT808.Worker 已启动，共 7 个 Worker");
 
 await host.RunAsync();
 
