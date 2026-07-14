@@ -1,27 +1,47 @@
 <Window xmlns="https://github.com/avaloniaui"
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
-        xmlns:vm="using:Client.Avalonia.ViewModels"
-        xmlns:v="using:Client.Avalonia.Views"
         x:Class="Client.Avalonia.Views.MainWindow"
         Title="{Binding Title}"
         Width="1100"
         Height="750"
         WindowStartupLocation="CenterScreen">
-  <TabControl SelectedIndex="{Binding SelectedTab}">
-    <TabItem Header="连接管理">
-      <ContentControl Content="{Binding Connection}" />
-    </TabItem>
-    <TabItem Header="终端模拟">
-      <ContentControl Content="{Binding Device}" />
-    </TabItem>
-    <TabItem Header="消息日志">
-      <ContentControl Content="{Binding MessageLog}" />
-    </TabItem>
-    <TabItem Header="服务端管理">
-      <ContentControl Content="{Binding Server}" />
-    </TabItem>
-    <TabItem Header="指令解析">
-      <ContentControl Content="{Binding Parser}" />
-    </TabItem>
-  </TabControl>
+  <Grid RowDefinitions="Auto,*">
+    <!-- 顶部标题栏 -->
+    <Border Grid.Row="0" Padding="14,8" Background="{DynamicResource SystemAccentColor}">
+      <Grid ColumnDefinitions="Auto,*,Auto">
+        <Label Grid.Column="0" FontSize="16" FontWeight="Bold" Foreground="White"
+               VerticalAlignment="Center">📡 JT808 测试客户端</Label>
+        <Label Grid.Column="2" FontSize="12" Foreground="#CCFFFFFF" VerticalAlignment="Center"
+               Content="{Binding Connection.StatusText}" />
+      </Grid>
+    </Border>
+
+    <!-- 标签页 -->
+    <TabControl Grid.Row="1" SelectedIndex="{Binding SelectedTab}" Margin="0">
+      <TabControl.Styles>
+        <Style Selector="TabItem">
+          <Setter Property="FontSize" Value="13" />
+          <Setter Property="Padding" Value="16,10" />
+        </Style>
+        <Style Selector="TabItem:selected">
+          <Setter Property="FontWeight" Value="Bold" />
+        </Style>
+      </TabControl.Styles>
+      <TabItem Header="🔌 连接管理">
+        <ContentControl Content="{Binding Connection}" />
+      </TabItem>
+      <TabItem Header="📱 终端模拟">
+        <ContentControl Content="{Binding Device}" />
+      </TabItem>
+      <TabItem Header="📋 消息日志">
+        <ContentControl Content="{Binding MessageLog}" />
+      </TabItem>
+      <TabItem Header="⚙️ 服务端管理">
+        <ContentControl Content="{Binding Server}" />
+      </TabItem>
+      <TabItem Header="🔍 指令解析">
+        <ContentControl Content="{Binding Parser}" />
+      </TabItem>
+    </TabControl>
+  </Grid>
 </Window>
