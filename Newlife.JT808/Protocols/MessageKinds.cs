@@ -451,5 +451,10 @@ namespace NewLife.JT808.Protocols
         /// <summary>平台下发远程录像回放控制</summary>
         录像回放控制 = 0x9202,
         #endregion
+
+        #region 粤标
+        /// <summary>主动安全报警上报。粤标核心报警消息</summary>
+        粤标主动安全报警 = 0x1FC4,
+        #endregion
     }
 }
