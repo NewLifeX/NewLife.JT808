@@ -28,11 +28,12 @@ Nuget：[NewLife.JT808](https://www.nuget.org/packages/NewLife.JT808)
 - **BCD 编码**：BCD 字符串和时间自定义序列化特性，适配协议特有编码格式
 - **GBK 编码**：内置 GBK 中文字符串编解码，自动注册 `CodePagesEncodingProvider`
 - **Web API 管理**：支持统一下发指令、在线会话管理、黑名单管理、Token 鉴权，方便集成到后台系统
-- **消息队列抽象**：IMsgProducer/IMsgConsumer/ISessionProducer 等接口解耦消息处理，内置 DefaultMsgQueue 内存实现、Redis Stream 生产/消费支持、RocketMQ 适配器
+- **消息队列抽象**：IMsgProducer/IMsgConsumer/ISessionProducer 等接口解耦消息处理，内置 DefaultMsgQueue 内存实现、Redis Stream 生产/消费支持、RocketMQ 适配器、Kafka 适配器
 - **跨服务器指令下发**：ICommandBus 接口 + Stardust 事件总线，支持集群广播指令到指定终端
 - **客户端增强**：自动重连、可配心跳、收发统计计数器，提升生产环境可靠性
 - **多框架支持**：`net45 / net461 / netstandard2.0 / netstandard2.1` 全兼容
-- **RocketMQ 集成**：基于 `NewLife.RocketMQ` 的消息队列生产/消费适配器，可作为 Redis Stream 的替代方案
+- **RocketMQ 集成**：基于 `NewLife.RocketMQ` 的消息队列生产/消费适配器，支持阿里云/华为云/腾讯云/ACL 四种云厂商认证模式
+- **Kafka 集成**：基于 `Confluent.Kafka` 的消息队列生产/消费适配器，支持消费组、ACK 机制（需要 .NET Standard 2.0+）
 
 ## 支持的协议版本
 

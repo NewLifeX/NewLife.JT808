@@ -24,7 +24,8 @@ public class RocketMQSessionAdapter : ISessionProducer, IDisposable
     /// <param name="nameServer">NameServer 地址</param>
     /// <param name="topic">会话通知主题</param>
     /// <param name="group">生产者组</param>
-    public RocketMQSessionAdapter(String nameServer, String? topic = null, String? group = null)
+    /// <param name="cloudProvider">云厂商适配器。阿里云传 <c>new AliyunProvider{AccessKey=...,SecretKey=...,InstanceId=...}</c>；华为云传 <c>new HuaweiProvider{...}</c>；腾讯云传 <c>new TencentProvider{...}</c>；ACL 传 <c>new AclProvider{...}</c></param>
+    public RocketMQSessionAdapter(String nameServer, String? topic = null, String? group = null, NewLife.RocketMQ.ICloudProvider? cloudProvider = null)
     {
         if (topic != null) Topic = topic;
         Producer = new Producer
@@ -32,6 +33,7 @@ public class RocketMQSessionAdapter : ISessionProducer, IDisposable
             NameServerAddress = nameServer,
             Topic = Topic,
             Group = group ?? "PID_SessionEvent",
+            CloudProvider = cloudProvider,
         };
         Producer.Start();
     }

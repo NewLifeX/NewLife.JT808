@@ -31,7 +31,8 @@ public class RocketMQConsumer<TMessage> : IMsgConsumer<TMessage>, IDisposable
     /// <param name="nameServer">NameServer 地址</param>
     /// <param name="topic">主题名称</param>
     /// <param name="group">消费组</param>
-    public RocketMQConsumer(String nameServer, String topic, String group)
+    /// <param name="cloudProvider">云厂商适配器。阿里云传 <c>new AliyunProvider{AccessKey=...,SecretKey=...,InstanceId=...}</c>；华为云传 <c>new HuaweiProvider{...}</c>；腾讯云传 <c>new TencentProvider{...}</c>；ACL 传 <c>new AclProvider{...}</c></param>
+    public RocketMQConsumer(String nameServer, String topic, String group, NewLife.RocketMQ.ICloudProvider? cloudProvider = null)
     {
         Topic = topic;
         Consumer = new Consumer
@@ -39,6 +40,7 @@ public class RocketMQConsumer<TMessage> : IMsgConsumer<TMessage>, IDisposable
             NameServerAddress = nameServer,
             Topic = topic,
             Group = group,
+            CloudProvider = cloudProvider,
         };
     }
 

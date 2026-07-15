@@ -27,7 +27,8 @@ public class RocketMQProducer<TMessage> : IMsgProducer<TMessage>, IDisposable
     /// <param name="nameServer">NameServer 地址</param>
     /// <param name="topic">主题名称</param>
     /// <param name="group">生产者组</param>
-    public RocketMQProducer(String nameServer, String topic, String? group = null)
+    /// <param name="cloudProvider">云厂商适配器。阿里云传 <c>new AliyunProvider{AccessKey=...,SecretKey=...,InstanceId=...}</c>；华为云传 <c>new HuaweiProvider{...}</c>；腾讯云传 <c>new TencentProvider{...}</c>；ACL 传 <c>new AclProvider{...}</c></param>
+    public RocketMQProducer(String nameServer, String topic, String? group = null, NewLife.RocketMQ.ICloudProvider? cloudProvider = null)
     {
         Topic = topic;
         Producer = new Producer
@@ -35,6 +36,7 @@ public class RocketMQProducer<TMessage> : IMsgProducer<TMessage>, IDisposable
             NameServerAddress = nameServer,
             Topic = topic,
             Group = group ?? $"PID_{topic}",
+            CloudProvider = cloudProvider,
         };
         Producer.Start();
     }
