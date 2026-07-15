@@ -33,7 +33,7 @@ namespace NewLife.JT808.Models
         /// </summary>
         public List<UInt32> MultimediaIds { get; set; }
 
-        public Boolean Read(Stream stream, Object context)
+        public Boolean Read(Stream stream, Object? context)
         {
             var reader = Helper.CreateReader(stream);
 
@@ -54,7 +54,7 @@ namespace NewLife.JT808.Models
             return true;
         }
 
-        public Boolean Write(Stream stream, Object context)
+        public Boolean Write(Stream stream, Object? context)
         {
             var writer = Helper.CreateWriter(stream);
 

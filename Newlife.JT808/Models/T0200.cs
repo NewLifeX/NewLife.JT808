@@ -41,7 +41,7 @@ namespace NewLife.JT808.Models
         /// <param name="stream"></param>
         /// <param name="context"></param>
         /// <returns></returns>
-        public Boolean Read(Stream stream, Object context)
+        public Boolean Read(Stream stream, Object? context)
         {
             var reader = context as Binary ?? Helper.CreateReader(stream);
 
@@ -80,7 +80,7 @@ namespace NewLife.JT808.Models
         /// <param name="context"></param>
         /// <returns></returns>
         /// <exception cref="Exception"></exception>
-        public Boolean Write(Stream stream, Object context)
+        public Boolean Write(Stream stream, Object? context)
         {
             var writer = context as Binary ?? Helper.CreateWriter(stream);
 

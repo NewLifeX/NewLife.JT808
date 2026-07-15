@@ -64,7 +64,7 @@ namespace NewLife.JT808.Models
         /// <param name="stream"></param>
         /// <param name="context"></param>
         /// <returns></returns>
-        public Boolean Read(Stream stream, Object context)
+        public Boolean Read(Stream stream, Object? context)
         {
             var header = context as JTMessage;
             var reader = Helper.CreateReader(stream, header);
@@ -96,7 +96,7 @@ namespace NewLife.JT808.Models
         /// <param name="stream"></param>
         /// <param name="context"></param>
         /// <returns></returns>
-        public Boolean Write(Stream stream, Object context)
+        public Boolean Write(Stream stream, Object? context)
         {
             var header = context as JTMessage;
             var writer = Helper.CreateWriter(stream, header);

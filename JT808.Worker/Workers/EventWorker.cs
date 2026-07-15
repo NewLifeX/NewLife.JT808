@@ -1,7 +1,9 @@
+using JT808.Data;
 using NewLife;
 using NewLife.Caching;
 using NewLife.Log;
 using NewLife.Model;
+using NewLife.Serialization;
 
 namespace JT808.Worker.Workers;
 
@@ -45,6 +47,18 @@ public class EventWorker : IHostedService
                 if (data != null)
                 {
                     XTrace.WriteLine("消费事件数据：{0}", data);
+
+                    // 解析事件数据并持久化
+                    if (data is String json)
+                    {
+                        var alarm = json.ToJsonEntity<Alarm>();
+                        if (alarm != null)
+                        {
+                            await alarm.InsertAsync();
+                            XTrace.WriteLine("事件数据已持久化：DeviceId={0}, AlarmType={1}",
+                                alarm.DeviceId, alarm.AlarmType);
+                        }
+                    }
                 }
                 else
                 {

@@ -1,7 +1,9 @@
+using JT808.Data;
 using NewLife;
 using NewLife.Caching;
 using NewLife.Log;
 using NewLife.Model;
+using NewLife.Serialization;
 
 namespace JT808.Worker.Workers;
 
@@ -45,6 +47,17 @@ public class TirePressureWorker : IHostedService
                 if (data != null)
                 {
                     XTrace.WriteLine("消费胎压数据：{0}", data);
+
+                    // 解析胎压数据并持久化
+                    if (data is String json)
+                    {
+                        var tp = json.ToJsonEntity<TirePressure>();
+                        if (tp != null)
+                        {
+                            await tp.InsertAsync();
+                            XTrace.WriteLine("胎压数据已持久化：DeviceId={0}", tp.DeviceId);
+                        }
+                    }
                 }
                 else
                 {

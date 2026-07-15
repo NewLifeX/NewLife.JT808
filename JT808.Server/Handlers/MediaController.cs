@@ -36,7 +36,37 @@ public class MediaController
     [MessageKind(MessageKinds.多媒体数据上传)]
     public Object OnMediaUpload(JT808Session session, JTMessage message)
     {
-        XTrace.WriteLine("多媒体数据上传：Mobile={0}", message.Mobile);
+        var model = message.ReadModel<T0801>();
+        XTrace.WriteLine("多媒体数据上传：Mobile={0}, MediaId={1}, Type={2}, Size={3}",
+            message.Mobile, model.MultimediaId, model.MultimediaType, model.MultimediaDataPackage?.Length);
+
+        var device = Device.FindByMobile(message.Mobile);
+        if (device != null)
+        {
+            // 保存媒体信息
+            var media = new MediaInfo
+            {
+                DeviceId = device.Id,
+                Mobile = message.Mobile,
+                MediaType = model.MultimediaType,
+                Format = model.MultimediaCodingFormat,
+                FileSize = model.MultimediaDataPackage?.Length ?? 0,
+                CreateTime = DateTime.Now,
+            };
+            _ = Task.Run(() => media.InsertAsync());
+
+            // 媒体记录
+            var record = new MediaRecord
+            {
+                DeviceId = device.Id,
+                Mobile = message.Mobile,
+                MediaId = model.MultimediaId,
+                Status = 1, // 已完成
+                CreateTime = DateTime.Now,
+            };
+            _ = Task.Run(() => record.InsertAsync());
+        }
+
         return null;
     }
 

@@ -25,7 +25,7 @@ namespace NewLife.JT808.SuBiao
         /// <param name="stream"></param>
         /// <param name="context"></param>
         /// <returns></returns>
-        public Boolean Read(Stream stream, Object context)
+        public Boolean Read(Stream stream, Object? context)
         {
             var binary = new Binary { Stream = stream };
 
@@ -49,7 +49,7 @@ namespace NewLife.JT808.SuBiao
         /// <param name="stream"></param>
         /// <param name="context"></param>
         /// <returns></returns>
-        public Boolean Write(Stream stream, Object context)
+        public Boolean Write(Stream stream, Object? context)
         {
             var binary = new Binary { Stream = stream };
 

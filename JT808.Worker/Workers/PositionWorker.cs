@@ -1,7 +1,9 @@
+using JT808.Data;
 using NewLife;
 using NewLife.Caching;
 using NewLife.Log;
 using NewLife.Model;
+using NewLife.Serialization;
 
 namespace JT808.Worker.Workers;
 
@@ -47,7 +49,21 @@ public class PositionWorker : IHostedService
                 if (data != null)
                 {
                     XTrace.WriteLine("消费位置数据：{0}", data);
-                    // TODO: 里程计算、坐标转换、持久化
+
+                    // 解析位置数据（期望 JSON 字符串或 PositionData 对象）
+                    PositionData? pos = null;
+                    if (data is String json)
+                        pos = json.ToJsonEntity<PositionData>();
+                    else if (data is PositionData p)
+                        pos = p;
+
+                    if (pos != null)
+                    {
+                        // 保存到数据库
+                        await pos.InsertAsync();
+                        XTrace.WriteLine("位置数据已持久化：DeviceId={0}, Lat={1}, Lng={2}",
+                            pos.DeviceId, pos.Latitude, pos.Longitude);
+                    }
                 }
                 else
                 {

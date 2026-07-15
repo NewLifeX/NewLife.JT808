@@ -28,7 +28,7 @@ namespace NewLife.JT808.SuBiao
         /// <param name="stream"></param>
         /// <param name="context"></param>
         /// <returns></returns>
-        public Boolean Read(Stream stream, Object context)
+        public Boolean Read(Stream stream, Object? context)
         {
             if (stream == null && context == null) return false;
 
@@ -53,7 +53,7 @@ namespace NewLife.JT808.SuBiao
         /// <param name="context"></param>
         /// <returns></returns>
         /// <exception cref="NotImplementedException"></exception>
-        public Boolean Write(Stream stream, Object context)
+        public Boolean Write(Stream stream, Object? context)
         {
             if (stream == null && context == null) return false;
 

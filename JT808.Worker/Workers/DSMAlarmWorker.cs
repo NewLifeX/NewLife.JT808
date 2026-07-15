@@ -1,7 +1,9 @@
+using JT808.Data.Safety;
 using NewLife;
 using NewLife.Caching;
 using NewLife.Log;
 using NewLife.Model;
+using NewLife.Serialization;
 
 namespace JT808.Worker.Workers;
 
@@ -45,6 +47,18 @@ public class DSMAlarmWorker : IHostedService
                 if (data != null)
                 {
                     XTrace.WriteLine("消费 DSM 报警：{0}", data);
+
+                    // 解析 DSM 报警数据并持久化
+                    if (data is String json)
+                    {
+                        var alarm = json.ToJsonEntity<DSMAlarm>();
+                        if (alarm != null)
+                        {
+                            await alarm.InsertAsync();
+                            XTrace.WriteLine("DSM 报警已持久化：DeviceId={0}, AlarmType={1}",
+                                alarm.DeviceId, alarm.AlarmType);
+                        }
+                    }
                 }
                 else
                 {
