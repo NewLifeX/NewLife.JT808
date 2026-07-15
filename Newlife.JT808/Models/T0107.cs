@@ -5,37 +5,59 @@ using NewLife.Serialization;
 
 namespace NewLife.JT808.Models
 {
+    /// <summary>车辆类型标志。终端属性应答中标识车辆类型</summary>
     [Flags]
     public enum T0107_Types : UInt16
     {
+        /// <summary>客运车辆</summary>
         客运车辆 = 1 << 0,
+        /// <summary>危险品运输车辆</summary>
         危险品车辆 = 1 << 1,
+        /// <summary>普通货运车辆</summary>
         普通货运车辆 = 1 << 2,
+        /// <summary>出租车辆</summary>
         出租车辆 = 1 << 3,
+        /// <summary>硬盘录像机</summary>
         硬盘录像 = 1 << 6,
+        /// <summary>分体机</summary>
         分体机 = 1 << 7,
+        /// <summary>挂车</summary>
         挂车 = 1 << 8,
     }
 
+    /// <summary>GNSS 定位系统类型</summary>
     [Flags]
     public enum T0107_GNSSes : Byte
     {
+        /// <summary>GPS</summary>
         GPS = 1 << 0,
+        /// <summary>北斗卫星导航系统</summary>
         北斗 = 1 << 1,
+        /// <summary>GLONASS</summary>
         GLONASS = 1 << 2,
+        /// <summary>Galileo</summary>
         Galileo = 1 << 3,
     }
 
+    /// <summary>通信方式类型</summary>
     [Flags]
     public enum T0107_Communications : Byte
     {
+        /// <summary>GPRS</summary>
         GPRS = 1 << 0,
+        /// <summary>CDMA</summary>
         CDMA = 1 << 1,
+        /// <summary>TD-SCDMA</summary>
         TD_SCDMA = 1 << 2,
+        /// <summary>WCDMA</summary>
         WCDMA = 1 << 3,
+        /// <summary>CDMA2000</summary>
         CDMA2000 = 1 << 4,
+        /// <summary>TD-LTE</summary>
         TD_LTE = 1 << 5,
+        /// <summary>其他</summary>
         Other = 1 << 6,
+        /// <summary>其他（扩展）</summary>
         Other2 = 1 << 7,
     }
 

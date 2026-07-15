@@ -7,6 +7,7 @@ namespace NewLife.JT808.Protocols;
     [AttributeUsage(AttributeTargets.Property | AttributeTargets.Field)]
     public class FullString2Attribute : AccessorAttribute
     {
+        /// <summary>适用的协议版本。为空时所有版本生效</summary>
         public String Version { get; set; }
 
         /// <summary>从数据流中读取消息</summary>

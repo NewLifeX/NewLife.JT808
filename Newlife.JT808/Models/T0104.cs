@@ -19,6 +19,8 @@ namespace NewLife.JT808.Models
         /// </summary>
         public List<TLV> Items { get; set; }
 
+        /// <summary>获取参数列表（参数 ID→值 字典）</summary>
+        /// <returns>参数键值对字典</returns>
         public IDictionary<ParameterKinds, Object> GetParameters()
         {
             var dic = TLV.Convert<ParameterKinds>(Items);

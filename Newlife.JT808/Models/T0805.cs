@@ -33,6 +33,10 @@ namespace NewLife.JT808.Models
         /// </summary>
         public List<UInt32> MultimediaIds { get; set; }
 
+        /// <summary>从数据流中读取消息体</summary>
+        /// <param name="stream">数据流</param>
+        /// <param name="context">上下文（JTMessage 对象）</param>
+        /// <returns>是否读取成功</returns>
         public Boolean Read(Stream stream, Object? context)
         {
             var reader = Helper.CreateReader(stream);
@@ -54,6 +58,10 @@ namespace NewLife.JT808.Models
             return true;
         }
 
+        /// <summary>将消息体写入数据流</summary>
+        /// <param name="stream">数据流</param>
+        /// <param name="context">上下文（JTMessage 对象）</param>
+        /// <returns>是否写入成功</returns>
         public Boolean Write(Stream stream, Object? context)
         {
             var writer = Helper.CreateWriter(stream);

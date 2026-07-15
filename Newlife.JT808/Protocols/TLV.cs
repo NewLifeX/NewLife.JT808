@@ -83,6 +83,10 @@ namespace NewLife.JT808.Protocols
             }
         }
 
+        /// <summary>将字典转换为 TLV 强类型列表</summary>
+        /// <typeparam name="TKind">键类型（枚举类型）</typeparam>
+        /// <param name="dic">原始字典（参数 ID→值的映射）</param>
+        /// <returns>TLV 列表</returns>
         public static IList<TLV> Convert<TKind>(IDictionary<TKind, object> dic) where TKind : struct
         {
             var list = new List<TLV>();
