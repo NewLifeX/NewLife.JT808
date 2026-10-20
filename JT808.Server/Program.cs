@@ -54,11 +54,39 @@ services.AddSingleton<JT808.Server.Services.QueueService>();
 services.AddSingleton<JT808.Server.Services.AlarmEventService>();
 services.AddSingleton<JT808.Server.Services.MediaService>();
 
+// 网关服务与集群共享状态
+var node = builder.Configuration["JT808:Node"];
+if (node.IsNullOrEmpty()) node = Environment.MachineName;
+var port = builder.Configuration["JT808:Port"].ToInt();
+if (port <= 0) port = 808;
+
+services.AddSingleton(sp =>
+{
+    var server = new JT808Server
+    {
+        Port = port,
+        Log = XTrace.Log,
+        SessionLog = XTrace.Log,
+        Tracer = DefaultTracer.Instance,
+    };
+
+    server.AddHandler(sp.GetRequiredService<JT808.Server.Handlers.NormalController>());
+    server.AddHandler(sp.GetRequiredService<JT808.Server.Handlers.PositionController>());
+    server.AddHandler(sp.GetRequiredService<JT808.Server.Handlers.InfoController>());
+    server.AddHandler(sp.GetRequiredService<JT808.Server.Handlers.MediaController>());
+    server.AddHandler(sp.GetRequiredService<JT808.Server.Handlers.FileHandler>());
+
+    return server;
+});
+
+services.AddSingleton(sp => new ClusterState(sp.GetRequiredService<ICacheProvider>().Cache) { Node = node });
+
 // 后台服务（注意启动顺序）
 services.AddHostedService<JT808.Server.HostedServices.DeviceOnlineHostedService>();
 services.AddHostedService<JT808.Server.HostedServices.DataRetentionService>();
 services.AddHostedService<JT808.Server.HostedServices.PreheatHostedService>();
 services.AddHostedService<JT808.Server.HostedServices.GpsHostedService>();
+services.AddHostedService<JT808.Server.HostedServices.ClusterStateHostedService>();
 services.AddHostedService<JT808.Server.HostedServices.ClearHostedService>();
 
 // ===== 健康检查 =====

@@ -92,6 +92,9 @@ public class JT808Session : NetSession<JT808Server>, ICommand
             return;
         }
 
+        // 任意消息都代表终端活跃，刷新会话有效期
+        if (!Mobile.IsNullOrEmpty()) Host.Manager.Touch(Mobile);
+
         var name = MessageFactory.GetKindName(msg.Kind);
         using var span = Host.Tracer?.NewSpan($"jt808:{name}", msg);
 

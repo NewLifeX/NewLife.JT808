@@ -1,21 +1,33 @@
+using System.Text.Json;
+using JT808.Web.Services;
 using Microsoft.AspNetCore.Mvc;
-using NewLife.JT808.Models;
+using NewLife;
 using NewLife.JT808.Protocols;
+using NewLife.Serialization;
 
 namespace JT808.Web.Controllers;
 
 /// <summary>JT808 管理 API 控制器</summary>
+/// <remarks>
+/// 会话、统计、黑名单与指令下发均基于分布式缓存中的集群共享状态，
+/// 与网关进程解耦——Web 无需启动本地网关实例即可管理远程终端。
+/// </remarks>
 [ApiController]
 [Route("api/jt808")]
 public class JT808Controller : ControllerBase
 {
-    private readonly JT808Server _server;
+    private readonly ClusterState _cluster;
+    private readonly CommandClient _client;
     private readonly JT808Auth? _auth;
 
     /// <summary>实例化</summary>
-    public JT808Controller(JT808Server server, JT808Auth? auth = null)
+    /// <param name="cluster">集群共享状态</param>
+    /// <param name="client">指令下发客户端</param>
+    /// <param name="auth">Token 鉴权服务</param>
+    public JT808Controller(ClusterState cluster, CommandClient client, JT808Auth? auth = null)
     {
-        _server = server;
+        _cluster = cluster;
+        _client = client;
         _auth = auth;
     }
 
@@ -38,24 +50,42 @@ public class JT808Controller : ControllerBase
 
     #region 指令下发
     /// <summary>统一下发指令</summary>
+    /// <param name="request">下发请求</param>
+    /// <returns>下发结果</returns>
     [HttpPost("command")]
     public IActionResult SendCommand([FromBody] SendCommandRequest request)
     {
         var authResult = CheckAuth();
         if (authResult != null) return authResult;
 
-        if (String.IsNullOrEmpty(request.Mobile) || request.Body == null)
+        if (String.IsNullOrEmpty(request.Mobile) || request.BodyType.IsNullOrEmpty())
             return BadRequest("缺少必要参数");
+        if (request.Body.ValueKind != JsonValueKind.Object)
+            return BadRequest("缺少必要参数");
+
+        var type = MessageFactory.FindType(request.BodyType);
+        if (type == null) return BadRequest("无法解析消息体");
+
+        var json = request.Body.GetRawText();
+        Object? body = null;
+        try
+        {
+            body = JsonHelper.ToJsonEntity(json, type, null);
+        }
+        catch (Exception)
+        {
+            // 反序列化失败按参数错误处理，避免把非法请求体当成服务端故障
+        }
+        if (body == null) return BadRequest("无法解析消息体");
+
+        var session = _cluster.GetSession(request.Mobile);
+        if (session == null) return Ok(new { success = false, message = "设备不在线" });
 
         try
         {
-            var body = CreateMessageBody(request.BodyType, request.Body);
-            if (body == null) return BadRequest("无法解析消息体");
-
-            var bus = _server.CommandBus ?? _server.Manager;
-            var result = bus.Send(request.Mobile, body);
+            var result = _client.SendCommand(session.Node, request.Mobile, type.FullName ?? type.Name, json);
             return result ? Ok(new { success = true, message = "指令已下发" })
-                          : Ok(new { success = false, message = "设备不在线" });
+                          : Ok(new { success = false, message = "指令下发失败" });
         }
         catch (Exception ex)
         {
@@ -66,84 +96,105 @@ public class JT808Controller : ControllerBase
 
     #region 会话管理
     /// <summary>获取在线会话列表</summary>
+    /// <returns>在线终端列表</returns>
     [HttpGet("sessions")]
     public IActionResult GetSessions()
     {
-        var sessions = _server.Manager.GetAll();
-        var list = sessions.Select(e => new
+        var list = _cluster.GetSessions().Select(e => new
         {
-            mobile = e.Key,
-            sessionId = e.Value.ID,
-            remote = e.Value.Remote?.ToString(),
-            time = DateTime.UtcNow.ToString("yyyy-MM-dd HH:mm:ss"),
+            mobile = e.Mobile,
+            node = e.Node,
+            sessionId = e.SessionId,
+            remote = e.Remote,
+            time = e.LoginTime.ToString("yyyy-MM-dd HH:mm:ss"),
         }).ToList();
 
         return Ok(new { total = list.Count, items = list });
     }
 
     /// <summary>获取指定终端会话详情</summary>
+    /// <param name="mobile">终端手机号</param>
+    /// <returns>会话详情</returns>
     [HttpGet("session/{mobile}")]
     public IActionResult GetSession(String mobile)
     {
         var authResult = CheckAuth();
         if (authResult != null) return authResult;
 
-        var session = _server.Manager.Find(mobile);
+        var session = _cluster.GetSession(mobile);
         if (session == null) return NotFound(new { success = false, message = "设备不在线" });
 
         return Ok(new
         {
-            mobile,
-            sessionId = session.ID,
-            remote = session.Remote?.ToString(),
-            time = DateTime.UtcNow,
+            mobile = session.Mobile,
+            node = session.Node,
+            sessionId = session.SessionId,
+            remote = session.Remote,
+            time = session.LoginTime.ToString("yyyy-MM-dd HH:mm:ss"),
         });
     }
 
     /// <summary>强制移除会话</summary>
+    /// <param name="mobile">终端手机号</param>
+    /// <returns>移除结果</returns>
     [HttpDelete("session/{mobile}")]
     public IActionResult RemoveSession(String mobile)
     {
         var authResult = CheckAuth();
         if (authResult != null) return authResult;
 
-        var session = _server.Manager.Find(mobile);
+        var session = _cluster.GetSession(mobile);
         if (session == null) return NotFound(new { success = false, message = "设备不在线" });
 
-        _server.Manager.Remove(mobile);
-        session.Close("管理员强制断开");
-
-        return Ok(new { success = true, message = "会话已移除" });
+        var result = _client.Kick(session.Node, mobile);
+        return result ? Ok(new { success = true, message = "已通知网关断开会话" })
+                      : StatusCode(500, new { success = false, message = "网关队列不可用" });
     }
     #endregion
 
     #region 服务器统计
     /// <summary>获取服务器统计</summary>
+    /// <returns>节点与在线会话统计</returns>
     [HttpGet("stats")]
     public IActionResult GetStats()
     {
+        var nodes = _cluster.GetNodes();
+        var sessions = _cluster.GetSessions();
+
         return Ok(new
         {
-            server = $"{_server.Name ?? "jt808"}:{_server.Port}",
-            running = _server.Active,
-            started = DateTime.UtcNow.ToString("yyyy-MM-dd HH:mm:ss"),
+            server = String.Join(",", nodes.Select(e => e.Node)),
+            running = nodes.Count > 0,
+            started = nodes.Count == 0 ? String.Empty : nodes.Min(e => e.StartTime).ToString("yyyy-MM-dd HH:mm:ss"),
+            nodes = nodes.Select(e => new
+            {
+                node = e.Node,
+                port = e.Port,
+                sessions = e.Sessions,
+                started = e.StartTime.ToString("yyyy-MM-dd HH:mm:ss"),
+                active = e.LastActive.ToString("yyyy-MM-dd HH:mm:ss"),
+            }).ToList(),
+            sessions = sessions.Count,
         });
     }
     #endregion
 
     #region 黑名单管理
     /// <summary>获取黑名单列表</summary>
+    /// <returns>黑名单</returns>
     [HttpGet("blacklist")]
     public IActionResult GetBlacklist()
     {
         var authResult = CheckAuth();
         if (authResult != null) return authResult;
 
-        var list = _server.Blacklist.GetAll();
+        var list = _cluster.GetBlacklist();
         return Ok(new { total = list.Length, items = list });
     }
 
     /// <summary>添加手机号到黑名单</summary>
+    /// <param name="request">黑名单请求</param>
+    /// <returns>添加结果</returns>
     [HttpPost("blacklist")]
     public IActionResult AddBlacklist([FromBody] BlacklistRequest request)
     {
@@ -153,32 +204,26 @@ public class JT808Controller : ControllerBase
         if (String.IsNullOrEmpty(request.Mobile))
             return BadRequest(new { success = false, message = "缺少手机号" });
 
-        var result = _server.Blacklist.Add(request.Mobile);
+        var result = _cluster.AddBlacklist(request.Mobile);
+
+        // 已在线设备立即断开
+        var session = _cluster.GetSession(request.Mobile);
+        if (session != null) _client.Kick(session.Node, request.Mobile);
+
         return Ok(new { success = result, message = result ? "已加入黑名单" : "已在黑名单中" });
     }
 
     /// <summary>从黑名单移除</summary>
+    /// <param name="mobile">终端手机号</param>
+    /// <returns>移除结果</returns>
     [HttpDelete("blacklist/{mobile}")]
     public IActionResult RemoveBlacklist(String mobile)
     {
         var authResult = CheckAuth();
         if (authResult != null) return authResult;
 
-        var result = _server.Blacklist.Remove(mobile);
+        var result = _cluster.RemoveBlacklist(mobile);
         return Ok(new { success = result, message = result ? "已移出黑名单" : "不在黑名单中" });
-    }
-    #endregion
-
-    #region 辅助
-    private static Object? CreateMessageBody(String? bodyType, Dictionary<String, Object> body)
-    {
-        if (String.IsNullOrEmpty(bodyType)) return null;
-
-        var type = Type.GetType(bodyType);
-        if (type == null) return null;
-
-        var json = NewLife.Serialization.JsonHelper.ToJson(body);
-        return NewLife.Serialization.JsonHelper.ToJsonEntity(json, type);
     }
     #endregion
 
@@ -193,7 +238,7 @@ public class JT808Controller : ControllerBase
         public String? BodyType { get; set; }
 
         /// <summary>消息体数据（JSON 对象）</summary>
-        public Dictionary<String, Object> Body { get; set; } = null!;
+        public JsonElement Body { get; set; }
     }
 
     /// <summary>黑名单操作请求</summary>

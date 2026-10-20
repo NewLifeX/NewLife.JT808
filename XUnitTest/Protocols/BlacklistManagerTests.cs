@@ -70,4 +70,38 @@ public class BlacklistManagerTests
         Assert.False(manager.IsBlacklisted(null));
         Assert.Equal(0, manager.Count);
     }
+
+    [Fact]
+    [DisplayName("黑名单_批量替换仅在内容变化时生效")]
+    public void ReplaceAll_OnlyChangedWhenContentDiffers()
+    {
+        var manager = new BlacklistManager();
+
+        Assert.True(manager.ReplaceAll(["13800138000", "13900139000"]));
+        Assert.Equal(2, manager.Count);
+        Assert.True(manager.IsBlacklisted("13800138000"));
+
+        // 内容相同（顺序无关）不触发变化
+        Assert.False(manager.ReplaceAll(["13900139000", "13800138000"]));
+        Assert.Equal(2, manager.Count);
+
+        Assert.True(manager.ReplaceAll(["13900139000"]));
+        Assert.False(manager.IsBlacklisted("13800138000"));
+        Assert.True(manager.IsBlacklisted("13900139000"));
+    }
+
+    [Fact]
+    [DisplayName("黑名单_批量替换忽略空值与重复项")]
+    public void ReplaceAll_IgnoresEmptyAndDuplicate()
+    {
+        var manager = new BlacklistManager();
+
+        Assert.True(manager.ReplaceAll(["13800138000", "", null, " 13800138000 "]));
+        Assert.Equal(1, manager.Count);
+        Assert.True(manager.IsBlacklisted("13800138000"));
+
+        Assert.True(manager.ReplaceAll([]));
+        Assert.Equal(0, manager.Count);
+        Assert.False(manager.ReplaceAll(null!));
+    }
 }

@@ -79,13 +79,4 @@ public class QueueService
         if (_rawData == null) return;
         _rawData.Add(data);
     }
-
-    private IProducerConsumer<Object>? _command;
-    /// <summary>推送指令到 Redis 队列（Web→Server 通道）</summary>
-    public void AddCommand(Object data)
-    {
-        _command ??= _cacheProvider.GetQueue<Object>("Command", "Group");
-        if (_command == null) return;
-        _command.Add(data);
-    }
 }

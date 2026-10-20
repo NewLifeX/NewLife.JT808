@@ -145,6 +145,34 @@ namespace NewLife.JT808.Protocols
             return Enum.IsDefined(typeof(MessageKinds), kind) ? kind + "" : ((int)kind).ToString("X4");
         }
 
+        /// <summary>按名称查找已注册的消息体类型</summary>
+        /// <remarks>
+        /// 支持程序集限定名、命名空间全名和短类名。
+        /// 跨进程传递消息体类型时，程序集版本可能不一致，直接 <see cref="Type.GetType(string)"/> 会解析失败，
+        /// 因此补充按已注册映射查找。
+        /// </remarks>
+        /// <param name="typeName">类型名称</param>
+        /// <returns>消息体类型，未找到返回 null</returns>
+        [System.Diagnostics.CodeAnalysis.RequiresUnreferencedCode("扫描程序集注册全部消息体，裁剪时需保留协议库程序集")]
+        public static Type? FindType(String typeName)
+        {
+            if (typeName.IsNullOrEmpty()) return null;
+
+            var type = Type.GetType(typeName);
+            if (type != null) return type;
+
+            var factory = Instance;
+            factory.Init();
+
+            foreach (var item in factory.Maps)
+            {
+                type = item.Value;
+                if (type.FullName == typeName || type.Name == typeName || type.AssemblyQualifiedName == typeName) return type;
+            }
+
+            return null;
+        }
+
         /// <summary>是否响应消息</summary>
         /// <param name="kind"></param>
         /// <returns></returns>

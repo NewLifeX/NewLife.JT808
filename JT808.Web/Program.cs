@@ -48,7 +48,8 @@ EntityFactory.InitConnection("Safety");
 EntityFactory.InitConnection("Platform");
 
 // ===== 服务注册 =====
-services.AddSingleton<JT808Server>();
+// 集群共享状态：Web 不启动网关，在线会话/黑名单/指令队列均通过分布式缓存与网关共享
+services.AddSingleton(sp => new ClusterState(sp.GetRequiredService<ICacheProvider>().Cache) { Node = Environment.MachineName });
 services.AddSingleton<JT808Auth>();
 services.AddSingleton<JT808.Web.Services.CommandClient>();
 

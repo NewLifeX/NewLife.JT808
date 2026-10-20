@@ -97,6 +97,42 @@ public class BlacklistManager
         }
     }
 
+    /// <summary>批量替换黑名单</summary>
+    /// <remarks>用于从外部共享状态同步黑名单，仅在内容变化时写文件。</remarks>
+    /// <param name="mobiles">新的黑名单手机号集合</param>
+    /// <returns>内容是否发生变化</returns>
+    public Boolean ReplaceAll(IEnumerable<String> mobiles)
+    {
+        if (mobiles == null) return false;
+
+        var changed = false;
+        lock (_blacklist)
+        {
+            var target = new HashSet<String>(StringComparer.OrdinalIgnoreCase);
+            foreach (var mobile in mobiles)
+            {
+                if (!mobile.IsNullOrEmpty()) target.Add(mobile.Trim());
+            }
+
+            if (target.Count == _blacklist.Count && target.SetEquals(_blacklist)) return false;
+
+            _blacklist.Clear();
+            foreach (var mobile in target)
+            {
+                _blacklist.Add(mobile);
+            }
+            changed = true;
+        }
+
+        if (changed)
+        {
+            Log?.Info("Blacklist replaced: {0} entries.", Count);
+            SaveFile();
+        }
+
+        return changed;
+    }
+
     /// <summary>清空黑名单</summary>
     public void Clear()
     {

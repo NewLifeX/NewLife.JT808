@@ -5,6 +5,7 @@ using NewLife;
 using NewLife.Cube;
 using NewLife.Cube.Extensions;
 using NewLife.Cube.ViewModels;
+using NewLife.JT808.Protocols;
 using NewLife.Log;
 using NewLife.Web;
 using XCode.Membership;
@@ -80,14 +81,21 @@ public class DeviceController : EntityController<Device>
         {
             try
             {
+                var cluster = HttpContext.RequestServices.GetRequiredService<ClusterState>();
+                var session = cluster.GetSession(device.Mobile);
+                if (session == null) return Content("指令下发失败：设备不在线");
+
+                // 统一传消息体类型全名，避免跨进程按程序集限定名解析失败
+                var bodyType = MessageFactory.FindType(type)?.FullName ?? type;
+
                 var client = HttpContext.RequestServices.GetRequiredService<CommandClient>();
-                var success = client.SendCommand(device.Mobile, type, data ?? "{}");
+                var success = client.SendCommand(session.Node, device.Mobile, bodyType, data ?? "{}");
                 if (success)
                 {
-                    XTrace.WriteLine("Web 指令已下发：Mobile={0}, Type={1}", device.Mobile, type);
+                    XTrace.WriteLine("Web 指令已下发：Mobile={0}, Type={1}, Node={2}", device.Mobile, bodyType, session.Node);
                     return RedirectToAction("Index", new { result = "指令已下发" });
                 }
-                return Content("指令下发失败：Redis 队列不可用");
+                return Content("指令下发失败：网关队列不可用");
             }
             catch (Exception ex)
             {

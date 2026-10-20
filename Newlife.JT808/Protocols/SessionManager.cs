@@ -34,6 +34,9 @@ public class SessionManager : ICommandBus
 
     /// <summary>当本地未找到目标设备时触发，由上层负责广播到远程服务器</summary>
     public event EventHandler<CommandEventArgs>? CommandReceived;
+
+    /// <summary>会话过期时间（秒）。终端超过该时间没有消息上报则视为离线</summary>
+    public Int32 SessionExpire { get; set; } = 1200;
     #endregion
 
     #region 构造
@@ -52,9 +55,18 @@ public class SessionManager : ICommandBus
     {
         if (mobile.IsNullOrEmpty()) return;
 
-        _cache.Set(mobile, session, 1200);
+        _cache.Set(mobile, session, SessionExpire);
 
         Log?.Info("Session registered: Mobile={0}, Session={1}", mobile, session);
+    }
+
+    /// <summary>刷新会话有效期。终端有消息上报时调用，避免在线会话因长时间未重新注册而失效</summary>
+    /// <param name="mobile">终端手机号</param>
+    public void Touch(String mobile)
+    {
+        if (mobile.IsNullOrEmpty()) return;
+
+        _cache.SetExpire(mobile, TimeSpan.FromSeconds(SessionExpire));
     }
 
     /// <summary>移除会话。终端离线时调用</summary>
@@ -70,13 +82,13 @@ public class SessionManager : ICommandBus
 
     /// <summary>根据手机号查找对应的网络会话</summary>
     /// <param name="mobile">终端手机号</param>
-    /// <returns>网络会话，未找到返回null</returns>
+    /// <returns>网络会话，未找到或已过期返回null</returns>
     public INetSession? Find(String mobile)
     {
         if (mobile.IsNullOrEmpty()) return null;
 
-        _cache.TryGetValue<INetSession>(mobile, out var session);
-        return session;
+        // 使用 Get 而非 TryGetValue，后者不校验过期时间
+        return _cache.Get<INetSession>(mobile);
     }
 
     /// <summary>判断终端是否在线（连接到本服务器）</summary>
@@ -85,13 +97,20 @@ public class SessionManager : ICommandBus
     public Boolean IsOnline(String mobile) => Find(mobile) != null;
 
     /// <summary>获取所有在线会话的列表</summary>
-    /// <returns>在线会话列表</returns>
+    /// <returns>在线会话列表。已过期的会话不会返回</returns>
     public IDictionary<String, INetSession> GetAll()
     {
         var keys = _cache.Keys;
         if (keys == null || keys.Count == 0) return new Dictionary<String, INetSession>();
 
-        return _cache.GetAll<INetSession>(keys);
+        var dic = _cache.GetAll<INetSession>(keys);
+        var result = new Dictionary<String, INetSession>();
+        foreach (var item in dic)
+        {
+            if (item.Value != null) result[item.Key] = item.Value;
+        }
+
+        return result;
     }
     #endregion
 
