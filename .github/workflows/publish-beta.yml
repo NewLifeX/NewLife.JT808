@@ -58,6 +58,10 @@ jobs:
     - name: Pack
       run: dotnet pack --version-suffix ${{ env.VERSION }} -c Release -o out Newlife.JT808/NewLife.JT808.csproj
 
+    - name: Verify package layout
+      shell: pwsh
+      run: pwsh -NoProfile -File ./check-package.ps1
+
     - name: Upload package
       if: github.event_name == 'pull_request'
       uses: actions/upload-artifact@v4
