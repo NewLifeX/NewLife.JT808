@@ -25,10 +25,13 @@ namespace NewLife.JT808.SuBiao
                 var len = reader.ReadByte();
                 //var ps = reader.Read<PeripheralStatus>();
                 var dt = reader.ReadBytes(len);
+                if (dt == null || dt.Length == 0) continue;
+
+                // 状态1字节 + 报警4字节；长度不足时按缺失字段为零处理，避免畸形数据抛异常
                 var ps = new PeripheralStatus
                 {
                     Status = (PeripheralWorkStatus)dt[0],
-                    Alarm = (PeripheralAlarmStatus)dt.ToUInt32(1, false)
+                    Alarm = dt.Length >= 5 ? (PeripheralAlarmStatus)dt.ToUInt32(1, false) : 0
                 };
                 //var ps = Binary.FastRead<PeripheralStatus>(new MemoryStream(dt));
                 dic[kind] = ps;

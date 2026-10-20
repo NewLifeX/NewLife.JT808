@@ -25,7 +25,7 @@ public class UpPackage
     public Byte KeepFields { get; set; }
 
     /// <summary>上行数据体</summary>
-    public UpBody Bodies { get; set; }
+    public UpBody? Bodies { get; set; }
 
     /// <summary>校验字</summary>
     public Byte CheckCode { get; set; }
@@ -49,11 +49,12 @@ public class UpPackage
         // 读取数据体
         if (DataLength > 0)
         {
-            // 根据命令字解析对应数据体
+            // 按声明长度截取数据块，保证校验字位置正确；未知命令字仅跳过数据体
+            var data = reader.ReadBytes(DataLength);
             var body = CreateBody(CommandId);
             if (body != null)
             {
-                body.Read(reader);
+                body.Read(new Binary { Stream = new MemoryStream(data), IsLittleEndian = false });
                 Bodies = body;
             }
         }
@@ -111,7 +112,7 @@ public class UpPackage
     }
 
     /// <summary>根据命令字创建对应的上行数据体</summary>
-    private static UpBody CreateBody(Byte commandId)
+    private static UpBody? CreateBody(Byte commandId)
     {
         // 此处由子类或外部注册扩展
         return null;

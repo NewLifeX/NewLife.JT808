@@ -30,7 +30,7 @@ namespace NewLife.JT808.SuBiao
         /// <returns></returns>
         public Boolean Read(Stream stream, Object? context)
         {
-            if (stream == null && context == null) return false;
+            if (stream == null) return false;
 
             // 头部标识探测
             var magic = stream.ReadBytes(4).ToStr();
@@ -55,7 +55,7 @@ namespace NewLife.JT808.SuBiao
         /// <exception cref="NotImplementedException"></exception>
         public Boolean Write(Stream stream, Object? context)
         {
-            if (stream == null && context == null) return false;
+            if (stream == null) return false;
 
             var writer = new Binary { Stream = stream, IsLittleEndian = false };
 

@@ -25,7 +25,7 @@ public class DownPackage
     public Byte KeepFields { get; set; }
 
     /// <summary>下行数据体</summary>
-    public DownBody Bodies { get; set; }
+    public DownBody? Bodies { get; set; }
 
     /// <summary>校验字</summary>
     public Byte CheckCode { get; set; }
@@ -46,10 +46,12 @@ public class DownPackage
 
         if (DataLength > 0)
         {
+            // 按声明长度截取数据块，保证校验字位置正确；未知命令字仅跳过数据体
+            var data = reader.ReadBytes(DataLength);
             var body = CreateBody(CommandId);
             if (body != null)
             {
-                body.Read(reader);
+                body.Read(new Binary { Stream = new MemoryStream(data), IsLittleEndian = false });
                 Bodies = body;
             }
         }
@@ -100,7 +102,7 @@ public class DownPackage
     }
 
     /// <summary>根据命令字创建对应的下行数据体</summary>
-    private static DownBody CreateBody(Byte commandId)
+    private static DownBody? CreateBody(Byte commandId)
     {
         return null;
     }
