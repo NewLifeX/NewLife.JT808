@@ -349,6 +349,53 @@ public class ProtocolCoverageTests
         Assert.True(String.IsNullOrEmpty(msg2.Mobile));
         Assert.Equal(MessageKinds.终端心跳, msg2.Kind);
     }
+
+    [Fact]
+    [DisplayName("帧读写_空流_返回失败")]
+    public void ReadWrite_NullStream_ReturnsFalse()
+    {
+        var msg = new JTMessage { Kind = MessageKinds.终端心跳, Mobile = "13800138000" };
+        Assert.False(msg.Read((Stream)null, null));
+        Assert.False(msg.Write((Stream)null, null));
+    }
+
+    [Fact]
+    [DisplayName("编码_属性含版本位但Version为0_按2013版写出")]
+    public void Write_VersionFlagMismatch_Normalized()
+    {
+        var msg = new JTMessage
+        {
+            Kind = MessageKinds.终端心跳,
+            Mobile = "13800138000",
+            Sequence = 1,
+            Property = PropertyFlags.Version,
+            Version = 0,
+        };
+
+        var pk = msg.ToPacket();
+        Assert.NotNull(pk);
+        Assert.Equal(15, pk.Total);
+
+        var msg2 = new JTMessage();
+        Assert.True(msg2.Read(pk));
+        Assert.Equal(0, msg2.Version);
+    }
+
+    [Fact]
+    [DisplayName("解码_超长垃圾数据_丢弃后恢复")]
+    public void Decode_OversizedGarbage_DiscardedThenRecovers()
+    {
+        var codec = new JTCodec();
+
+        // 70KB 无帧边界垃圾数据，超过 64KB 缓冲上限
+        var garbage = new Byte[70 * 1024];
+        Assert.Empty(codec.Decode(new ArrayPacket(garbage)));
+
+        // 缓冲区已丢弃，后续有效帧仍可解析
+        var msg = new JTMessage { Kind = MessageKinds.终端心跳, Mobile = "13800138000", Sequence = 1 };
+        var list = codec.Decode(msg.ToPacket());
+        Assert.Single(list);
+    }
     #endregion
 
     #region 消息工厂

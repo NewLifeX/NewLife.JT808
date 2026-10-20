@@ -10,6 +10,9 @@ namespace NewLife.JT808.Protocols;
 /// </remarks>
 public class JTCodec
 {
+    /// <summary>接收缓冲区上限。超过则判定为垃圾数据，避免内存无限增长</summary>
+    private const Int32 MaxBufferSize = 64 * 1024;
+
     private Int32 _gid;
     private MemoryStream _buffer = new();
 
@@ -70,7 +73,7 @@ public class JTCodec
 
         // 保留未处理完的数据
         _buffer.SetLength(0);
-        if (data.Total > 0)
+        if (data.Total > 0 && data.Total <= MaxBufferSize)
             data.CopyTo(_buffer);
 
         return list;

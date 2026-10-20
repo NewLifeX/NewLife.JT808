@@ -220,6 +220,9 @@ public class MessageBodyTests
     /// <summary>序列化消息体到JTMessage再反序列化，返回反序列化结果</summary>
     private static Object SerializeDeserialize(Object body, MessageKinds kind)
     {
+        // 确保消息工厂已扫描程序集（Init 幂等），避免测试执行顺序影响解析
+        MessageFactory.Instance.Init();
+
         var msg = new JTMessage
         {
             Kind = kind,

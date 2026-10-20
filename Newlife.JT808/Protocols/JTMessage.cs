@@ -57,7 +57,7 @@ public class JTMessage : IAccessor
     /// <returns></returns>
     public bool Read(Stream stream, object context)
     {
-        if (stream == null && context == null) return false;
+        if (stream == null) return false;
 
         // 头部标识探测
         if (stream.ReadByte() != 0x7E) return false;
@@ -147,7 +147,7 @@ public class JTMessage : IAccessor
     /// <exception cref="NotImplementedException"></exception>
     public bool Write(Stream stream, object context)
     {
-        if (stream == null && context == null) return false;
+        if (stream == null) return false;
 
         // 计算属性
         var flag = (ushort)Property;
@@ -155,7 +155,12 @@ public class JTMessage : IAccessor
         var length = pk?.Total ?? 0;
         if (length > 0x3FF) throw new InvalidOperationException(L.T("The message body length {0} exceeds the 1023-byte limit; split it into sub-packets.", length));
         flag = (ushort)(flag | length & 0x3FF);
-        if (Version > 0) flag |= 1 << 14;
+
+        // 版本位以 Version 为准，避免 Property 残留位与写入的头长度不一致
+        if (Version > 0)
+            flag |= 1 << 14;
+        else
+            flag = (ushort)(flag & ~(1 << 14));
 
         // 使用内存流，后面可能需要转义
         var ms = Pool.MemoryStream.Get();
