@@ -1,82 +1,82 @@
-using NewLife;
-using NewLife.Caching;
+using System.Collections.Concurrent;
+using JT808.Server.Messaging;
+using NewLife.JT808.Protocols;
 using NewLife.Log;
 
 namespace JT808.Server.Services;
 
-/// <summary>Redis Stream 消息队列生产者服务</summary>
+/// <summary>设备数据消息生产服务</summary>
 /// <remarks>
-/// 参考 GPS808 的 QueueService 模式，管理多个 Redis Stream 主题的生产者。
+/// 通过 <see cref="IMessageBus"/> 把位置、传感器、事件与各类报警数据投递到主题：
+/// 内部固定走 Redis（Worker 消费），启用外部集成时额外镜像到 RocketMQ/Kafka。
+/// 外部镜像失败只记录日志，不影响设备接入与内部处理。
 /// </remarks>
 public class QueueService
 {
-    private readonly ICacheProvider _cacheProvider;
+    private readonly MessagingRuntime _runtime;
+    private readonly ConcurrentDictionary<String, IMsgProducer<Object>> _internal = new(StringComparer.Ordinal);
+    private readonly ConcurrentDictionary<String, IMsgProducer<Object>> _external = new(StringComparer.Ordinal);
+    private volatile Boolean _externalFailed;
 
-    public QueueService(ICacheProvider cacheProvider)
+    /// <summary>实例化</summary>
+    /// <param name="runtime">消息总线运行时</param>
+    public QueueService(MessagingRuntime runtime) => _runtime = runtime;
+
+    /// <summary>推送位置数据</summary>
+    /// <param name="data">位置数据</param>
+    public void AddPosition(Object data) => Publish("PositionData", data);
+
+    /// <summary>推送传感器数据</summary>
+    /// <param name="data">传感器数据</param>
+    public void AddSensor(Object data) => Publish("SensorData", data);
+
+    /// <summary>推送事件数据</summary>
+    /// <param name="data">事件数据</param>
+    public void AddEvent(Object data) => Publish("EventData", data);
+
+    /// <summary>推送 ADAS 报警</summary>
+    /// <param name="data">报警数据</param>
+    public void AddAdasAlarm(Object data) => Publish("ADASAlarm", data);
+
+    /// <summary>推送 DSM 报警</summary>
+    /// <param name="data">报警数据</param>
+    public void AddDsmAlarm(Object data) => Publish("DSMAlarm", data);
+
+    /// <summary>推送 BSD 报警</summary>
+    /// <param name="data">报警数据</param>
+    public void AddBsdAlarm(Object data) => Publish("BSDAlarm", data);
+
+    /// <summary>推送原始报文</summary>
+    /// <param name="data">原始报文</param>
+    public void AddRawData(Object data) => Publish("RawData", data);
+
+    private void Publish(String topic, Object data, String? mobile = null)
     {
-        _cacheProvider = cacheProvider;
+        try
+        {
+            var producer = GetProducer(_internal, _runtime.Internal, topic);
+            _ = producer.ProduceAsync(mobile ?? String.Empty, data);
+        }
+        catch (Exception ex)
+        {
+            XTrace.WriteException(ex);
+        }
+
+        if (_runtime.External == null || _externalFailed) return;
+
+        try
+        {
+            var producer = GetProducer(_external, _runtime.External, topic);
+            _ = producer.ProduceAsync(mobile ?? String.Empty, data);
+        }
+        catch (Exception ex)
+        {
+            // 外部集成故障不影响设备接入，只在本进程内熔断，避免刷屏重试
+            _externalFailed = true;
+            XTrace.WriteLine("外部消息镜像已停用：{0}", ex.Message);
+        }
     }
 
-    private IProducerConsumer<Object>? _position;
-    /// <summary>推送位置数据到 Redis Stream</summary>
-    public void AddPosition(Object data)
-    {
-        _position ??= _cacheProvider.GetQueue<Object>("PositionData", "Group");
-        if (_position == null) return;
-        _position.Add(data);
-    }
-
-    private IProducerConsumer<Object>? _sensor;
-    /// <summary>推送传感器数据到 Redis Stream</summary>
-    public void AddSensor(Object data)
-    {
-        _sensor ??= _cacheProvider.GetQueue<Object>("SensorData", "Group");
-        if (_sensor == null) return;
-        _sensor.Add(data);
-    }
-
-    private IProducerConsumer<Object>? _event;
-    /// <summary>推送事件数据到 Redis Stream</summary>
-    public void AddEvent(Object data)
-    {
-        _event ??= _cacheProvider.GetQueue<Object>("EventData", "Group");
-        if (_event == null) return;
-        _event.Add(data);
-    }
-
-    private IProducerConsumer<Object>? _adas;
-    /// <summary>推送 ADAS 报警到 Redis Stream</summary>
-    public void AddAdasAlarm(Object data)
-    {
-        _adas ??= _cacheProvider.GetQueue<Object>("ADASAlarm", "Group");
-        if (_adas == null) return;
-        _adas.Add(data);
-    }
-
-    private IProducerConsumer<Object>? _dsm;
-    /// <summary>推送 DSM 报警到 Redis Stream</summary>
-    public void AddDsmAlarm(Object data)
-    {
-        _dsm ??= _cacheProvider.GetQueue<Object>("DSMAlarm", "Group");
-        if (_dsm == null) return;
-        _dsm.Add(data);
-    }
-
-    private IProducerConsumer<Object>? _bsd;
-    /// <summary>推送 BSD 报警到 Redis Stream</summary>
-    public void AddBsdAlarm(Object data)
-    {
-        _bsd ??= _cacheProvider.GetQueue<Object>("BSDAlarm", "Group");
-        if (_bsd == null) return;
-        _bsd.Add(data);
-    }
-
-    private IProducerConsumer<Object>? _rawData;
-    /// <summary>推送原始报文到 Redis Stream</summary>
-    public void AddRawData(Object data)
-    {
-        _rawData ??= _cacheProvider.GetQueue<Object>("RawData", "Group");
-        if (_rawData == null) return;
-        _rawData.Add(data);
-    }
+    private static IMsgProducer<Object> GetProducer(ConcurrentDictionary<String, IMsgProducer<Object>> cache, IMessageBus bus, String topic) =>
+        cache.GetOrAdd(topic, e => bus.CreateProducer<Object>(e));
 }

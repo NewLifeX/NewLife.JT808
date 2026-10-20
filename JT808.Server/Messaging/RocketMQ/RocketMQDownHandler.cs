@@ -10,7 +10,7 @@ namespace JT808.Server.Messaging.RocketMQ;
 /// 消费 RocketMQ 指令队列中的下行指令，将字符串类型的 BodyData 转换为 Byte[]。
 /// 配合 CommandClient 使用，CommandClient 向 RocketMQ 发送指令，此处理器接收并转换。
 /// </remarks>
-public class RocketMQDownHandler : IDownMessageHandler, IDisposable
+public class RocketMQDownHandler : IDownMessageHandler, IDownMessageSubscriber, IDisposable
 {
     #region 属性
     /// <summary>RocketMQ 消费者实例</summary>

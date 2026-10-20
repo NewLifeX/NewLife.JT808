@@ -72,6 +72,18 @@ public interface IDownMessageHandler
     Task<Byte[]> HandleAsync(String mobile, Byte[] data);
 }
 
+/// <summary>下行消息订阅接口</summary>
+/// <remarks>
+/// <see cref="IDownMessageHandler"/> 只定义"处理一条指令"，
+/// 需要从消息中间件持续接收指令时，用本接口注册消费回调。
+/// </remarks>
+public interface IDownMessageSubscriber
+{
+    /// <summary>开始消费指令队列</summary>
+    /// <param name="onMessage">消费回调：mobile, data → 结果</param>
+    void Start(Func<String, Byte[], Task<Byte[]>> onMessage);
+}
+
 /// <summary>消息日志接口</summary>
 public interface IMsgLogging
 {

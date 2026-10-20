@@ -1,3 +1,4 @@
+using JT808.Server.Messaging;
 using NewLife;
 using NewLife.JT808.Protocols;
 using NewLife.Log;
@@ -9,12 +10,14 @@ namespace JT808.Server.HostedServices;
 /// <remarks>
 /// 定时把本节点在线会话、节点心跳写入分布式缓存，并从缓存同步黑名单。
 /// Web 管理接口据此得到真实在线会话、节点列表和黑名单，实现跨进程共享。
+/// 启用外部集成时，会话变化还会广播到外部主题（<see cref="SessionEvent"/>）。
 /// 会话与节点记录都带过期时间，本节点异常退出后由过期时间兜底清理。
 /// </remarks>
 public class ClusterStateHostedService : IHostedService
 {
     private readonly JT808Server _server;
     private readonly ClusterState _cluster;
+    private readonly MessagingRuntime _runtime;
 
     private TimerX? _timer;
     private readonly Object _lock = new();
@@ -25,10 +28,12 @@ public class ClusterStateHostedService : IHostedService
     /// <summary>实例化</summary>
     /// <param name="server">网关服务</param>
     /// <param name="cluster">集群共享状态</param>
-    public ClusterStateHostedService(JT808Server server, ClusterState cluster)
+    /// <param name="runtime">消息总线运行时</param>
+    public ClusterStateHostedService(JT808Server server, ClusterState cluster, MessagingRuntime runtime)
     {
         _server = server;
         _cluster = cluster;
+        _runtime = runtime;
 
         _server.Blacklist.Log = XTrace.Log;
     }
@@ -98,6 +103,8 @@ public class ClusterStateHostedService : IHostedService
     {
         var now = DateTime.Now;
         var current = new HashSet<String>(StringComparer.Ordinal);
+        var online = new List<String>();
+        var offline = new List<String>();
 
         foreach (var item in _server.Manager.GetAll())
         {
@@ -124,16 +131,47 @@ public class ClusterStateHostedService : IHostedService
 
         lock (_lock)
         {
+            foreach (var mobile in current)
+            {
+                if (!_published.Contains(mobile)) online.Add(mobile);
+            }
+
             foreach (var mobile in _published)
             {
                 if (current.Contains(mobile)) continue;
 
                 _cluster.RemoveSession(mobile);
                 _loginTimes.Remove(mobile);
+                offline.Add(mobile);
             }
 
             _published.Clear();
             foreach (var mobile in current) _published.Add(mobile);
+        }
+
+        PublishSessionEvents(online, true);
+        PublishSessionEvents(offline, false);
+    }
+
+    /// <summary>广播会话事件。未启用外部集成时忽略</summary>
+    private void PublishSessionEvents(IList<String> mobiles, Boolean online)
+    {
+        var producer = _runtime.SessionProducer;
+        if (producer == null || mobiles.Count == 0) return;
+
+        foreach (var mobile in mobiles)
+        {
+            try
+            {
+                if (online)
+                    _ = producer.ProduceOnlineAsync(mobile);
+                else
+                    _ = producer.ProduceOfflineAsync(mobile);
+            }
+            catch (Exception ex)
+            {
+                XTrace.WriteLine("会话事件广播失败：Mobile={0}, {1}", mobile, ex.Message);
+            }
         }
     }
 

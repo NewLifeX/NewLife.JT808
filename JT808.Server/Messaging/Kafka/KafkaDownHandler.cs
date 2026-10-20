@@ -10,7 +10,7 @@ namespace JT808.Server.Messaging.Kafka;
 /// 配合 CommandClient 使用，CommandClient 向 Kafka 发送指令，此处理器接收并转换。
 /// 需要 .NET Standard 2.0+ 或 .NET Framework 4.6.1+ 运行时支持。
 /// </remarks>
-public class KafkaDownHandler : IDownMessageHandler, IDisposable
+public class KafkaDownHandler : IDownMessageHandler, IDownMessageSubscriber, IDisposable
 {
     #region 属性
     /// <summary>Kafka 消费者实例</summary>

@@ -40,7 +40,7 @@ Docs: [Requirements](Doc/需求文档.md) / [Architecture](Doc/架构设计.md) 
 - **BCD encoding**: custom serialization attributes for BCD strings and timestamps
 - **GBK encoding**: built-in GBK string codec with automatic `CodePagesEncodingProvider` registration
 - **Web API management**: unified command delivery, online session management, blacklist and token authentication
-- **Message-queue abstraction**: `IMsgProducer`/`IMsgConsumer`/`ISessionProducer` interfaces with an in-memory `DefaultMsgQueue`; Redis Stream, RocketMQ and Kafka adapters ship in the `JT808.Server` project
+- **Message queue abstraction**: `IMessageBus` creates producers/consumers, session events and downlink handlers; `RedisMessageBus` is the built-in internal transport and RocketMQ/Kafka adapters in `JT808.Server` plug in through the `JT808:Messaging` config switch
 - **Cluster command delivery**: `ClusterState` shares online sessions, node heartbeats and the blacklist through Redis, routes commands to the node that owns the terminal, and keeps `ICommandBus` as an extension point for custom transports
 - **Client hardening**: automatic reconnection, configurable heartbeat and send/receive counters
 - **Multi-framework support**: `net45 / net461 / netstandard2.0 / netstandard2.1 / net8.0`

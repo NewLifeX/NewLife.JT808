@@ -54,6 +54,11 @@ services.AddSingleton<JT808.Server.Services.QueueService>();
 services.AddSingleton<JT808.Server.Services.AlarmEventService>();
 services.AddSingleton<JT808.Server.Services.MediaService>();
 
+// 消息总线：内部固定 Redis，外部可选 RocketMQ/Kafka（JT808:Messaging）
+var messaging = JT808.Server.Messaging.MessagingOptions.Load(builder.Configuration);
+services.AddSingleton(messaging);
+services.AddSingleton(sp => new JT808.Server.Messaging.MessagingRuntime(sp.GetRequiredService<ICacheProvider>(), messaging));
+
 // 网关服务与集群共享状态
 var node = builder.Configuration["JT808:Node"];
 if (node.IsNullOrEmpty()) node = Environment.MachineName;
@@ -80,6 +85,7 @@ services.AddSingleton(sp =>
 });
 
 services.AddSingleton(sp => new ClusterState(sp.GetRequiredService<ICacheProvider>().Cache) { Node = node });
+services.AddSingleton<JT808.Server.Services.CommandExecutor>();
 
 // 后台服务（注意启动顺序）
 services.AddHostedService<JT808.Server.HostedServices.DeviceOnlineHostedService>();
@@ -87,6 +93,7 @@ services.AddHostedService<JT808.Server.HostedServices.DataRetentionService>();
 services.AddHostedService<JT808.Server.HostedServices.PreheatHostedService>();
 services.AddHostedService<JT808.Server.HostedServices.GpsHostedService>();
 services.AddHostedService<JT808.Server.HostedServices.ClusterStateHostedService>();
+services.AddHostedService<JT808.Server.HostedServices.ExternalDownlinkHostedService>();
 services.AddHostedService<JT808.Server.HostedServices.ClearHostedService>();
 
 // ===== 健康检查 =====

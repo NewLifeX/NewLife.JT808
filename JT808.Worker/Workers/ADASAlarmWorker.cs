@@ -1,76 +1,32 @@
 using JT808.Data.Safety;
 using NewLife;
-using NewLife.Caching;
+using NewLife.JT808.Protocols;
 using NewLife.Log;
-using NewLife.Model;
 using NewLife.Serialization;
 
 namespace JT808.Worker.Workers;
 
 /// <summary>ADAS 报警消费 Worker</summary>
-public class ADASAlarmWorker : IHostedService
+/// <remarks>消费 ADASAlarm 主题并持久化。</remarks>
+public class ADASAlarmWorker : StreamConsumerWorker
 {
-    private readonly IProducerConsumer<Object>? _queue;
-    private CancellationTokenSource? _cts;
-    private volatile Boolean _running;
+    /// <summary>实例化</summary>
+    /// <param name="bus">消息总线</param>
+    public ADASAlarmWorker(IMessageBus bus) : base(bus, "ADASAlarm") { }
 
-    public ADASAlarmWorker(QueueService queueService)
+    /// <summary>处理 ADAS 报警</summary>
+    /// <param name="mobile">终端手机号</param>
+    /// <param name="data">报警数据</param>
+    protected override async Task ProcessAsync(String mobile, Object data)
     {
-        _queue = queueService.Create<Object>("ADASAlarm", "Group");
-    }
+        XTrace.WriteLine("消费 ADAS 报警：{0}", data);
 
-    public Task StartAsync(CancellationToken cancellationToken)
-    {
-        _running = true;
-        _cts = CancellationTokenSource.CreateLinkedTokenSource(cancellationToken);
-        _ = ConsumeAsync(_cts.Token);
-        XTrace.WriteLine("ADASAlarmWorker 已启动");
-        return Task.CompletedTask;
-    }
+        if (data is not String json) return;
 
-    public Task StopAsync(CancellationToken cancellationToken)
-    {
-        _running = false;
-        _cts?.Cancel();
-        XTrace.WriteLine("ADASAlarmWorker 已停止");
-        return Task.CompletedTask;
-    }
+        var alarm = json.ToJsonEntity<ADASAlarm>();
+        if (alarm == null) return;
 
-    private async Task ConsumeAsync(CancellationToken cancellationToken)
-    {
-        while (_running && !cancellationToken.IsCancellationRequested)
-        {
-            try
-            {
-                if (_queue == null) return;
-                var data = _queue.TakeOne();
-                if (data != null)
-                {
-                    XTrace.WriteLine("消费 ADAS 报警：{0}", data);
-
-                    // 解析 ADAS 报警数据并持久化
-                    if (data is String json)
-                    {
-                        var alarm = json.ToJsonEntity<ADASAlarm>();
-                        if (alarm != null)
-                        {
-                            await alarm.InsertAsync();
-                            XTrace.WriteLine("ADAS 报警已持久化：DeviceId={0}, AlarmType={1}",
-                                alarm.DeviceId, alarm.AlarmType);
-                        }
-                    }
-                }
-                else
-                {
-                    await Task.Delay(1000, cancellationToken);
-                }
-            }
-            catch (TaskCanceledException) { break; }
-            catch (Exception ex)
-            {
-                XTrace.WriteLine("ADASAlarmWorker 异常：{0}", ex.Message);
-                await Task.Delay(5000, cancellationToken);
-            }
-        }
+        await alarm.InsertAsync();
+        XTrace.WriteLine("ADAS 报警已持久化：DeviceId={0}, AlarmType={1}", alarm.DeviceId, alarm.AlarmType);
     }
 }

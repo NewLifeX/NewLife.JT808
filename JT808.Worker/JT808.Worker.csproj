@@ -11,6 +11,7 @@
 
   <ItemGroup>
     <ProjectReference Include="..\JT808.Data\JT808.Data.csproj" />
+    <ProjectReference Include="..\Newlife.JT808\NewLife.JT808.csproj" />
   </ItemGroup>
 
   <ItemGroup>

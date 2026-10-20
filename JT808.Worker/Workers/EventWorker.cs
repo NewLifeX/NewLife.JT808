@@ -1,76 +1,32 @@
 using JT808.Data;
 using NewLife;
-using NewLife.Caching;
+using NewLife.JT808.Protocols;
 using NewLife.Log;
-using NewLife.Model;
 using NewLife.Serialization;
 
 namespace JT808.Worker.Workers;
 
 /// <summary>事件数据消费 Worker</summary>
-public class EventWorker : IHostedService
+/// <remarks>消费 EventData 主题并写入报警表。</remarks>
+public class EventWorker : StreamConsumerWorker
 {
-    private readonly IProducerConsumer<Object>? _queue;
-    private CancellationTokenSource? _cts;
-    private volatile Boolean _running;
+    /// <summary>实例化</summary>
+    /// <param name="bus">消息总线</param>
+    public EventWorker(IMessageBus bus) : base(bus, "EventData") { }
 
-    public EventWorker(QueueService queueService)
+    /// <summary>处理事件数据</summary>
+    /// <param name="mobile">终端手机号</param>
+    /// <param name="data">事件数据</param>
+    protected override async Task ProcessAsync(String mobile, Object data)
     {
-        _queue = queueService.Create<Object>("EventData", "Group");
-    }
+        XTrace.WriteLine("消费事件数据：{0}", data);
 
-    public Task StartAsync(CancellationToken cancellationToken)
-    {
-        _running = true;
-        _cts = CancellationTokenSource.CreateLinkedTokenSource(cancellationToken);
-        _ = ConsumeAsync(_cts.Token);
-        XTrace.WriteLine("EventWorker 已启动");
-        return Task.CompletedTask;
-    }
+        if (data is not String json) return;
 
-    public Task StopAsync(CancellationToken cancellationToken)
-    {
-        _running = false;
-        _cts?.Cancel();
-        XTrace.WriteLine("EventWorker 已停止");
-        return Task.CompletedTask;
-    }
+        var alarm = json.ToJsonEntity<Alarm>();
+        if (alarm == null) return;
 
-    private async Task ConsumeAsync(CancellationToken cancellationToken)
-    {
-        while (_running && !cancellationToken.IsCancellationRequested)
-        {
-            try
-            {
-                if (_queue == null) return;
-                var data = _queue.TakeOne();
-                if (data != null)
-                {
-                    XTrace.WriteLine("消费事件数据：{0}", data);
-
-                    // 解析事件数据并持久化
-                    if (data is String json)
-                    {
-                        var alarm = json.ToJsonEntity<Alarm>();
-                        if (alarm != null)
-                        {
-                            await alarm.InsertAsync();
-                            XTrace.WriteLine("事件数据已持久化：DeviceId={0}, AlarmType={1}",
-                                alarm.DeviceId, alarm.AlarmType);
-                        }
-                    }
-                }
-                else
-                {
-                    await Task.Delay(1000, cancellationToken);
-                }
-            }
-            catch (TaskCanceledException) { break; }
-            catch (Exception ex)
-            {
-                XTrace.WriteLine("EventWorker 异常：{0}", ex.Message);
-                await Task.Delay(5000, cancellationToken);
-            }
-        }
+        await alarm.InsertAsync();
+        XTrace.WriteLine("事件数据已持久化：DeviceId={0}, AlarmType={1}", alarm.DeviceId, alarm.AlarmType);
     }
 }

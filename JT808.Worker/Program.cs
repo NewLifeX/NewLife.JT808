@@ -3,6 +3,7 @@ using JT808.Worker.Workers;
 using NewLife;
 using NewLife.Caching;
 using NewLife.Caching.Services;
+using NewLife.JT808.Protocols;
 using NewLife.Log;
 using NewLife.Model;
 using Stardust;
@@ -37,7 +38,8 @@ EntityFactory.InitConnection("GPS");
 EntityFactory.InitConnection("Safety");
 EntityFactory.InitConnection("Platform");
 
-services.AddSingleton<QueueService>();
+// 消息总线：消费端使用 Redis Stream，与网关生产端保持同一主题与消费组
+services.AddSingleton<IMessageBus, RedisMessageBus>();
 
 var host = services.BuildHost();
 
@@ -53,20 +55,3 @@ host.Add<TirePressureWorker>();
 XTrace.WriteLine("JT808.Worker 已启动，共 7 个 Worker");
 
 await host.RunAsync();
-
-/// <summary>Redis Stream 消费者服务</summary>
-public class QueueService
-{
-    private readonly ICacheProvider _cacheProvider;
-
-    public QueueService(ICacheProvider cacheProvider)
-    {
-        _cacheProvider = cacheProvider;
-    }
-
-    public IProducerConsumer<T>? Create<T>(String topic, String? group = null)
-    {
-        var queue = _cacheProvider.GetQueue<T>(topic, group ?? "Group");
-        return queue as IProducerConsumer<T>;
-    }
-}

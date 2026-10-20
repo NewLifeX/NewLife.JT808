@@ -40,7 +40,7 @@ Nuget：[NewLife.JT808](https://www.nuget.org/packages/NewLife.JT808)
 - **BCD 编码**：BCD 字符串和时间自定义序列化特性，适配协议特有编码格式
 - **GBK 编码**：内置 GBK 中文字符串编解码，自动注册 `CodePagesEncodingProvider`
 - **Web API 管理**：支持统一下发指令、在线会话管理、黑名单管理、Token 鉴权，方便集成到后台系统
-- **消息队列抽象**：IMsgProducer/IMsgConsumer/ISessionProducer 等接口解耦消息处理，内置 DefaultMsgQueue 内存实现；Redis Stream、RocketMQ、Kafka 适配器位于 JT808.Server 项目
+- **消息队列抽象**：`IMessageBus` 统一创建生产者/消费者、会话事件与下行处理器；内置 `RedisMessageBus` 作为内部传输，RocketMQ/Kafka 适配器经 `JT808:Messaging` 配置开关接入
 - **集群指令下发**：`ClusterState` 通过 Redis 共享在线会话、节点心跳与黑名单，指令按终端所在节点投递；`ICommandBus` 保留为自定义传输的扩展点
 - **客户端增强**：自动重连、可配心跳、收发统计计数器，提升生产环境可靠性
 - **AOT 兼容**：NativeAOT 冒烟工程覆盖编解码、消息工厂与序列化主路径
