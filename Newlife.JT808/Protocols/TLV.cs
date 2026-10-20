@@ -123,7 +123,7 @@ namespace NewLife.JT808.Protocols
                         short m => m.GetBytes(false),
                         uint n => n.GetBytes(false),
                         int n => n.GetBytes(false),
-                        _ => throw new Exception($"不支持的类型[{item.Value.GetType()}]"),
+                        _ => throw new Exception(L.T("Unsupported type [{0}].", item.Value.GetType())),
                     };
                 }
             }

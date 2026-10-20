@@ -24,7 +24,7 @@ public class JT808Session : NetSession<JT808Server>, ICommand
     {
         base.OnConnected();
 
-        WriteLog("终端连接 {0}", Remote);
+        WriteLog("Terminal connected {0}", Remote);
     }
 
     /// <summary>连接断开时触发</summary>
@@ -37,7 +37,7 @@ public class JT808Session : NetSession<JT808Server>, ICommand
         if (!Mobile.IsNullOrEmpty())
             Host.Manager.Remove(Mobile);
 
-        WriteLog("终端断开 {0} {1}", Remote, reason);
+        WriteLog("Terminal disconnected {0} {1}", Remote, reason);
     }
 
     /// <summary>收到消息时触发</summary>
@@ -92,7 +92,7 @@ public class JT808Session : NetSession<JT808Server>, ICommand
             // 路由到处理器
             if (!Host.Handlers.TryGetValue(msg.Kind, out var handler))
             {
-                WriteLog("未支持指令[{0}]", name);
+                WriteLog("Unsupported command [{0}]", name);
                 return;
             }
 

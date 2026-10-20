@@ -66,7 +66,7 @@ public class RocketMQProducer<TMessage> : IMsgProducer<TMessage>, IDisposable
         }
         catch (Exception ex)
         {
-            Log?.Error("RocketMQ 生产失败: {0}", ex.Message);
+            Log?.Error("RocketMQ produce failed: {0}", ex.Message);
             return false;
         }
     }

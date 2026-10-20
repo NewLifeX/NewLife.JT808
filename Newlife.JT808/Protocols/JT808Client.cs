@@ -230,7 +230,7 @@ public class JT808Client : DisposeBase
             {
                 Handlers[att.Kind] = method.As<MessageHandler>(handler);
 
-                WriteLog("注册[{0}]：{1}.{2}", att.Kind, method.DeclaringType.FullName, method.Name);
+                WriteLog("Registered [{0}]: {1}.{2}", att.Kind, method.DeclaringType.FullName, method.Name);
             }
         }
     }
@@ -386,11 +386,11 @@ public class JT808Client : DisposeBase
             _client.Send(pk);
             SentCount++;
 
-            WriteLog("心跳 => {0}", seq);
+            WriteLog("Heartbeat => {0}", seq);
         }
         catch (Exception ex)
         {
-            WriteLog("心跳异常：{0}", ex.Message);
+            WriteLog("Heartbeat error: {0}", ex.Message);
         }
     }
     #endregion
@@ -404,7 +404,7 @@ public class JT808Client : DisposeBase
 
         if (MaxReconnect > 0 && _reconnectCount >= MaxReconnect)
         {
-            WriteLog("已达到最大重连次数 {0}，停止重连", MaxReconnect);
+            WriteLog("Maximum reconnection attempts {0} reached, stop reconnecting.", MaxReconnect);
             return;
         }
 
@@ -434,7 +434,7 @@ public class JT808Client : DisposeBase
         _reconnectCount++;
         ReconnectCount++;
 
-        WriteLog("自动重连第 {0} 次...", _reconnectCount);
+        WriteLog("Auto reconnect attempt {0}...", _reconnectCount);
 
         try
         {
@@ -442,7 +442,7 @@ public class JT808Client : DisposeBase
         }
         catch (Exception ex)
         {
-            WriteLog("自动重连失败：{0}", ex.Message);
+            WriteLog("Auto reconnect failed: {0}", ex.Message);
         }
     }
     #endregion

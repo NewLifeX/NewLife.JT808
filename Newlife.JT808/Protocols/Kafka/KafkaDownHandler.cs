@@ -91,7 +91,7 @@ public class KafkaDownHandler : IDownMessageHandler, IDisposable
             }
             catch (Exception ex)
             {
-                Log?.Error("Kafka 指令消费异常: {0}", ex.Message);
+                Log?.Error("Kafka command consume error: {0}", ex.Message);
                 await Task.Delay(1000);
             }
         }

@@ -101,7 +101,7 @@ public class KafkaConsumer<TMessage> : IMsgConsumer<TMessage>, IDisposable
             }
             catch (Exception ex)
             {
-                Log?.Error("Kafka 消费异常: {0}", ex.Message);
+            Log?.Error("Kafka consume error: {0}", ex.Message);
                 await Task.Delay(1000, cancellationToken);
             }
         }

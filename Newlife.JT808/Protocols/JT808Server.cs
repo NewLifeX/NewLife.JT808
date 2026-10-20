@@ -79,7 +79,7 @@ public class JT808Server : NetServer<JT808Session>
             {
                 Handlers[att.Kind] = method.As<JT808Handler>(handler);
 
-                WriteLog("注册[{0}]：{1}.{2}", att.Kind, method.DeclaringType.FullName, method.Name);
+                WriteLog("Registered [{0}]: {1}.{2}", att.Kind, method.DeclaringType.FullName, method.Name);
             }
         }
     }

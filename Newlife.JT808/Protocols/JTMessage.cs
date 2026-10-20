@@ -132,7 +132,7 @@ public class JTMessage : IAccessor
         var checkSum2 = GetCheckSum(ms, 0);
         var checkSum = reader.ReadByte();
         //if (checkSum != checkSum2) return false;
-        if (checkSum != checkSum2) XTrace.WriteLine("checkSum Error {0:X2}!={1:X2}", checkSum, checkSum2);
+        if (checkSum != checkSum2) XTrace.WriteLine(L.T("Checksum error {0:X2}!={1:X2}", checkSum, checkSum2));
 
         Reply = MessageFactory.IsReply(Kind);
 
@@ -319,7 +319,7 @@ public class JTMessage : IAccessor
     public T ReadModel<T>() where T : new()
     {
         var msg = new T();
-        if (!TryReadModel(msg)) throw new InvalidDataException();
+        if (!TryReadModel(msg)) throw new InvalidDataException(L.T("Failed to parse the message body."));
 
         return msg;
     }

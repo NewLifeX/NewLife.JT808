@@ -42,7 +42,7 @@ public class DefaultMsgQueue<TMessage> : IMsgProducer<TMessage>, IMsgConsumer<TM
     {
         if (_queue.Count >= MaxQueueLength)
         {
-            Log?.Warn("队列已满，丢弃消息：Topic={0}, Mobile={1}", Topic, mobile);
+            Log?.Warn("Queue full, message dropped: Topic={0}, Mobile={1}", Topic, mobile);
             return Task.FromResult(false);
         }
 
@@ -99,7 +99,7 @@ public class DefaultMsgQueue<TMessage> : IMsgProducer<TMessage>, IMsgConsumer<TM
             }
             catch (Exception ex)
             {
-                Log?.Error("消息处理异常：Topic={0}, Mobile={1}", Topic, item.mobile, ex);
+                Log?.Error("Message handling error: Topic={0}, Mobile={1}", Topic, item.mobile, ex);
             }
         }
     }

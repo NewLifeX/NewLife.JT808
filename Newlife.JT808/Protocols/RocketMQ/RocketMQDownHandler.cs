@@ -73,7 +73,7 @@ public class RocketMQDownHandler : IDownMessageHandler, IDisposable
                 }
                 catch (Exception ex)
                 {
-                    Log?.Error("RocketMQ 指令消费异常: {0}", ex.Message);
+                    Log?.Error("RocketMQ command consume error: {0}", ex.Message);
                     return false;
                 }
             }

@@ -37,7 +37,7 @@ public class JT808Auth
             ?? "jt808-default-token";
 
         if (Token == "jt808-default-token")
-            Log?.Warn("JT808 API Token 使用默认值，建议通过环境变量 JT808_API_TOKEN 设置");
+            Log?.Warn("JT808 API token uses the default value, set it via the JT808_API_TOKEN environment variable.");
     }
     #endregion
 

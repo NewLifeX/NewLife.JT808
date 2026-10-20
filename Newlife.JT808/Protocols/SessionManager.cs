@@ -54,7 +54,7 @@ public class SessionManager : ICommandBus
 
         _cache.Set(mobile, session, 1200);
 
-        Log?.Info("会话注册：Mobile={0}, Session={1}", mobile, session);
+        Log?.Info("Session registered: Mobile={0}, Session={1}", mobile, session);
     }
 
     /// <summary>移除会话。终端离线时调用</summary>
@@ -65,7 +65,7 @@ public class SessionManager : ICommandBus
 
         _cache.Remove(mobile);
 
-        Log?.Info("会话移除：Mobile={0}", mobile);
+        Log?.Info("Session removed: Mobile={0}", mobile);
     }
 
     /// <summary>根据手机号查找对应的网络会话</summary>
@@ -111,7 +111,7 @@ public class SessionManager : ICommandBus
         if (session is ICommand cmd)
         {
             cmd.Send(body);
-            Log?.Info("指令本地下发：Mobile={0}, Body={1}", mobile, body);
+            Log?.Info("Command sent locally: Mobile={0}, Body={1}", mobile, body);
             return true;
         }
 
@@ -121,11 +121,11 @@ public class SessionManager : ICommandBus
 
         if (args.Handled)
         {
-            Log?.Info("指令远程广播：Mobile={0}, Body={1}", mobile, body);
+            Log?.Info("Command broadcast remotely: Mobile={0}, Body={1}", mobile, body);
             return true;
         }
 
-        Log?.Warn("指令下发失败，设备不在线：Mobile={0}", mobile);
+        Log?.Warn("Command delivery failed, device offline: Mobile={0}", mobile);
         return false;
     }
 
@@ -142,12 +142,12 @@ public class SessionManager : ICommandBus
             try
             {
                 var result = await cmd.SendAsync<TResult>(body);
-                Log?.Info("指令本地下发（异步）：Mobile={0}, Body={1}", mobile, body);
+                Log?.Info("Command sent locally (async): Mobile={0}, Body={1}", mobile, body);
                 return result;
             }
             catch (Exception ex)
             {
-                Log?.Error("指令本地下发异常：Mobile={0}", mobile, ex);
+                Log?.Error("Command send error: Mobile={0}", mobile, ex);
                 return null;
             }
         }
@@ -158,11 +158,11 @@ public class SessionManager : ICommandBus
 
         if (args.Handled)
         {
-            Log?.Info("指令远程广播（异步）：Mobile={0}, Body={1}", mobile, body);
+            Log?.Info("Command broadcast remotely (async): Mobile={0}, Body={1}", mobile, body);
         }
         else
         {
-            Log?.Warn("指令下发失败，设备不在线：Mobile={0}", mobile);
+            Log?.Warn("Command delivery failed, device offline: Mobile={0}", mobile);
         }
 
         return null;
@@ -183,11 +183,11 @@ public class SessionManager : ICommandBus
         if (session is ICommand cmd)
         {
             cmd.Send(body);
-            Log?.Info("远程指令本地执行：Mobile={0}, Body={1}", mobile, body);
+            Log?.Info("Remote command executed locally: Mobile={0}, Body={1}", mobile, body);
             return true;
         }
 
-        Log?.Warn("远程指令本地执行失败，设备已离线：Mobile={0}", mobile);
+        Log?.Warn("Remote command failed, device offline: Mobile={0}", mobile);
         return false;
     }
     #endregion

@@ -116,7 +116,7 @@ namespace NewLife.JT808.Protocols
                     Helper.CreateReader(ms, message).TryRead(null, ref msg);
 
 #if DEBUG
-                if (ms.Position < ms.Length) throw new Exception($"解析未完成，可用[{ms.Length}]，实际[{ms.Position}]");
+                if (ms.Position < ms.Length) throw new Exception(L.T("Parsing incomplete, available [{0}], consumed [{1}].", ms.Length, ms.Position));
 #endif
             }
 

@@ -47,7 +47,7 @@ public class BlacklistManager
         {
             if (_blacklist.Add(mobile))
             {
-                Log?.Info("黑名单添加：{0}", mobile);
+                Log?.Info("Blacklist add: {0}", mobile);
                 SaveFile();
                 return true;
             }
@@ -66,7 +66,7 @@ public class BlacklistManager
         {
             if (_blacklist.Remove(mobile))
             {
-                Log?.Info("黑名单移除：{0}", mobile);
+                Log?.Info("Blacklist remove: {0}", mobile);
                 SaveFile();
                 return true;
             }
@@ -104,7 +104,7 @@ public class BlacklistManager
         {
             _blacklist.Clear();
         }
-        Log?.Info("黑名单已清空");
+        Log?.Info("Blacklist cleared.");
         SaveFile();
     }
     #endregion
@@ -127,7 +127,7 @@ public class BlacklistManager
                     _blacklist.Add(mobile);
             }
         }
-        Log?.Info("黑名单已加载：{0} 条", Count);
+        Log?.Info("Blacklist loaded: {0} entries.", Count);
     }
 
     /// <summary>保存黑名单到文件</summary>

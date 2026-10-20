@@ -84,7 +84,7 @@ public class RocketMQConsumer<TMessage> : IMsgConsumer<TMessage>, IDisposable
                 }
                 catch (Exception ex)
                 {
-                    Log?.Error("RocketMQ 消费异常: {0}", ex.Message);
+                    Log?.Error("RocketMQ consume error: {0}", ex.Message);
                     return false;
                 }
             }
