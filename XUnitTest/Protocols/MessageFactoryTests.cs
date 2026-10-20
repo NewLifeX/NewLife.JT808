@@ -129,6 +129,63 @@ public class MessageFactoryTests
     }
 
     [Fact]
+    [DisplayName("注册泛型_RegisterT")]
+    public void RegisterGeneric_AddsMapping()
+    {
+        var factory = new MessageFactory();
+
+        factory.Register<FakeBody>();
+
+        Assert.True(factory.Maps.ContainsKey(FakeKind));
+        Assert.IsType<FakeBody>(factory.Create(FakeKind));
+        Assert.Equal(FakeKind, factory.Types[typeof(FakeBody)]);
+    }
+
+    [Fact]
+    [DisplayName("自定义映射_SetMap")]
+    public void SetMap_OverridesMapping()
+    {
+        var factory = new MessageFactory();
+
+        factory.SetMap<FakeBody>();
+        Assert.Equal(typeof(FakeBody), factory.Maps[FakeKind]);
+
+        factory.SetMap(FakeKind, typeof(FakeBody2));
+        Assert.Equal(typeof(FakeBody2), factory.Maps[FakeKind]);
+        Assert.Equal(FakeKind, factory.Types[typeof(FakeBody2)]);
+    }
+
+    [Fact]
+    [DisplayName("解析_无负载_返回空壳对象")]
+    public void Parse_NoPayload_ReturnsInstance()
+    {
+        var msg = new JTMessage
+        {
+            Kind = MessageKinds.位置信息汇报,
+            Mobile = "13880011111",
+            Sequence = 1,
+        };
+
+        var parsed = MessageFactory.Instance.Parse(msg);
+
+        Assert.IsType<T0200>(parsed);
+    }
+
+    private const MessageKinds FakeKind = (MessageKinds)0x7E01;
+
+    [MessageKind(FakeKind)]
+    private class FakeBody
+    {
+        public Byte Value { get; set; }
+    }
+
+    [MessageKind(FakeKind)]
+    private class FakeBody2
+    {
+        public Byte Value { get; set; }
+    }
+
+    [Fact]
     [DisplayName("类型名_GetKindName")]
     public void GetKindName_ReturnsName()
     {
