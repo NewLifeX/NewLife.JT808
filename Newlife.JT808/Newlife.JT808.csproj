@@ -42,7 +42,6 @@
 			<PrivateAssets>all</PrivateAssets>
 			<IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
 		</PackageReference>
-		<PackageReference Include="NewLife.RocketMQ" Version="3.2.2026.1019-beta1521" />
 	</ItemGroup>
 
 	<ItemGroup Condition="'$(TargetFramework)'!='net45'">

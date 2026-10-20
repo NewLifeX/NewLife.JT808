@@ -1,8 +1,9 @@
+using NewLife.JT808.Protocols;
 using NewLife.Log;
 using NewLife.RocketMQ;
 using NewLife.Serialization;
 
-namespace NewLife.JT808.Protocols.RocketMQ;
+namespace JT808.Server.Messaging.RocketMQ;
 
 /// <summary>基于 RocketMQ 的下行指令处理器</summary>
 /// <remarks>

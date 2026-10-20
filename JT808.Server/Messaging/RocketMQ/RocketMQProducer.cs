@@ -1,7 +1,8 @@
+using NewLife.JT808.Protocols;
 using NewLife.Log;
 using NewLife.RocketMQ;
 
-namespace NewLife.JT808.Protocols.RocketMQ;
+namespace JT808.Server.Messaging.RocketMQ;
 
 /// <summary>基于 RocketMQ 的消息生产者适配器</summary>
 /// <remarks>

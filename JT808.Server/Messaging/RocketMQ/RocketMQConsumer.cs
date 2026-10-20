@@ -1,11 +1,9 @@
+using NewLife.JT808.Protocols;
 using NewLife.Log;
 using NewLife.RocketMQ;
 using NewLife.Serialization;
-#if NET45
-using TaskEx = System.Threading.Tasks.Task;
-#endif
 
-namespace NewLife.JT808.Protocols.RocketMQ;
+namespace JT808.Server.Messaging.RocketMQ;
 
 /// <summary>基于 RocketMQ 的消息消费者适配器</summary>
 /// <remarks>

@@ -40,13 +40,13 @@ Docs: [Requirements](Doc/需求文档.md) / [Architecture](Doc/架构设计.md) 
 - **BCD encoding**: custom serialization attributes for BCD strings and timestamps
 - **GBK encoding**: built-in GBK string codec with automatic `CodePagesEncodingProvider` registration
 - **Web API management**: unified command delivery, online session management, blacklist and token authentication
-- **Message-queue abstraction**: `IMsgProducer`/`IMsgConsumer`/`ISessionProducer` interfaces with an in-memory `DefaultMsgQueue`, Redis Stream, RocketMQ and Kafka adapters
+- **Message-queue abstraction**: `IMsgProducer`/`IMsgConsumer`/`ISessionProducer` interfaces with an in-memory `DefaultMsgQueue`, Redis Stream and Kafka adapters
 - **Cross-server command delivery**: `ICommandBus` plus the Stardust event bus for cluster-wide broadcast to a specific terminal
 - **Client hardening**: automatic reconnection, configurable heartbeat and send/receive counters
 - **Multi-framework support**: `net45 / net461 / netstandard2.0 / netstandard2.1 / net8.0`
 - **AOT friendly**: NativeAOT smoke project covering codec, factory and serialization paths
 - **Localization**: 11 runtime languages out of the box, English source text as fallback, AOT-safe tables
-- **RocketMQ integration**: producer/consumer adapter supporting Alibaba Cloud, Huawei Cloud, Tencent Cloud and ACL authentication
+- **RocketMQ integration**: producer/consumer adapter in the `JT808.Server` project (not shipped in the NuGet package), supporting Alibaba Cloud, Huawei Cloud, Tencent Cloud and ACL authentication
 - **Kafka integration**: producer/consumer adapter based on `Confluent.Kafka` with consumer groups and ACK support (.NET Standard 2.0+)
 
 ## Supported protocol versions
