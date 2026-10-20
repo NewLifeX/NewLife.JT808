@@ -1,4 +1,3 @@
-﻿using NewLife.JT808.Protocols;
 using NewLife.JT808.Protocols;
 using NewLife;
 using NewLife.Serialization;
@@ -82,7 +81,7 @@ namespace NewLife.JT808.Models
         /// 2013版本 5 个字节，终端制造商编码
         /// 2019版本 11 个字节，终端制造商编码
         /// </summary>
-        public String MakerId { get; set; }
+        public String? MakerId { get; set; }
 
         /// <summary>
         /// 终端型号
@@ -90,7 +89,7 @@ namespace NewLife.JT808.Models
         /// 2019版本
         /// BYTE[30] 30 个字节，此终端型号由制造商自行定义，位数不足时，后补“0X00”。
         /// </summary>
-        public String Model { get; set; }
+        public String? Model { get; set; }
 
         /// <summary>
         /// 终端ID 
@@ -98,23 +97,23 @@ namespace NewLife.JT808.Models
         /// 2019版本
         /// BYTE[30]  30 个字节，由大写字母和数字组成，此终端 ID 由制造商自行定义，位数不足时，后补“0X00”
         /// </summary>
-        public String TerminalId { get; set; }
+        public String? TerminalId { get; set; }
 
         /// <summary>
         /// 终端 SIM 卡 ICCID
         /// BCD[10]
         /// </summary>
-        public String SIM_ICCID { get; set; }
+        public String? SIM_ICCID { get; set; }
 
         /// <summary>
         /// 终端硬件版本号
         /// </summary>
-        public String HardwareVersion { get; set; }
+        public String? HardwareVersion { get; set; }
 
         /// <summary>
         /// 终端固件版本号
         /// </summary>
-        public String FirmwareVersion { get; set; }
+        public String? FirmwareVersion { get; set; }
 
         /// <summary>
         /// GNSS 模块属性
@@ -201,20 +200,20 @@ namespace NewLife.JT808.Models
             writer.WriteUInt16((UInt16)Type);
             if (header != null && header.Version > 0)
             {
-                writer.WriteFixedString(MakerId, 11);
-                writer.WriteFixedString(Model, 30);
-                writer.WriteFixedString(TerminalId, 30);
+                writer.WriteFixedString(MakerId ?? String.Empty, 11);
+                writer.WriteFixedString(Model ?? String.Empty, 30);
+                writer.WriteFixedString(TerminalId ?? String.Empty, 30);
             }
             else
             {
-                writer.WriteFixedString(MakerId, 5);
-                writer.WriteFixedString(Model, 20);
-                writer.WriteFixedString(TerminalId, 7);
+                writer.WriteFixedString(MakerId ?? String.Empty, 5);
+                writer.WriteFixedString(Model ?? String.Empty, 20);
+                writer.WriteFixedString(TerminalId ?? String.Empty, 7);
             }
 
-            writer.WriteBCD(SIM_ICCID, 10);
-            writer.WriteString(HardwareVersion);
-            writer.WriteString(FirmwareVersion);
+            writer.WriteBCD(SIM_ICCID ?? String.Empty, 10);
+            writer.WriteString(HardwareVersion ?? String.Empty);
+            writer.WriteString(FirmwareVersion ?? String.Empty);
             writer.WriteByte((Byte)GNSSModule);
             writer.WriteByte((Byte)CommunicationModule);
 

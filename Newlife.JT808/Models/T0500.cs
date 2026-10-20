@@ -1,4 +1,4 @@
-﻿using NewLife.JT808.Protocols;
+using NewLife.JT808.Protocols;
 
 namespace NewLife.JT808.Models
 {
@@ -15,6 +15,6 @@ namespace NewLife.JT808.Models
         /// <summary>
         /// 位置信息汇报消息体
         /// </summary>
-        public T0200 Position { get; set; }
+        public T0200? Position { get; set; }
     }
 }

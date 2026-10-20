@@ -1,4 +1,4 @@
-﻿using NewLife.JT808.Protocols;
+using NewLife.JT808.Protocols;
 
 namespace NewLife.JT808.Models
 {
@@ -10,6 +10,6 @@ namespace NewLife.JT808.Models
         public UInt16 Sequence { get; set; }
 
         /// <summary>位置</summary>
-        public T0200 Position { get; set; }
+        public T0200? Position { get; set; }
     }
 }

@@ -1,4 +1,4 @@
-﻿using NewLife.JT808.Protocols;
+using NewLife.JT808.Protocols;
 
 namespace NewLife.JT808.Models
 {
@@ -19,6 +19,6 @@ namespace NewLife.JT808.Models
         /// 行车记录仪上行数据包
         /// </summary>
         [FullBytes]
-        public Byte[] Data { get; set; }
+        public Byte[]? Data { get; set; }
     }
 }

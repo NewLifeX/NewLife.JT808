@@ -1,4 +1,3 @@
-﻿using NewLife.JT808.Protocols;
 using NewLife.JT808.Protocols;
 using NewLife;
 
@@ -17,13 +16,13 @@ namespace NewLife.JT808.Models
         /// <summary>
         /// 参数列表
         /// </summary>
-        public List<TLV> Items { get; set; }
+        public List<TLV>? Items { get; set; }
 
         /// <summary>获取参数列表（参数 ID→值 字典）</summary>
         /// <returns>参数键值对字典</returns>
         public IDictionary<ParameterKinds, Object> GetParameters()
         {
-            var dic = TLV.Convert<ParameterKinds>(Items);
+            var dic = TLV.Convert<ParameterKinds>(Items ?? []);
 
             foreach (var item in dic)
             {

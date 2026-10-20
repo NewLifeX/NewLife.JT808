@@ -1,4 +1,4 @@
-﻿using NewLife;
+using NewLife;
 using NewLife.Serialization;
 
 namespace NewLife.JT808.Protocols;
@@ -45,7 +45,7 @@ public static class PositionAdditional
     /// <summary>写入附加数据</summary>
     /// <param name="writer"></param>
     /// <param name="dic"></param>
-    public static void WriteAdditional(this Binary writer, IDictionary<AdditionalKinds, object> dic)
+    public static void WriteAdditional(this Binary writer, IDictionary<AdditionalKinds, object>? dic)
     {
         if (dic == null || dic.Count == 0) return;
 

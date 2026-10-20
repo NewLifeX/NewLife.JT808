@@ -1,4 +1,4 @@
-﻿using NewLife.Serialization;
+using NewLife.Serialization;
 using System.Text;
 
 namespace NewLife.JT808.Protocols;
@@ -44,7 +44,7 @@ namespace NewLife.JT808.Protocols;
         /// <summary>创建读取器</summary>
         /// <param name="stream"></param>
         /// <returns></returns>
-        public static Binary CreateReader(Stream stream, JTMessage message) => new()
+        public static Binary CreateReader(Stream stream, JTMessage? message) => new()
         {
             Stream = stream,
             Encoding = Encoding,
@@ -58,7 +58,7 @@ namespace NewLife.JT808.Protocols;
         /// <summary>创建写入器</summary>
         /// <param name="stream"></param>
         /// <returns></returns>
-        public static Binary CreateWriter(Stream stream, JTMessage message) => new()
+        public static Binary CreateWriter(Stream stream, JTMessage? message) => new()
         {
             Stream = stream,
             Encoding = Encoding,

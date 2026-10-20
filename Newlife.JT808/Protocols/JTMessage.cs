@@ -1,4 +1,4 @@
-﻿using System.Reflection;
+using System.Reflection;
 using System.Runtime.Serialization;
 using NewLife.Buffers;
 using NewLife.Collections;
@@ -55,7 +55,7 @@ public class JTMessage : IAccessor
     /// <param name="stream"></param>
     /// <param name="context"></param>
     /// <returns></returns>
-    public bool Read(Stream stream, object context)
+    public bool Read(Stream stream, Object? context)
     {
         if (stream == null) return false;
 
@@ -145,7 +145,7 @@ public class JTMessage : IAccessor
     /// <param name="context"></param>
     /// <returns></returns>
     /// <exception cref="NotImplementedException"></exception>
-    public bool Write(Stream stream, object context)
+    public bool Write(Stream stream, Object? context)
     {
         if (stream == null) return false;
 

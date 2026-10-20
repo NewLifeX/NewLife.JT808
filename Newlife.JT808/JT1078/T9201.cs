@@ -1,5 +1,4 @@
 using NewLife.JT808.Protocols;
-using NewLife.JT808.Protocols;
 
 namespace NewLife.JT808.JT1078;
 
@@ -12,7 +11,7 @@ namespace NewLife.JT808.JT1078;
 public class T9201
 {
     /// <summary>服务器IP</summary>
-    public String Server { get; set; }
+    public String? Server { get; set; }
 
     /// <summary>TCP端口</summary>
     public UInt16 TcpPort { get; set; }

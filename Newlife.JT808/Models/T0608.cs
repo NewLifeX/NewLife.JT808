@@ -1,4 +1,4 @@
-﻿using NewLife.JT808.Protocols;
+using NewLife.JT808.Protocols;
 
 namespace NewLife.JT808.Models
 {
@@ -10,6 +10,6 @@ namespace NewLife.JT808.Models
         public Byte QueryType { get; set; }
 
         /// <summary>查询的区域或线路的ID</summary>
-        public List<UInt32> Ids { get; set; }
+        public List<UInt32>? Ids { get; set; }
     }
 }

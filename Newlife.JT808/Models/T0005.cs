@@ -1,4 +1,4 @@
-﻿using NewLife.JT808.Protocols;
+using NewLife.JT808.Protocols;
 using NewLife.Serialization;
 
 namespace NewLife.JT808.Models
@@ -26,13 +26,13 @@ namespace NewLife.JT808.Models
         /// BYTE[2*n]
         /// 重传包序号顺序排列，如“包 ID1 包 ID2......包 IDn”。
         /// </summary>
-        public byte[] Data { get; set; }
+        public byte[]? Data { get; set; }
 
         /// <summary>读取</summary>
         /// <param name="stream"></param>
         /// <param name="context"></param>
         /// <returns></returns>
-        public bool Read(Stream stream, object context)
+        public bool Read(Stream stream, Object? context)
         {
             var header = context as JTMessage;
             var reader = new BinaryReader(stream);
@@ -53,7 +53,7 @@ namespace NewLife.JT808.Models
         /// <param name="stream"></param>
         /// <param name="context"></param>
         /// <returns></returns>
-        public bool Write(Stream stream, object context)
+        public bool Write(Stream stream, Object? context)
         {
             var header = context as JTMessage;
             var writer = new BinaryWriter(stream);
@@ -67,7 +67,7 @@ namespace NewLife.JT808.Models
             else
                 writer.Write((byte)Count);
 
-            writer.Write(Data);
+            if (Data != null) writer.Write(Data);
 
             return true;
         }

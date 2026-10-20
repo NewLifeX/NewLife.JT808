@@ -1,4 +1,4 @@
-﻿using NewLife.JT808.Protocols;
+using NewLife.JT808.Protocols;
 using NewLife.Serialization;
 
 namespace NewLife.JT808.Models
@@ -15,6 +15,6 @@ namespace NewLife.JT808.Models
 
         /// <summary>内容</summary>
         [FieldSize(nameof(Length))]
-        public Byte[] Body { get; set; }
+        public Byte[]? Body { get; set; }
     }
 }

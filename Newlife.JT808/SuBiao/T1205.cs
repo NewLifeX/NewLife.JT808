@@ -1,4 +1,3 @@
-﻿using NewLife.JT808.Protocols;
 using NewLife.JT808.Protocols;
 using NewLife.Serialization;
 

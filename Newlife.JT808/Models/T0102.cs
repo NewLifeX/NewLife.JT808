@@ -1,4 +1,4 @@
-﻿using NewLife.JT808.Protocols;
+using NewLife.JT808.Protocols;
 using NewLife.Serialization;
 
 namespace NewLife.JT808.Models
@@ -13,16 +13,16 @@ namespace NewLife.JT808.Models
         /// </summary>
         [FullString2(Version = "2013")]
         [FieldSize(0, Version = "2019")]
-        public String Code { get; set; }
+        public String? Code { get; set; }
 
         /// <summary>终端IMEI  长度15 2019版本</summary>
         [JT2019]
         [FieldSize(15)]
-        public String IMEI { get; set; }
+        public String? IMEI { get; set; }
 
         /// <summary>软件版本号 长度20 后补 "0x00" 2019版本</summary>
         [JT2019]
         [FieldSize(20)]
-        public String Version { get; set; }
+        public String? Version { get; set; }
     }
 }

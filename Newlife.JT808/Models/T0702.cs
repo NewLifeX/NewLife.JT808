@@ -1,5 +1,4 @@
-﻿using System.Globalization;
-using NewLife.JT808.Protocols;
+using System.Globalization;
 using NewLife.JT808.Protocols;
 using NewLife.Serialization;
 

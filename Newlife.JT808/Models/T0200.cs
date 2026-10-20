@@ -1,5 +1,4 @@
-﻿using System.Globalization;
-using NewLife.JT808.Protocols;
+using System.Globalization;
 using NewLife.JT808.Protocols;
 using NewLife;
 using NewLife.Serialization;
@@ -35,7 +34,7 @@ namespace NewLife.JT808.Models
         public DateTime GPSTime { get; set; }
 
         /// <summary>附加信息</summary>
-        public IDictionary<AdditionalKinds, Object> Additionals { get; set; }
+        public IDictionary<AdditionalKinds, Object>? Additionals { get; set; }
 
         /// <summary>读取消息</summary>
         /// <param name="stream"></param>
