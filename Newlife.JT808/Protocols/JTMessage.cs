@@ -11,7 +11,7 @@ using NewLife.Serialization;
 namespace NewLife.JT808.Protocols;
 
 /// <summary>JT808报文消息</summary>
-public class JTMessage : IMessage, IAccessor
+public class JTMessage : IAccessor
 {
     #region 属性
     /// <summary>消息编号</summary>
@@ -41,14 +41,6 @@ public class JTMessage : IMessage, IAccessor
     /// <summary>是否响应</summary>
     /// <remarks>所有终端主发的消息均应要求平台应答</remarks>
     public bool Reply { get; set; }
-
-    /// <summary>是否错误响应</summary>
-    [IgnoreDataMember]
-    bool IMessage.Error { get; set; }
-
-    /// <summary>是否单向请求。单向请求无需等待响应</summary>
-    [IgnoreDataMember]
-    Boolean IMessage.OneWay { get; set; }
 
     /// <summary>负载数据</summary>
     [IgnoreDataMember]
@@ -243,19 +235,10 @@ public class JTMessage : IMessage, IAccessor
         return crc;
     }
 
-/// <summary>读取数据包。实现IMessage接口</summary>
-        /// <param name="pk"></param>
-        /// <returns></returns>
-        Boolean IMessage.Read(IPacket pk) => Read(pk.GetStream(), null);
-
-
-        /// <summary>释放资源</summary>
-        void IDisposable.Dispose() { }
-
-        /// <summary>读取数据包</summary>
-        /// <param name="pk"></param>
-        /// <returns></returns>
-        public Boolean Read(IPacket pk) => Read(pk.GetStream(), null);
+    /// <summary>读取数据包</summary>
+    /// <param name="pk"></param>
+    /// <returns></returns>
+    public Boolean Read(IPacket pk) => Read(pk.GetStream(), null);
 
     /// <summary>转数据包</summary>
     /// <returns></returns>
@@ -387,7 +370,7 @@ public class JTMessage : IMessage, IAccessor
     #region 辅助
     /// <summary>创建响应</summary>
     /// <returns></returns>
-    public IMessage CreateReply() => new JTMessage { Reply = true, Kind = Kind, Mobile = Mobile, Version = Version };
+    public JTMessage CreateReply() => new() { Reply = true, Kind = Kind, Mobile = Mobile, Version = Version };
 
     /// <summary>获取数据包长度</summary>
     /// <param name="pk"></param>

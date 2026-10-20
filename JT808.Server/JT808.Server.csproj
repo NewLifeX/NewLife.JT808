@@ -6,8 +6,8 @@
   </ItemGroup>
 
   <ItemGroup>
-    <PackageReference Include="NewLife.Redis" Version="6.5.2026.701" />
-    <PackageReference Include="NewLife.Stardust.Extensions" Version="3.9.2026.708" />
+    <PackageReference Include="NewLife.Redis" Version="6.6.2026.1019-beta1511" />
+    <PackageReference Include="NewLife.Stardust.Extensions" Version="3.10.2026.1018-beta1738" />
   </ItemGroup>
 
   <PropertyGroup>

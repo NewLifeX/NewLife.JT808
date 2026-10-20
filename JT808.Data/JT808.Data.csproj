@@ -8,7 +8,7 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <PackageReference Include="NewLife.XCode" Version="12.0.2026.701" />
+    <PackageReference Include="NewLife.XCode" Version="12.2.2026.1019-beta1521" />
   </ItemGroup>
 
 </Project>

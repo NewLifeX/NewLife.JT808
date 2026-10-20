@@ -61,7 +61,7 @@ public class JTCodec
             // 提取完整帧
             var frame = data.Slice(startIdx, frameLen);
             var msg = new JTMessage();
-            if (((IMessage)msg).Read(frame))
+            if (msg.Read(frame))
                 list.Add(msg);
 
             // 移动到下一帧
