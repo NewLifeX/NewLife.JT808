@@ -1,17 +1,29 @@
 # NewLife.JT808 - JT/T 808 车辆定位协议
 
-![GitHub top language](https://img.shields.io/github/languages/top/newlifex/newlife.jt808?logo=github)
-![GitHub License](https://img.shields.io/github/license/newlifex/newlife.jt808?logo=github)
-![Nuget Downloads](https://img.shields.io/nuget/dt/newlife.jt808?logo=nuget)
-![Nuget](https://img.shields.io/nuget/v/newlife.jt808?logo=nuget)
-![Nuget (with prereleases)](https://img.shields.io/nuget/vpre/newlife.jt808?label=dev%20nuget&logo=nuget)
+![GitHub License](https://img.shields.io/github/license/NewLifeX/NewLife.JT808?logo=github)
+![NuGet Downloads](https://img.shields.io/nuget/dt/NewLife.JT808?logo=nuget)
+![NuGet](https://img.shields.io/nuget/v/NewLife.JT808?logo=nuget)
+![NuGet prerelease](https://img.shields.io/nuget/vpre/NewLife.JT808?label=dev%20nuget&logo=nuget)
+
+[![test](https://github.com/NewLifeX/NewLife.JT808/actions/workflows/test.yml/badge.svg?branch=master)](https://github.com/NewLifeX/NewLife.JT808/actions/workflows/test.yml)
+
+<!-- metrics:start -->
+[![AOT smoke](https://img.shields.io/badge/AOT%20smoke-16%2F16-brightgreen?logo=dotnet)](AotSmoke/Program.cs)
+[![TFM](https://img.shields.io/badge/TFM-5%20%28net45%20%E2%86%92%20net8.0%29-512BD4?logo=dotnet)](Newlife.JT808/NewLife.JT808.csproj)
+[![locales](https://img.shields.io/badge/locales-11-2ea44f?logo=dotnet)](Doc/多语言本地化.md)
+<!-- metrics:end -->
+![platform](https://img.shields.io/badge/platform-Windows%20%7C%20Linux%20%7C%20macOS-blue)
+[![contributors](https://img.shields.io/github/contributors/NewLifeX/NewLife.JT808?logo=github)](https://github.com/NewLifeX/NewLife.JT808/graphs/contributors)
+
+<!-- lang:start -->
+🌐 [English](README.md) | [繁體中文](README.zh-TW.md) | [Español](README.es.md) | [Deutsch](README.de.md) | [日本語](README.ja.md) | [Français](README.fr.md) | [Português](README.pt.md) | [Русский](README.ru.md) | [한국어](README.ko.md) | [العربية](README.ar.md)
+<!-- lang:end -->
 
 JT/T 808 车辆定位协议完整实现，支持 2011/2013/2019 三个版本，涵盖 70+ 标准消息体、苏标/粤标主动安全扩展、JT/T 1078 音视频基础消息、JT/T 19056 行车记录仪协议及 RocketMQ 消息队列集成。
 
 源码： https://github.com/NewLifeX/NewLife.JT808  
 Nuget：[NewLife.JT808](https://www.nuget.org/packages/NewLife.JT808)  
-文档：[需求文档](Doc/需求文档.md) / [架构设计](Doc/架构设计.md) / [功能清单](Doc/功能清单.md) / [使用文档](Doc/使用文档.md)
-
+文档：[需求文档](Doc/需求文档.md) / [架构设计](Doc/架构设计.md) / [功能清单](Doc/功能清单.md) / [使用文档](Doc/使用文档.md) / [多语言本地化](Doc/多语言本地化.md)
 
 ## 主要特点
 
@@ -31,7 +43,9 @@ Nuget：[NewLife.JT808](https://www.nuget.org/packages/NewLife.JT808)
 - **消息队列抽象**：IMsgProducer/IMsgConsumer/ISessionProducer 等接口解耦消息处理，内置 DefaultMsgQueue 内存实现、Redis Stream 生产/消费支持、RocketMQ 适配器、Kafka 适配器
 - **跨服务器指令下发**：ICommandBus 接口 + Stardust 事件总线，支持集群广播指令到指定终端
 - **客户端增强**：自动重连、可配心跳、收发统计计数器，提升生产环境可靠性
-- **多框架支持**：`net45 / net461 / netstandard2.0 / netstandard2.1` 全兼容
+- **AOT 兼容**：NativeAOT 冒烟工程覆盖编解码、消息工厂与序列化主路径
+- **多语言**：内置 11 种运行时语言，英文源文兜底，词表压缩内嵌且 AOT 安全
+- **多框架支持**：`net45 / net461 / netstandard2.0 / netstandard2.1 / net8.0` 全兼容
 - **RocketMQ 集成**：基于 `NewLife.RocketMQ` 的消息队列生产/消费适配器，支持阿里云/华为云/腾讯云/ACL 四种云厂商认证模式
 - **Kafka 集成**：基于 `Confluent.Kafka` 的消息队列生产/消费适配器，支持消费组、ACK 机制（需要 .NET Standard 2.0+）
 
@@ -119,7 +133,6 @@ Nuget：[NewLife.JT808](https://www.nuget.org/packages/NewLife.JT808)
 | 70 | 0x6006 | 文本信息下发响应 | 上行 | ✅ |
 | 71 | 0x1080 | 自定义消息 | — | ✅ |
 
-
 ## 快速入门
 
 ### 安装 NuGet 包
@@ -164,7 +177,7 @@ var t8001 = new T8001
 {
     Sequence = jtMessage.Sequence,
     Kind = jtMessage.Kind,
-    Result = ResultKinds.成功
+    Result = ResultKinds.Success
 };
 
 // 序列化为字节数组
@@ -178,7 +191,7 @@ var reply = new JTMessage
     Kind = MessageKinds.平台通用应答,
     Mobile = jtMessage.Mobile,
     Sequence = (UInt16)(jtMessage.Sequence + 1),
-    Payload = new Packet(ms.ToArray()),
+    Payload = new ArrayPacket(ms.ToArray()),
     Reply = false
 };
 
@@ -222,6 +235,33 @@ public class T0200 : IAccessor
     }
 }
 ```
+
+## 多语言
+
+库内置 11 种运行时语言（简繁中文、英文、西班牙语、德语、日语、法语、葡萄牙语、俄语、韩语与阿拉伯语）。消息以英文源文为键，缺少译文时自动回退英文。
+
+```csharp
+using System.Globalization;
+using NewLife;
+
+// 默认跟随进程 UI 文化，也可显式固定
+Localization.Culture = CultureInfo.GetCultureInfo("ja");
+
+// ASP.NET Core 宿主可按 Accept-Language 识别请求语言
+using var scope = RequestCultureScope.Create(Request.Headers.AcceptLanguage);
+```
+
+### NativeAOT
+
+`MessageFactory.Init()` 通过扫描程序集发现消息体，NativeAOT 或裁剪发布的应用需要保留协议库程序集：
+
+```xml
+<ItemGroup>
+  <TrimmerRootAssembly Include="NewLife.JT808" />
+</ItemGroup>
+```
+
+仓库内的 `AotSmoke` 工程以 NativeAOT 发布，并在 Windows/Linux（x64 与 arm64）运行 16 个冒烟场景。
 
 ## 生态版图
 

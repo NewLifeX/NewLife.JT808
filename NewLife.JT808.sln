@@ -8,10 +8,16 @@ EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution Items", "{719C113A-6804-4150-8473-BF889F06DFD6}"
 	ProjectSection(SolutionItems) = preProject
 		.editorconfig = .editorconfig
+		.github\workflows\aot.yml = .github\workflows\aot.yml
 		.github\workflows\publish-beta.yml = .github\workflows\publish-beta.yml
 		.github\workflows\publish.yml = .github\workflows\publish.yml
-		Readme.MD = Readme.MD
+		.github\workflows\readme.yml = .github\workflows\readme.yml
 		.github\workflows\test.yml = .github\workflows\test.yml
+		README.md = README.md
+		README.zh-CN.md = README.zh-CN.md
+		readme-languages.json = readme-languages.json
+		readme-metrics.json = readme-metrics.json
+		readme-package.json = readme-package.json
 	EndProjectSection
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "JT808.Server", "JT808.Server\JT808.Server.csproj", "{3A3B3F12-86C3-4230-AB1F-C707B0F99A8D}"
@@ -27,6 +33,8 @@ EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Client.Avalonia", "Client.Avalonia\Client.Avalonia.csproj", "{B61F4C7C-768D-43D8-9B73-0292AD147FB4}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "JT808.Worker", "JT808.Worker\JT808.Worker.csproj", "{E1A74841-7C07-4281-B7CE-817FE572FCF3}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "AotSmoke", "AotSmoke\AotSmoke.csproj", "{084CB738-DF58-44C2-93F5-8F1088273FB8}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -134,6 +142,18 @@ Global
 		{E1A74841-7C07-4281-B7CE-817FE572FCF3}.Release|x64.Build.0 = Release|Any CPU
 		{E1A74841-7C07-4281-B7CE-817FE572FCF3}.Release|x86.ActiveCfg = Release|Any CPU
 		{E1A74841-7C07-4281-B7CE-817FE572FCF3}.Release|x86.Build.0 = Release|Any CPU
+		{084CB738-DF58-44C2-93F5-8F1088273FB8}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{084CB738-DF58-44C2-93F5-8F1088273FB8}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{084CB738-DF58-44C2-93F5-8F1088273FB8}.Debug|x64.ActiveCfg = Debug|Any CPU
+		{084CB738-DF58-44C2-93F5-8F1088273FB8}.Debug|x64.Build.0 = Debug|Any CPU
+		{084CB738-DF58-44C2-93F5-8F1088273FB8}.Debug|x86.ActiveCfg = Debug|Any CPU
+		{084CB738-DF58-44C2-93F5-8F1088273FB8}.Debug|x86.Build.0 = Debug|Any CPU
+		{084CB738-DF58-44C2-93F5-8F1088273FB8}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{084CB738-DF58-44C2-93F5-8F1088273FB8}.Release|Any CPU.Build.0 = Release|Any CPU
+		{084CB738-DF58-44C2-93F5-8F1088273FB8}.Release|x64.ActiveCfg = Release|Any CPU
+		{084CB738-DF58-44C2-93F5-8F1088273FB8}.Release|x64.Build.0 = Release|Any CPU
+		{084CB738-DF58-44C2-93F5-8F1088273FB8}.Release|x86.ActiveCfg = Release|Any CPU
+		{084CB738-DF58-44C2-93F5-8F1088273FB8}.Release|x86.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
