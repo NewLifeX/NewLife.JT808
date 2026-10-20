@@ -1,9 +1,9 @@
-#if !NET45
 using Confluent.Kafka;
+using NewLife.JT808.Protocols;
 using NewLife.Log;
 using NewLife.Serialization;
 
-namespace NewLife.JT808.Protocols.Kafka;
+namespace JT808.Server.Messaging.Kafka;
 
 /// <summary>基于 Kafka 的消息生产者适配器</summary>
 /// <remarks>
@@ -94,4 +94,3 @@ public class KafkaProducer<TMessage> : IMsgProducer<TMessage>, IDisposable
     public ILog Log { get; set; } = Logger.Null;
     #endregion
 }
-#endif

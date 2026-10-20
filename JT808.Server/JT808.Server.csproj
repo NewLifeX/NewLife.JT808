@@ -6,6 +6,7 @@
   </ItemGroup>
 
   <ItemGroup>
+    <PackageReference Include="Confluent.Kafka" Version="2.15.0" />
     <PackageReference Include="NewLife.Redis" Version="6.6.2026.1019-beta1511" />
     <PackageReference Include="NewLife.RocketMQ" Version="3.2.2026.1019-beta1521" />
     <PackageReference Include="NewLife.Stardust.Extensions" Version="3.10.2026.1018-beta1738" />

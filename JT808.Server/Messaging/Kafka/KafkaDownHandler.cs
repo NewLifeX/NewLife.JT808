@@ -1,8 +1,8 @@
-#if !NET45
 using Confluent.Kafka;
+using NewLife.JT808.Protocols;
 using NewLife.Log;
 
-namespace NewLife.JT808.Protocols.Kafka;
+namespace JT808.Server.Messaging.Kafka;
 
 /// <summary>基于 Kafka 的下行指令处理器</summary>
 /// <remarks>
@@ -114,4 +114,3 @@ public class KafkaDownHandler : IDownMessageHandler, IDisposable
     public ILog Log { get; set; } = Logger.Null;
     #endregion
 }
-#endif
