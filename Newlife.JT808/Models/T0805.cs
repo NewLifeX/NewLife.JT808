@@ -1,4 +1,5 @@
 using NewLife.JT808.Protocols;
+using NewLife.Serialization;
 
 namespace NewLife.JT808.Models
 {
@@ -7,7 +8,7 @@ namespace NewLife.JT808.Models
     /// 0x0805
     /// </summary>
     [MessageKind(MessageKinds.摄像头立即拍摄命令应答)]
-    public class T0805
+    public class T0805 : IAccessor
     {
         /// <summary>
         /// 应答流水号
@@ -30,7 +31,7 @@ namespace NewLife.JT808.Models
         /// <summary>
         /// 多媒体ID列表
         /// </summary>
-        public List<UInt32> MultimediaIds { get; set; }
+        public List<UInt32> MultimediaIds { get; set; } = [];
 
         /// <summary>从数据流中读取消息体</summary>
         /// <param name="stream">数据流</param>
@@ -70,7 +71,9 @@ namespace NewLife.JT808.Models
 
             if (Result == 0)
             {
-                writer.WriteUInt16((UInt16)MultimediaIds.Count);
+                var count = (UInt16)MultimediaIds.Count;
+                MultimediaIdCount = count;
+                writer.WriteUInt16(count);
                 foreach (var item in MultimediaIds)
                 {
                     writer.WriteUInt32(item);

@@ -134,7 +134,7 @@ namespace NewLife.JT808.Models
                         //LicenseIssuing = reader.Read<String>();
                         CertificateExpire = reader.ReadBCD(4);
 
-                        if (header.Version >= 1)
+                        if (header != null && header.Version >= 1)
                         {
                             IdentityCard = reader.ReadString(20);
                             //IdentityCard = reader.ReadFixedString(20);
@@ -183,7 +183,7 @@ namespace NewLife.JT808.Models
             var writer = Helper.CreateWriter(stream);
             var header = context as JTMessage;
 
-            if (header.Version == 0)
+            if (header == null || header.Version == 0)
             {
                 writer.Write(UserName);
                 writer.WriteFixedString(IdentityCard, 20);
@@ -205,7 +205,7 @@ namespace NewLife.JT808.Models
                         writer.Write(LicenseIssuing);
                         writer.WriteBCD(CertificateExpire, 4);
 
-                        if (header.Version == 1)
+                        if (header != null && header.Version >= 1)
                         {
                             writer.WriteFixedString(IdentityCard, 20);
 

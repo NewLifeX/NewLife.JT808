@@ -16,7 +16,7 @@ namespace NewLife.JT808.Models
         public Byte Type { get; set; }
 
         /// <summary>位置汇报数据集合</summary>
-        public List<T0200> Positions { get; set; }
+        public List<T0200> Positions { get; set; } = [];
 
         /// <summary>解析数据</summary>
         /// <param name="stream"></param>
@@ -33,6 +33,7 @@ namespace NewLife.JT808.Models
             {
                 var len = reader.ReadUInt16();
                 var buf = reader.ReadBytes(len);
+                if (buf == null || buf.Length == 0) continue;
                 var ms = new MemoryStream(buf);
 
                 var msg = new T0200();
@@ -60,6 +61,7 @@ namespace NewLife.JT808.Models
                 foreach (var item in Positions)
                 {
                     var pk = item.ToPacket();
+                    if (pk == null) continue;
                     writer.Write((UInt16)pk.Total);
                     writer.Write(pk.ToArray());
                 }

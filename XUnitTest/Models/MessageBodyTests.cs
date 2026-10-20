@@ -305,6 +305,155 @@ public class MessageBodyTests
         Assert.Equal("1.0.0", body.Version);
     }
 
+    [Fact]
+    [DisplayName("T0704_定位数据批量上传_多位置往返")]
+    public void T0704_BatchPositions()
+    {
+        var t0704 = new T0704
+        {
+            Type = 1,
+            Positions =
+            [
+                new T0200
+                {
+                    Alarm = 0,
+                    Status = PositionStatus.ACC | PositionStatus.定位,
+                    Latitude = 22334455,
+                    Longitude = 114112233,
+                    Altitude = 50,
+                    Speed = 80,
+                    Direction = 270,
+                    GPSTime = new DateTime(2026, 10, 20, 9, 0, 0),
+                },
+                new T0200
+                {
+                    Alarm = PositionAlarms.超速报警,
+                    Status = PositionStatus.定位,
+                    Latitude = 22334456,
+                    Longitude = 114112234,
+                    Altitude = 51,
+                    Speed = 90,
+                    Direction = 271,
+                    GPSTime = new DateTime(2026, 10, 20, 9, 0, 30),
+                },
+            ],
+        };
+
+        var buf = SerializeDeserialize(t0704, MessageKinds.定位数据批量上传);
+        var result = (T0704)buf;
+
+        Assert.Equal((UInt16)2, result.Count);
+        Assert.Equal((Byte)1, result.Type);
+        Assert.NotNull(result.Positions);
+        Assert.Equal(2, result.Positions.Count);
+        Assert.Equal(22334455, result.Positions[0].Latitude);
+        Assert.Equal(114112233, result.Positions[0].Longitude);
+        Assert.Equal((UInt16)80, result.Positions[0].Speed);
+        Assert.True(result.Positions[1].Alarm.Has(PositionAlarms.超速报警));
+        Assert.Equal(new DateTime(2026, 10, 20, 9, 0, 30), result.Positions[1].GPSTime);
+    }
+
+    [Fact]
+    [DisplayName("T0805_拍摄应答_多媒体ID列表往返")]
+    public void T0805_MediaIds()
+    {
+        var t0805 = new T0805
+        {
+            ReplyMsgNum = 9,
+            Result = 0,
+            MultimediaIds = [1001, 1002],
+        };
+
+        var buf = SerializeDeserialize(t0805, MessageKinds.摄像头立即拍摄命令应答);
+        var result = (T0805)buf;
+
+        Assert.Equal((UInt16)9, result.ReplyMsgNum);
+        Assert.Equal((Byte)0, result.Result);
+        Assert.Equal((UInt16)2, result.MultimediaIdCount);
+        Assert.NotNull(result.MultimediaIds);
+        Assert.Equal([1001u, 1002u], result.MultimediaIds);
+    }
+
+    [Fact]
+    [DisplayName("T0805_拍摄失败_无多媒体ID")]
+    public void T0805_Failure()
+    {
+        var t0805 = new T0805
+        {
+            ReplyMsgNum = 10,
+            Result = 1,
+        };
+
+        var buf = SerializeDeserialize(t0805, MessageKinds.摄像头立即拍摄命令应答);
+        var result = (T0805)buf;
+
+        Assert.Equal((Byte)1, result.Result);
+        Assert.Equal((UInt16)0, result.MultimediaIdCount);
+        Assert.Empty(result.MultimediaIds);
+    }
+
+    [Fact]
+    [DisplayName("T0802_多媒体检索应答_位置数据往返")]
+    public void T0802_MediaSearch()
+    {
+        var t0802 = new T0802
+        {
+            MsgNum = 7,
+            MediaProperties =
+            [
+                new MediaSearchItem
+                {
+                    MediaId = 100,
+                    MediaType = MediaTypes.图像,
+                    ChannelId = 1,
+                    EventItemCoding = 0,
+                    Position = new T0200
+                    {
+                        Alarm = 0,
+                        Status = PositionStatus.定位,
+                        Latitude = 22334455,
+                        Longitude = 114112233,
+                        Altitude = 50,
+                        Speed = 60,
+                        Direction = 90,
+                        GPSTime = new DateTime(2026, 10, 20, 8, 30, 0),
+                    },
+                },
+                new MediaSearchItem
+                {
+                    MediaId = 101,
+                    MediaType = MediaTypes.视频,
+                    ChannelId = 2,
+                    EventItemCoding = 1,
+                },
+            ],
+        };
+
+        var buf = SerializeDeserialize(t0802, MessageKinds.存储多媒体数据检索应答);
+        var result = (T0802)buf;
+
+        Assert.Equal((UInt16)7, result.MsgNum);
+        Assert.Equal((UInt16)2, result.MultimediaItemCount);
+        Assert.NotNull(result.MediaProperties);
+        Assert.Equal(2, result.MediaProperties.Count);
+
+        var first = result.MediaProperties[0];
+        Assert.Equal(100u, first.MediaId);
+        Assert.Equal(MediaTypes.图像, first.MediaType);
+        Assert.Equal((Byte)1, first.ChannelId);
+        Assert.NotNull(first.Position);
+        Assert.Equal(22334455, first.Position.Latitude);
+        Assert.Equal(114112233, first.Position.Longitude);
+        Assert.Equal(new DateTime(2026, 10, 20, 8, 30, 0), first.Position.GPSTime);
+
+        var second = result.MediaProperties[1];
+        Assert.Equal(101u, second.MediaId);
+        Assert.Equal(MediaTypes.视频, second.MediaType);
+        Assert.Equal((Byte)1, second.EventItemCoding);
+        Assert.NotNull(second.Position);
+        Assert.Equal(0, second.Position.Latitude);
+    }
+
     #region 辅助
     /// <summary>序列化消息体到JTMessage再反序列化，返回反序列化结果</summary>
     private static Object SerializeDeserialize(Object body, MessageKinds kind)

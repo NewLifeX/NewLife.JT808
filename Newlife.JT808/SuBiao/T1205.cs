@@ -28,8 +28,7 @@ namespace NewLife.JT808.SuBiao
             for (var i = 0; i < count; i++)
             {
                 var item = reader.Read<ResourceInfo>();
-
-                list.Add(item);
+                if (item != null) list.Add(item);
             }
             Items = list;
 
@@ -49,9 +48,12 @@ namespace NewLife.JT808.SuBiao
             var count = Items?.Count ?? 0;
             writer.Write(count);
 
-            for (var i = 0; i < count; i++)
+            if (Items != null)
             {
-                writer.Write(Items[i]);
+                for (var i = 0; i < count; i++)
+                {
+                    writer.Write(Items[i]);
+                }
             }
 
             return true;
