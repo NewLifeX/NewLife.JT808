@@ -36,3 +36,4 @@
 "RocketMQ command consume error: {0}": "RocketMQ-Befehl-Verbrauchsfehler: {0}"
 "RocketMQ produce failed: {0}": "RocketMQ-Produktion fehlgeschlagen: {0}"
 "The message body length {0} exceeds the 1023-byte limit; split it into sub-packets.": "Die Nachrichtenlänge {0} überschreitet das Limit von 1023 Byte; teilen Sie sie in Teilpakete auf."
+"Blacklisted device rejected: {0}": "Gerät auf der Sperrliste abgewiesen: {0}"

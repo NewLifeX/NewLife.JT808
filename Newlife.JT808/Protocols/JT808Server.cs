@@ -1,4 +1,4 @@
-﻿using System.Reflection;
+using System.Reflection;
 using NewLife.Caching;
 using NewLife.Data;
 using NewLife.Log;
@@ -72,6 +72,8 @@ public class JT808Server : NetServer<JT808Session>
             // 参数匹配：(JT808Session, JTMessage)
             var pis = method.GetParameters();
             if (pis.Length != 2) continue;
+            if (!pis[0].ParameterType.IsAssignableFrom(typeof(JT808Session))) continue;
+            if (!pis[1].ParameterType.IsAssignableFrom(typeof(JTMessage))) continue;
 
             // 获取消息类型映射
             var att = method.GetCustomAttribute<MessageKindAttribute>();
@@ -168,6 +170,6 @@ public class JT808Server : NetServer<JT808Session>
     /// <summary>写日志</summary>
     /// <param name="format"></param>
     /// <param name="args"></param>
-    public void WriteLog(String format, params Object[] args) => Log?.Info(format, args);
+    public override void WriteLog(String format, params Object?[] args) => Log?.Info(format, args);
     #endregion
 }

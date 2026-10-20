@@ -84,6 +84,14 @@ public class JT808Session : NetSession<JT808Server>, ICommand
     /// <param name="msg">完整的JTMessage（分包已合并）</param>
     protected virtual void ProcessMessage(JTMessage msg)
     {
+        // 黑名单设备直接断开
+        if (!Mobile.IsNullOrEmpty() && Host.Blacklist.IsBlacklisted(Mobile))
+        {
+            WriteLog("Blacklisted device rejected: {0}", Mobile);
+            Close("Blacklisted device");
+            return;
+        }
+
         var name = MessageFactory.GetKindName(msg.Kind);
         using var span = Host.Tracer?.NewSpan($"jt808:{name}", msg);
 

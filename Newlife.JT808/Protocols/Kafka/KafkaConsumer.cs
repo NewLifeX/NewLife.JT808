@@ -101,8 +101,17 @@ public class KafkaConsumer<[System.Diagnostics.CodeAnalysis.DynamicallyAccessedM
             }
             catch (Exception ex)
             {
-            Log?.Error("Kafka consume error: {0}", ex.Message);
-                await Task.Delay(1000, cancellationToken);
+                if (cancellationToken.IsCancellationRequested) break;
+
+                Log?.Error("Kafka consume error: {0}", ex.Message);
+                try
+                {
+                    await Task.Delay(1000, cancellationToken);
+                }
+                catch (OperationCanceledException)
+                {
+                    break;
+                }
             }
         }
     }

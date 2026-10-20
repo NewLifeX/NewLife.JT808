@@ -225,6 +225,8 @@ public class JT808Client : DisposeBase
             // 参数匹配：(JT808Client, JTMessage)
             var pis = method.GetParameters();
             if (pis.Length != 2) continue;
+            if (!pis[0].ParameterType.IsAssignableFrom(typeof(JT808Client))) continue;
+            if (!pis[1].ParameterType.IsAssignableFrom(typeof(JTMessage))) continue;
 
             // 获取消息类型映射
             var att = method.GetCustomAttribute<MessageKindAttribute>();
@@ -427,6 +429,14 @@ public class JT808Client : DisposeBase
         {
             StopReconnect();
             _reconnectCount = 0;
+            return;
+        }
+
+        // 达到最大重连次数后停止，避免无限重试
+        if (MaxReconnect > 0 && _reconnectCount >= MaxReconnect)
+        {
+            StopReconnect();
+            WriteLog("Maximum reconnection attempts {0} reached, stop reconnecting.", MaxReconnect);
             return;
         }
 

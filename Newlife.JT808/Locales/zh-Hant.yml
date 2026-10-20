@@ -36,3 +36,4 @@
 "RocketMQ command consume error: {0}": "RocketMQ 指令消費異常：{0}"
 "RocketMQ produce failed: {0}": "RocketMQ 生產失敗：{0}"
 "The message body length {0} exceeds the 1023-byte limit; split it into sub-packets.": "訊息內容長度{0}超過1023位元組上限，請拆分為分包傳送。"
+"Blacklisted device rejected: {0}": "黑名單裝置被拒絕：{0}"

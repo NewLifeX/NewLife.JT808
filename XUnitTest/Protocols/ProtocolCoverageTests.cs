@@ -459,6 +459,24 @@ public class ProtocolCoverageTests
         Assert.Equal("终端心跳", MessageFactory.GetKindName(MessageKinds.终端心跳));
         Assert.Equal("7FFF", MessageFactory.GetKindName((MessageKinds)0x7FFF));
     }
+
+    [Fact]
+    [DisplayName("消息处理器_签名不匹配时跳过")]
+    public void AddHandler_IgnoresIncompatibleSignature()
+    {
+        var server = new JT808Server();
+
+        // 带 [MessageKind] 但参数类型不匹配的方法应被忽略，而不是抛异常
+        server.AddHandler(new IncompatibleHandler());
+
+        Assert.False(server.Handlers.ContainsKey(MessageKinds.终端心跳));
+    }
+
+    private class IncompatibleHandler
+    {
+        [MessageKind(MessageKinds.终端心跳)]
+        public Object OnHeartbeat(String first, String second) => null;
+    }
     #endregion
 
     #region 序列化特性
