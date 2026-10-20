@@ -216,6 +216,95 @@ public class MessageBodyTests
         Assert.True(result.Items.Count >= 1);
     }
 
+    [Fact]
+    [DisplayName("T0100_终端注册_2013版")]
+    public void T0100_Version2013()
+    {
+        var t0100 = new T0100
+        {
+            Province = 31,
+            City = 755,
+            Provider = "ABC",
+            Model = "MODEL-1",
+            DeviceId = "DEV1",
+            Color = CarColors.蓝色,
+            PlateNo = "粤B12345",
+        };
+
+        var msg = new JTMessage { Kind = MessageKinds.终端注册, Mobile = "13880011111", Sequence = 1, Version = 0 };
+        msg.SetResult(t0100);
+
+        var pk = msg.ToPacket();
+        Assert.NotNull(pk);
+
+        var msg2 = new JTMessage();
+        Assert.True(msg2.Read(pk));
+        Assert.Equal(0, msg2.Version);
+
+        var body = msg2.ReadModel<T0100>();
+        Assert.Equal(31, body.Province);
+        Assert.Equal(755, body.City);
+        Assert.Equal("ABC", body.Provider);
+        Assert.Equal("MODEL-1", body.Model);
+        Assert.Equal("DEV1", body.DeviceId);
+        Assert.Equal("粤B12345", body.PlateNo);
+    }
+
+    [Fact]
+    [DisplayName("T0100_终端注册_2011版8字节型号")]
+    public void T0100_Version2011_ShortModel()
+    {
+        var t0100 = new T0100
+        {
+            Province = 11,
+            City = 100,
+            Provider = "ABCDE",
+            Model = "MODEL-11",
+            DeviceId = "DEV11",
+            Color = CarColors.黄色,
+            PlateNo = "京A12345",
+        };
+
+        // 2011 与 2013 共用 Version=0，读取时按剩余长度识别 8/20 字节型号
+        var msg = new JTMessage { Kind = MessageKinds.终端注册, Mobile = "13880011111", Sequence = 1, Version = 0 };
+        msg.SetResult(t0100);
+
+        var pk = msg.ToPacket();
+        var msg2 = new JTMessage();
+        Assert.True(msg2.Read(pk));
+
+        var body = msg2.ReadModel<T0100>();
+        Assert.Equal(11, body.Province);
+        Assert.Equal("MODEL-11", body.Model);
+        Assert.Equal("京A12345", body.PlateNo);
+    }
+
+    [Fact]
+    [DisplayName("T0102_终端鉴权_2019版往返")]
+    public void T0102_Version2019()
+    {
+        var t0102 = new T0102
+        {
+            Code = "AUTH123",
+            IMEI = "123456789012345",
+            Version = "1.0.0",
+        };
+
+        var msg = new JTMessage { Kind = MessageKinds.终端鉴权, Mobile = "13880011111", Sequence = 1, Version = 1 };
+        msg.SetResult(t0102);
+
+        var pk = msg.ToPacket();
+        Assert.NotNull(pk);
+
+        var msg2 = new JTMessage();
+        Assert.True(msg2.Read(pk));
+
+        var body = msg2.ReadModel<T0102>();
+        Assert.Equal("AUTH123", body.Code);
+        Assert.Equal("123456789012345", body.IMEI);
+        Assert.Equal("1.0.0", body.Version);
+    }
+
     #region 辅助
     /// <summary>序列化消息体到JTMessage再反序列化，返回反序列化结果</summary>
     private static Object SerializeDeserialize(Object body, MessageKinds kind)
