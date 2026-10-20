@@ -1,21 +1,47 @@
 name: publish-beta
 
+# 预览版：master/main/dev 上协议库有变更即打 -beta 包并发布；
+# PR 只做打包验证（不推送），确保版本后缀、包内容与发布流程在合并前就是通的。
+
 on:
   push:
-    branches: 
-        - master
-        - main
+    branches:
+      - master
+      - main
+      - dev
     paths:
-        - 'Newlife.JT808/**'
+      - 'Newlife.JT808/**'
+      - '.github/workflows/publish-beta.yml'
+  pull_request:
+    branches:
+      - master
+      - main
+      - dev
+    paths:
+      - 'Newlife.JT808/**'
+      - '.github/workflows/publish-beta.yml'
   workflow_dispatch:
+
+concurrency:
+  group: publish-beta-${{ github.ref }}
+  cancel-in-progress: true
+
+permissions:
+  contents: read
+  packages: write
 
 jobs:
   build-publish:
-
-    runs-on: ubuntu-latest
+    name: pack & push (beta)
+    runs-on: windows-latest
+    timeout-minutes: 30
 
     steps:
     - uses: actions/checkout@v4
+      with:
+        # SourceLink 需要完整提交历史才能生成正确的源码链接
+        fetch-depth: 0
+
     - name: Setup dotNET
       uses: actions/setup-dotnet@v4
       with:
@@ -25,12 +51,30 @@ jobs:
           8.x
           9.x
           10.x
+
     - name: Get Version
-      run: echo "VERSION=$(date '+%Y.%m%d-beta%H%M')" >> $GITHUB_ENV
-    - name: Build
+      run: echo "VERSION=$((Get-Date).ToString('yyyy.MMdd'))-beta$((Get-Date).ToString('HHmm'))" | Out-File -FilePath $env:GITHUB_ENV -Encoding utf8 -Append
+
+    - name: Pack
+      run: dotnet pack --version-suffix ${{ env.VERSION }} -c Release -o out Newlife.JT808/NewLife.JT808.csproj
+
+    - name: Upload package
+      if: github.event_name == 'pull_request'
+      uses: actions/upload-artifact@v4
+      with:
+        name: nupkg-beta
+        path: |
+          out/*.nupkg
+          out/*.snupkg
+        if-no-files-found: error
+        retention-days: 7
+
+    - name: Publish to NuGet
+      if: github.event_name != 'pull_request'
       run: |
-        dotnet pack --version-suffix ${{ env.VERSION }} -c Release -o out Newlife.JT808/NewLife.JT808.csproj
-    - name: Publish
-      run: |
-        # dotnet nuget push ./out/*.nupkg --skip-duplicate --source https://nuget.pkg.github.com/NewLifeX/index.json --api-key ${{ github.token }}
-        dotnet nuget push ./out/*.nupkg --skip-duplicate --source https://api.nuget.org/v3/index.json --api-key ${{ secrets.nugetKey }}
+        dotnet nuget push .\out\*.nupkg --skip-duplicate --source https://api.nuget.org/v3/index.json --api-key ${{ secrets.nugetKey }}
+        dotnet nuget push .\out\*.snupkg --skip-duplicate --source https://api.nuget.org/v3/index.json --api-key ${{ secrets.nugetKey }}
+
+    - name: Publish to GitHub Packages
+      if: github.event_name != 'pull_request'
+      run: dotnet nuget push .\out\*.nupkg --skip-duplicate --source https://nuget.pkg.github.com/NewLifeX/index.json --api-key ${{ github.token }}

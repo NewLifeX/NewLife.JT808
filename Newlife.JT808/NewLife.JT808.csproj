@@ -48,6 +48,11 @@
 		<PackageReference Include="System.Text.Encoding.CodePages" Version="5.0.0" />
 	</ItemGroup>
 
+	<!-- 非 Windows 构建机（CI 的 Linux/macOS）编译 net4x 目标需要引用程序集 -->
+	<ItemGroup Condition="$(TargetFramework.StartsWith('net4'))">
+		<PackageReference Include="Microsoft.NETFramework.ReferenceAssemblies" Version="1.0.3" PrivateAssets="all" />
+	</ItemGroup>
+
 	<ItemGroup>
 		<PackageReference Include="NewLife.Core" Version="12.0.2026.1019-beta1502" />
 	</ItemGroup>

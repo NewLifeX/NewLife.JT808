@@ -1,0 +1,29 @@
+<Solution>
+  <Configurations>
+    <Platform Name="Any CPU" />
+    <Platform Name="x64" />
+    <Platform Name="x86" />
+  </Configurations>
+  <Folder Name="/Solution Items/">
+    <File Path=".editorconfig" />
+    <File Path=".github/workflows/aot.yml" />
+    <File Path=".github/workflows/publish-beta.yml" />
+    <File Path=".github/workflows/publish.yml" />
+    <File Path=".github/workflows/readme.yml" />
+    <File Path=".github/workflows/test.yml" />
+    <File Path="readme-languages.json" />
+    <File Path="readme-metrics.json" />
+    <File Path="readme-package.json" />
+    <File Path="README.md" />
+    <File Path="README.zh-CN.md" />
+  </Folder>
+  <Project Path="AotSmoke/AotSmoke.csproj" />
+  <Project Path="Client.Avalonia/Client.Avalonia.csproj" />
+  <Project Path="Client/Client.csproj" />
+  <Project Path="JT808.Data/JT808.Data.csproj" />
+  <Project Path="JT808.Server/JT808.Server.csproj" />
+  <Project Path="JT808.Web/JT808.Web.csproj" />
+  <Project Path="JT808.Worker/JT808.Worker.csproj" />
+  <Project Path="Newlife.JT808/NewLife.JT808.csproj" />
+  <Project Path="XUnitTest/XUnitTest.csproj" />
+</Solution>
