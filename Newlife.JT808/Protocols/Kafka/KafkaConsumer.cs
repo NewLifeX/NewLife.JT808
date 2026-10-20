@@ -12,7 +12,7 @@ namespace NewLife.JT808.Protocols.Kafka;
 /// 需要 .NET Standard 2.0+ 或 .NET Framework 4.6.1+ 运行时支持。
 /// </remarks>
 /// <typeparam name="TMessage">消息类型</typeparam>
-public class KafkaConsumer<TMessage> : IMsgConsumer<TMessage>, IDisposable
+public class KafkaConsumer<[System.Diagnostics.CodeAnalysis.DynamicallyAccessedMembers(System.Diagnostics.CodeAnalysis.DynamicallyAccessedMemberTypes.PublicParameterlessConstructor | System.Diagnostics.CodeAnalysis.DynamicallyAccessedMemberTypes.PublicFields | System.Diagnostics.CodeAnalysis.DynamicallyAccessedMemberTypes.PublicProperties)] TMessage> : IMsgConsumer<TMessage>, IDisposable
 {
     #region 属性
     /// <summary>Kafka 消费者实例</summary>

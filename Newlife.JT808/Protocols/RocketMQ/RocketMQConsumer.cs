@@ -13,7 +13,7 @@ namespace NewLife.JT808.Protocols.RocketMQ;
 /// 消费时反序列化为 TMessage，从消息 keys 中提取 mobile。
 /// </remarks>
 /// <typeparam name="TMessage">消息类型</typeparam>
-public class RocketMQConsumer<TMessage> : IMsgConsumer<TMessage>, IDisposable
+public class RocketMQConsumer<[System.Diagnostics.CodeAnalysis.DynamicallyAccessedMembers(System.Diagnostics.CodeAnalysis.DynamicallyAccessedMemberTypes.PublicParameterlessConstructor | System.Diagnostics.CodeAnalysis.DynamicallyAccessedMemberTypes.PublicFields | System.Diagnostics.CodeAnalysis.DynamicallyAccessedMemberTypes.PublicProperties)] TMessage> : IMsgConsumer<TMessage>, IDisposable
 {
     #region 属性
     /// <summary>RocketMQ 消费者实例</summary>

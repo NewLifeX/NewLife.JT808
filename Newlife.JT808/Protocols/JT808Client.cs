@@ -92,6 +92,7 @@ public class JT808Client : DisposeBase
     #endregion
 
     #region 构造
+    [System.Diagnostics.CodeAnalysis.UnconditionalSuppressMessage("Trimming", "IL2026", Justification = "协议库通过反射注册全部消息体，AOT 部署需保留 NewLife.JT808 程序集")]
     static JT808Client()
     {
         // 确保消息工厂已初始化
@@ -118,6 +119,7 @@ public class JT808Client : DisposeBase
 
     #region 连接管理
     /// <summary>打开连接并开始接收消息</summary>
+    [System.Diagnostics.CodeAnalysis.UnconditionalSuppressMessage("Trimming", "IL2026", Justification = "协议库通过反射注册全部消息体，AOT 部署需保留 NewLife.JT808 程序集")]
     public virtual void Open()
     {
         MessageFactory.Instance.Init();
@@ -212,9 +214,9 @@ public class JT808Client : DisposeBase
     /// </remarks>
     /// <typeparam name="T">处理器类型</typeparam>
     /// <param name="handler">处理器实例</param>
-    public virtual void AddHandler<T>(T handler)
+    public virtual void AddHandler<[System.Diagnostics.CodeAnalysis.DynamicallyAccessedMembers(System.Diagnostics.CodeAnalysis.DynamicallyAccessedMemberTypes.PublicMethods)] T>(T handler)
     {
-        var type = handler.GetType();
+        var type = typeof(T);
         foreach (var method in type.GetMethods())
         {
             if (method.IsStatic) continue;

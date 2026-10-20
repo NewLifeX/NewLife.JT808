@@ -29,6 +29,7 @@ namespace NewLife.JT808.Protocols
 
         #region 方法
         /// <summary>初始化，加载内部</summary>
+        [System.Diagnostics.CodeAnalysis.RequiresUnreferencedCode("扫描程序集注册全部消息体，裁剪时需保留协议库程序集")]
         public void Init()
         {
             foreach (var item in GetType().Assembly.GetTypes())
@@ -61,6 +62,7 @@ namespace NewLife.JT808.Protocols
 
         /// <summary>从指定程序集扫描并注册所有带有[MessageKind]特性的类型</summary>
         /// <param name="assembly">要扫描的程序集</param>
+        [System.Diagnostics.CodeAnalysis.RequiresUnreferencedCode("扫描程序集注册全部消息体，裁剪时需保留协议库程序集")]
         public void Register(Assembly assembly)
         {
             foreach (var type in assembly.GetTypes())
@@ -125,15 +127,12 @@ namespace NewLife.JT808.Protocols
         #endregion
 
         #region 辅助
-        static Array _vs;
         /// <summary>获取类型名</summary>
         /// <param name="kind"></param>
         /// <returns></returns>
         public static string GetKindName(MessageKinds kind)
         {
-            if (_vs == null) _vs = Enum.GetValues(typeof(MessageKinds));
-
-            return Array.IndexOf(_vs, kind) >= 0 ? kind + "" : ((int)kind).ToString("X4");
+            return Enum.IsDefined(typeof(MessageKinds), kind) ? kind + "" : ((int)kind).ToString("X4");
         }
 
         /// <summary>是否响应消息</summary>

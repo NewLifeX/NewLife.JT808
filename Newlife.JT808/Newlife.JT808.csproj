@@ -1,7 +1,7 @@
 <Project Sdk="Microsoft.NET.Sdk">
 
 	<PropertyGroup>
-		<TargetFrameworks>netstandard2.1;netstandard2.0;net461;net45</TargetFrameworks>
+		<TargetFrameworks>net45;net461;netstandard2.0;netstandard2.1;net8.0</TargetFrameworks>
 		<RootNamespace>NewLife.JT808</RootNamespace>
 		<AssemblyTitle>JT808协议</AssemblyTitle>
 		<Description>JT/T 808车辆定位协议完整实现，支持2011/2013/2019版本</Description>
@@ -56,6 +56,11 @@
 	<ItemGroup>
 		<PackageReference Include="NewLife.Core" Version="12.0.2026.1019-beta1502" />
 	</ItemGroup>
+
+	<!-- 发布包支持 NativeAOT：net8.0+ 才启用 AOT/裁剪分析器，旧目标框架保持原样 -->
+	<PropertyGroup Condition="$([MSBuild]::IsTargetFrameworkCompatible('$(TargetFramework)', 'net8.0'))">
+		<IsAotCompatible>true</IsAotCompatible>
+	</PropertyGroup>
 
 	<ItemGroup>
 		<Content Include="..\Doc\leaf.png" Link="leaf.png" PackagePath="\" />

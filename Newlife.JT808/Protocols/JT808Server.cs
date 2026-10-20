@@ -61,9 +61,9 @@ public class JT808Server : NetServer<JT808Session>
     /// </remarks>
     /// <typeparam name="T">处理器类型</typeparam>
     /// <param name="handler">处理器实例</param>
-    public void AddHandler<T>(T handler)
+    public void AddHandler<[System.Diagnostics.CodeAnalysis.DynamicallyAccessedMembers(System.Diagnostics.CodeAnalysis.DynamicallyAccessedMemberTypes.PublicMethods)] T>(T handler)
     {
-        var type = handler.GetType();
+        var type = typeof(T);
         foreach (var method in type.GetMethods())
         {
             if (method.IsStatic) continue;
