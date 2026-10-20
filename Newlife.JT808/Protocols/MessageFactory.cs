@@ -19,6 +19,7 @@ namespace NewLife.JT808.Protocols
         #region 属性
         ConcurrentDictionary<MessageKinds, Type> _map1 = new();
         ConcurrentDictionary<Type, MessageKinds> _map2 = new();
+        private Boolean _inited;
 
         /// <summary>类型映射</summary>
         public IDictionary<MessageKinds, Type> Maps => _map1;
@@ -32,6 +33,10 @@ namespace NewLife.JT808.Protocols
         [System.Diagnostics.CodeAnalysis.RequiresUnreferencedCode("扫描程序集注册全部消息体，裁剪时需保留协议库程序集")]
         public void Init()
         {
+            // 重复调用（如每次建立连接）无需重复扫描程序集
+            if (_inited) return;
+            _inited = true;
+
             foreach (var item in GetType().Assembly.GetTypes())
             {
                 //if (item.Namespace == ns)

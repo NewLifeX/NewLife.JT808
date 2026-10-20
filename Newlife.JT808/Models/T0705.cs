@@ -85,7 +85,12 @@ namespace NewLife.JT808.Models
                 foreach (var item in Items)
                 {
                     writer.Write(item.Id);
-                    writer.Write(item.Data, 0, item.Data.Length);
+
+                    // CAN 数据固定 8 字节，不足补零，避免写出非法帧
+                    var data = item.Data;
+                    var buf = new Byte[8];
+                    if (data != null) Array.Copy(data, buf, Math.Min(buf.Length, data.Length));
+                    writer.Write(buf, 0, buf.Length);
                 }
             }
 

@@ -35,3 +35,4 @@
 "RocketMQ consume error: {0}": "Erreur de consommation RocketMQ : {0}"
 "RocketMQ command consume error: {0}": "Erreur de consommation de commande RocketMQ : {0}"
 "RocketMQ produce failed: {0}": "Échec de production RocketMQ : {0}"
+"The message body length {0} exceeds the 1023-byte limit; split it into sub-packets.": "La longueur du corps du message {0} dépasse la limite de 1023 octets ; divisez-le en sous-paquets."

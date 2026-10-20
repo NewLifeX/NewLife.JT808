@@ -291,15 +291,16 @@ public class JT808Client : DisposeBase
 
         var pk = Codec.Encode(msg);
 
-        // 使用TaskCompletionSource等待响应
-        var tcs = new TaskCompletionSource<IPacket>();
+        // 使用TaskCompletionSource等待响应。按期望响应类型与手机号过滤，避免被同连接的其他报文抢先完成
+        var expected = typeof(TResult).GetCustomAttribute<MessageKindAttribute>()?.Kind;
+        var tcs = new TaskCompletionSource<JTMessage>();
         EventHandler<ReceivedEventArgs> handler = null;
         handler = (s, e) =>
         {
-            if (e.Message is JTMessage reply)
-            {
-                tcs.TrySetResult(e.Packet);
-            }
+            if (e.Message is JTMessage reply &&
+                (expected == null || reply.Kind == expected) &&
+                (reply.Mobile.IsNullOrEmpty() || Mobile.IsNullOrEmpty() || reply.Mobile == Mobile))
+                tcs.TrySetResult(reply);
         };
 
         try
@@ -309,11 +310,7 @@ public class JT808Client : DisposeBase
 
             using var cts = new CancellationTokenSource(timeout);
             cts.Token.Register(() => tcs.TrySetCanceled());
-            var rs = await tcs.Task;
-            if (rs == null) return null;
-
-            var list = Codec.Decode(rs);
-            var reply = list?.FirstOrDefault();
+            var reply = await tcs.Task;
             if (reply == null) return null;
 
             var result = reply.ReadModel<TResult>();

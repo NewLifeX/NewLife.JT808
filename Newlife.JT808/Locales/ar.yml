@@ -35,3 +35,4 @@
 "RocketMQ consume error: {0}": "خطأ استهلاك RocketMQ: {0}"
 "RocketMQ command consume error: {0}": "خطأ استهلاك أوامر RocketMQ: {0}"
 "RocketMQ produce failed: {0}": "فشل إنتاج RocketMQ: {0}"
+"The message body length {0} exceeds the 1023-byte limit; split it into sub-packets.": "طول جسم الرسالة {0} يتجاوز الحد الأقصى 1023 بايت؛ قسّمه إلى حزم فرعية."

@@ -280,6 +280,75 @@ public class ProtocolCoverageTests
         Assert.True(msg2.Read(pk));
         Assert.Equal(payload, msg2.Payload.ToArray());
     }
+
+    [Fact]
+    [DisplayName("解码_转义帧_经粘包编解码器往返")]
+    public void Decode_EscapedPayload_ViaCodec()
+    {
+        var payload = new Byte[] { 0x7D, 0x7E, 0x7D, 0x01, 0x7D, 0x02, 0x00, 0xFF, 0x7E };
+        var msg = new JTMessage
+        {
+            Kind = MessageKinds.数据上行透传,
+            Mobile = "13800138000",
+            Sequence = 9,
+            Payload = new ArrayPacket(payload),
+        };
+
+        var pk = msg.ToPacket();
+        Assert.NotNull(pk);
+        Assert.Equal(pk.Total, JTMessage.GetLength(pk));
+
+        var list = new JTCodec().Decode(pk);
+
+        var reply = Assert.Single(list);
+        Assert.Equal(MessageKinds.数据上行透传, reply.Kind);
+        Assert.Equal(payload, reply.Payload.ToArray());
+    }
+
+    [Fact]
+    [DisplayName("解码_转义帧后紧跟普通帧_两帧均解析")]
+    public void Decode_EscapedThenPlain_TwoFrames()
+    {
+        var escaped = new JTMessage { Kind = MessageKinds.数据上行透传, Mobile = "13800138000", Sequence = 1, Payload = new ArrayPacket(new Byte[] { 0x7D, 0x7E, 0x7D }) };
+        var plain = new JTMessage { Kind = MessageKinds.终端心跳, Mobile = "13800138001", Sequence = 2 };
+
+        var bytes = escaped.ToPacket().ToArray().Concat(plain.ToPacket().ToArray()).ToArray();
+        var list = new JTCodec().Decode(new ArrayPacket(bytes));
+
+        Assert.Equal(2, list.Count);
+        Assert.Equal(MessageKinds.数据上行透传, list[0].Kind);
+        Assert.Equal(MessageKinds.终端心跳, list[1].Kind);
+    }
+
+    [Fact]
+    [DisplayName("编码_消息体超过1023字节_抛出异常")]
+    public void Write_PayloadExceedsLimit_Throws()
+    {
+        var msg = new JTMessage
+        {
+            Kind = MessageKinds.数据上行透传,
+            Mobile = "13800138000",
+            Sequence = 1,
+            Payload = new ArrayPacket(new Byte[1024]),
+        };
+
+        var ex = Assert.Throws<InvalidOperationException>(() => msg.ToPacket());
+        Assert.Contains("1023", ex.Message);
+    }
+
+    [Fact]
+    [DisplayName("编码_手机号为空_补零不抛异常")]
+    public void Write_NullMobile_Padded()
+    {
+        var msg = new JTMessage { Kind = MessageKinds.终端心跳, Sequence = 1 };
+        var pk = msg.ToPacket();
+        Assert.NotNull(pk);
+
+        var msg2 = new JTMessage();
+        Assert.True(msg2.Read(pk));
+        Assert.True(String.IsNullOrEmpty(msg2.Mobile));
+        Assert.Equal(MessageKinds.终端心跳, msg2.Kind);
+    }
     #endregion
 
     #region 消息工厂

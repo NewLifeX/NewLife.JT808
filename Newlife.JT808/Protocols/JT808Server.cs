@@ -98,7 +98,8 @@ public class JT808Server : NetServer<JT808Session>
 
     /// <summary>合并分包消息</summary>
     /// <remarks>
-    /// 按 SessionID + MessageKinds 作为缓存键，60s超时。
+    /// 按 SessionID + MessageKinds + 消息流水号 作为缓存键，60s超时。
+    /// 加入流水号可避免同一终端同类消息的多个分包序列相互串包。
     /// 集齐所有分包后返回完整消息，否则返回null并缓存当前包。
     /// </remarks>
     /// <param name="session">网络会话</param>
@@ -114,7 +115,7 @@ public class JT808Server : NetServer<JT808Session>
         using var span = Tracer?.NewSpan($"jt808:{name}:Merge", $"count={message.PackageCount} index={message.PackageIndex}");
 
         // 找到该消息的首包，把后续包附加进去
-        var key = $"{session.ID}-{message.Kind}";
+        var key = $"{session.ID}-{message.Kind}-{message.Sequence}";
         if (_mergeCache.TryGetValue<JTMessage>(key, out var first))
         {
             if (first.Append(message))
@@ -128,7 +129,7 @@ public class JT808Server : NetServer<JT808Session>
         else
         {
             // 拷贝数据，避免网络缓冲区被重用导致数据损坏
-            message.Payload = new ArrayPacket(message.Payload.ToArray());
+            if (message.Payload != null) message.Payload = new ArrayPacket(message.Payload.ToArray());
             _mergeCache.Set(key, message, 60);
         }
 

@@ -35,3 +35,4 @@
 "RocketMQ consume error: {0}": "RocketMQ 消費エラー：{0}"
 "RocketMQ command consume error: {0}": "RocketMQ コマンド消費エラー：{0}"
 "RocketMQ produce failed: {0}": "RocketMQ 送信に失敗しました：{0}"
+"The message body length {0} exceeds the 1023-byte limit; split it into sub-packets.": "メッセージ本文の長さ {0} が 1023 バイトの上限を超えています。分割パケットに分けて送信してください。"

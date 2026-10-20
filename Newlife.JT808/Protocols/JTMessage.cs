@@ -153,6 +153,7 @@ public class JTMessage : IAccessor
         var flag = (ushort)Property;
         var pk = Payload;
         var length = pk?.Total ?? 0;
+        if (length > 0x3FF) throw new InvalidOperationException(L.T("The message body length {0} exceeds the 1023-byte limit; split it into sub-packets.", length));
         flag = (ushort)(flag | length & 0x3FF);
         if (Version > 0) flag |= 1 << 14;
 
@@ -169,14 +170,14 @@ public class JTMessage : IAccessor
         if (Version > 0)
         {
             writer.Write(Version);
-            var str = Mobile;
+            var str = Mobile ?? String.Empty;
             if (str.Length < 10 * 2) str = str.PadLeft(10 * 2, '0');
             writer.WriteBCD(str, 10);
         }
         // 2013版本
         else
         {
-            var str = Mobile;
+            var str = Mobile ?? String.Empty;
             if (str.Length < 6 * 2) str = str.PadLeft(6 * 2, '0');
             writer.WriteBCD(str, 6);
         }
@@ -375,31 +376,29 @@ public class JTMessage : IAccessor
     public JTMessage CreateReply() => new() { Reply = true, Kind = Kind, Mobile = Mobile, Version = Version };
 
     /// <summary>获取数据包长度</summary>
-    /// <param name="pk"></param>
-    /// <returns></returns>
+    /// <param name="pk">以 0x7E 开头的原始帧数据</param>
+    /// <returns>完整帧长度；半包或非法帧返回 0</returns>
+    /// <remarks>按原始字节扫描帧尾，跳过 0x7D 转义对，避免消息体包含转义字节时长度计算偏小。</remarks>
     public static int GetLength(IPacket pk)
     {
-        //（头）1+（消息 ID ）2+（消息体属性）2+（终端手机号）6+（消息流水号）2+（检验码 ）1+（尾）1
-        if (pk.Total < 15) return 0;
+        if (pk == null || pk.Total < 2 || pk[0] != 0x7E) return 0;
 
-        // 属性位
-        var reader = new SpanReader(pk) { IsLittleEndian = false };
-        reader.Advance(3);
-        var property = reader.ReadUInt16();
-        var flag = (PropertyFlags)property;
+        for (var i = 1; i < pk.Total; i++)
+        {
+            var b = pk[i];
+            if (b == 0x7D)
+            {
+                // 转义对必须成对出现，末字节孤立表示半包
+                if (i + 1 >= pk.Total) return 0;
+                i++;
+                continue;
+            }
 
-        // 头部长度，区分2019
-        var len = 1 + 2 + 2;
-        if (flag.Has(PropertyFlags.Version))
-            len += 1 + 10;
-        else
-            len += 6;
+            // 第一个未转义的 0x7E 即帧尾
+            if (b == 0x7E) return i + 1;
+        }
 
-        len += 2;
-
-        if (flag.Has(PropertyFlags.Package)) len += 2 + 2;
-
-        return len + (property & 0x3FF) + 1 + 1;
+        return 0;
     }
 
     /// <summary>已重写。返回友好文本</summary>

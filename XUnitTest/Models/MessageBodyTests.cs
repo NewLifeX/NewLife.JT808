@@ -157,6 +157,27 @@ public class MessageBodyTests
     }
 
     [Fact]
+    [DisplayName("T0705_CAN数据_空或不足8字节补零")]
+    public void T0705_ShortData_Padded()
+    {
+        var t0705 = new T0705
+        {
+            Time = new DateTime(2024, 1, 2, 3, 4, 5),
+            Items =
+            [
+                new CanProperty { Id = 0x11, Data = null },
+                new CanProperty { Id = 0x22, Data = new Byte[] { 1, 2, 3 } },
+            ],
+        };
+
+        var buf = SerializeDeserialize(t0705, MessageKinds.CAN总线数据上传);
+        var result = (T0705)buf;
+        Assert.Equal(2, result.Items.Length);
+        Assert.Equal(new Byte[8], result.Items[0].Data);
+        Assert.Equal(new Byte[] { 1, 2, 3, 0, 0, 0, 0, 0 }, result.Items[1].Data);
+    }
+
+    [Fact]
     [DisplayName("T8103_设置终端参数_TLV列表")]
     public void T8103_ParameterSettings()
     {

@@ -35,3 +35,4 @@
 "RocketMQ consume error: {0}": "RocketMQ 소비 오류: {0}"
 "RocketMQ command consume error: {0}": "RocketMQ 명령 소비 오류: {0}"
 "RocketMQ produce failed: {0}": "RocketMQ 전송 실패: {0}"
+"The message body length {0} exceeds the 1023-byte limit; split it into sub-packets.": "메시지 본문 길이 {0}이(가) 1023바이트 제한을 초과했습니다. 하위 패킷으로 분할하여 전송하세요."

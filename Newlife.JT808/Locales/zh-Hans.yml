@@ -35,3 +35,4 @@
 "RocketMQ consume error: {0}": "RocketMQ 消费异常：{0}"
 "RocketMQ command consume error: {0}": "RocketMQ 指令消费异常：{0}"
 "RocketMQ produce failed: {0}": "RocketMQ 生产失败：{0}"
+"The message body length {0} exceeds the 1023-byte limit; split it into sub-packets.": "消息体长度{0}超过1023字节上限，请拆分为分包发送。"

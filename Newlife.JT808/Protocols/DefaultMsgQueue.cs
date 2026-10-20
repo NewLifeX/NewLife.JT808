@@ -40,14 +40,14 @@ public class DefaultMsgQueue<TMessage> : IMsgProducer<TMessage>, IMsgConsumer<TM
     /// <summary>生产消息到内存队列</summary>
     public Task<Boolean> ProduceAsync(String mobile, TMessage message, CancellationToken cancellationToken = default)
     {
-        if (_queue.Count >= MaxQueueLength)
-        {
-            Log?.Warn("Queue full, message dropped: Topic={0}, Mobile={1}", Topic, mobile);
-            return Task.FromResult(false);
-        }
-
         lock (_queue)
         {
+            if (_queue.Count >= MaxQueueLength)
+            {
+                Log?.Warn("Queue full, message dropped: Topic={0}, Mobile={1}", Topic, mobile);
+                return Task.FromResult(false);
+            }
+
             _queue.Enqueue((mobile, message));
         }
 
