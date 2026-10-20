@@ -14,6 +14,9 @@ param(
 
 $ErrorActionPreference = "Stop"
 
+# 兼容 pwsh -File 调用：逗号分隔的多个目录在该模式下会作为单个字符串传入
+$SourceDir = @($SourceDir | ForEach-Object { $_ -split '[,;]' } | ForEach-Object { $_.Trim() } | Where-Object { $_ })
+
 $root = $PSScriptRoot
 $localeDir = if ([IO.Path]::IsPathRooted($LocaleDir)) { $LocaleDir } else { Join-Path $root $LocaleDir }
 if (!(Test-Path $localeDir)) {
