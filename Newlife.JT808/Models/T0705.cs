@@ -49,7 +49,7 @@ namespace NewLife.JT808.Models
             var reader = Helper.CreateReader(stream);
 
             Count = reader.ReadUInt16();
-            if (TimeSpan.TryParseExact(reader.ReadBCD(5), "HHmmssffff", null, out var ts))
+            if (TimeSpan.TryParseExact(reader.ReadBCD(5), "hhmmssffff", null, out var ts))
                 Time = DateTime.Today.Add(ts);
 
             var list = new List<CanProperty>();

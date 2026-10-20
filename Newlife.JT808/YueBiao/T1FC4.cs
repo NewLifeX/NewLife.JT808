@@ -19,7 +19,7 @@ public class T1FC4 : IAccessor
     public String TerminalId { get; set; } = String.Empty;
 
     /// <summary>报警标识号</summary>
-    public AlarmDevice AlarmId { get; set; } = new();
+    public AlarmDevice AlarmId { get; set; } = new() { DeviceIdLength = YueBiaoConstants.TerminalIdLength_YueBiao };
 
     /// <summary>车辆状态</summary>
     public CarStatus Status { get; set; }
@@ -63,7 +63,8 @@ public class T1FC4 : IAccessor
         var reader = Helper.CreateReader(stream);
 
         TerminalId = reader.ReadFixedString(30);
-        AlarmId = reader.Read<AlarmDevice>();
+        AlarmId = new AlarmDevice { DeviceIdLength = YueBiaoConstants.TerminalIdLength_YueBiao };
+        AlarmId.Read(stream, context);
         Status = (CarStatus)reader.ReadUInt16();
         AlarmType = reader.ReadByte();
         AlarmKind = reader.ReadByte();
@@ -91,7 +92,9 @@ public class T1FC4 : IAccessor
         var writer = Helper.CreateWriter(stream);
 
         writer.WriteFixedString(TerminalId, 30);
-        writer.Write(AlarmId);
+        AlarmId ??= new AlarmDevice();
+        AlarmId.DeviceIdLength = YueBiaoConstants.TerminalIdLength_YueBiao;
+        AlarmId.Write(stream, context);
         writer.Write((UInt16)Status);
         writer.Write(AlarmType);
         writer.Write(AlarmKind);

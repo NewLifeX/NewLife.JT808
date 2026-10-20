@@ -218,7 +218,7 @@ public class JTMessageTests
             Sequence = 1,
             Property = PropertyFlags.Package,
             PackageCount = 2,
-            PackageIndex = 0,
+            PackageIndex = 1,
             Payload = (ArrayPacket)payload,
         };
 
@@ -229,7 +229,7 @@ public class JTMessageTests
             Sequence = 1,
             Property = PropertyFlags.Package,
             PackageCount = 2,
-            PackageIndex = 1,
+            PackageIndex = 2,
             Payload = (ArrayPacket)payload,
         };
 
@@ -237,6 +237,10 @@ public class JTMessageTests
         var merged = pkg1.Append(pkg2);
         Assert.True(merged);
         Assert.Equal(2, pkg1.PackageCount);
+
+        // 包序号从1开始，0 为非法值
+        var invalid = new JTMessage { PackageCount = 2, PackageIndex = 0, Payload = (ArrayPacket)payload };
+        Assert.False(pkg1.Append(invalid));
     }
 
     [Fact]

@@ -185,8 +185,8 @@ public class JTMessage : IAccessor
 
         if (Property.Has(PropertyFlags.Package))
         {
-            writer.Write(PackageIndex);
             writer.Write(PackageCount);
+            writer.Write(PackageIndex);
         }
 
         if (length > 0) pk.CopyTo(writer.Stream);
@@ -267,18 +267,20 @@ public class JTMessage : IAccessor
     /// <returns></returns>
     public bool Append(JTMessage message)
     {
-        if (message.PackageCount <= 0 || message.PackageIndex >= message.PackageCount) return false;
+        // 包序号从1开始，合法范围 1..PackageCount
+        if (message == null || message.PackageCount <= 0) return false;
+        if (message.PackageIndex < 1 || message.PackageIndex > message.PackageCount) return false;
 
         // 放入分包数组，注意要深度拷贝，否则可能存在网络缓冲区冲突，导致数据被修改
-        if (_packets == null)
-        {
-            _packets = new IPacket[PackageCount];
-            _packets[PackageIndex] = Payload.Clone();
-        }
+        _packets ??= new IPacket[message.PackageCount];
+        if (message.PackageIndex > _packets.Length) return false;
 
-        if (message.PackageIndex >= _packets.Length) return false;
+        // 首包自身也要进入集合，分包可能乱序到达
+        if (PackageIndex >= 1 && PackageIndex <= _packets.Length && Payload != null)
+            _packets[PackageIndex - 1] ??= Payload.Clone();
 
-        _packets[message.PackageIndex] = message.Payload.Clone();
+        if (message.Payload != null)
+            _packets[message.PackageIndex - 1] = message.Payload.Clone();
 
         return _packets.All(e => e != null);
     }

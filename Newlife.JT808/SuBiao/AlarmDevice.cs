@@ -9,6 +9,9 @@ namespace NewLife.JT808.SuBiao
         /// <summary>终端ID。苏标7字节，粤标30字节</summary>
         public String DeviceId { get; set; }
 
+        /// <summary>终端ID长度。0=按 DeviceId 长度自动判断（大于7取30，否则取7）</summary>
+        public Int32 DeviceIdLength { get; set; }
+
         /// <summary>YY-MM-DD-hh-mm-ss（GMT+8 时间）</summary>
         public DateTime Time { get; set; }
 
@@ -31,7 +34,7 @@ namespace NewLife.JT808.SuBiao
 
             // 苏标16字节，粤标40字节
             var retain = stream.Length - stream.Position;
-            var len = retain >= 40 ? 30 : 7;
+            var len = DeviceIdLength > 0 ? DeviceIdLength : retain >= 40 ? 30 : 7;
             DeviceId = binary.ReadFixedString(len);
 
             var str = binary.ReadBCD(6);
@@ -54,9 +57,9 @@ namespace NewLife.JT808.SuBiao
             var binary = new Binary { Stream = stream };
 
             // 苏标16字节，粤标40字节
-            var len = DeviceId.Length > 7 ? 30 : 7;
+            var len = DeviceIdLength > 0 ? DeviceIdLength : (DeviceId?.Length ?? 0) > 7 ? 30 : 7;
 
-            binary.WriteFixedString(DeviceId, len);
+            binary.WriteFixedString(DeviceId ?? String.Empty, len);
             binary.WriteBCD(Time.ToString("yyMMddHHmmss"), 6);
             binary.WriteByte(Sequence);
             binary.WriteByte(Attachments);

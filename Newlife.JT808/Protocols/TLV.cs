@@ -20,18 +20,36 @@ namespace NewLife.JT808.Protocols
         public static IList<TLV> Read(Stream stream)
         {
             var list = new List<TLV>();
+            var buf = new byte[4];
             while (true)
             {
-                var kind = stream.ReadBytes(4).ToUInt32(0, false);
+                // 流末尾不足一个完整类型字段时结束，避免越过末尾抛异常
+                var count = 0;
+                while (count < buf.Length)
+                {
+                    var n = stream.Read(buf, count, buf.Length - count);
+                    if (n <= 0) break;
+                    count += n;
+                }
+                if (count < buf.Length) break;
+
+                var kind = buf.ToUInt32(0, false);
                 if (kind <= 0) break;
 
                 var len = stream.ReadByte();
                 if (len <= 0) break;
 
                 var data = new byte[len];
-                var count = stream.Read(data, 0, len);
-                if (count > 0)
+                var read = 0;
+                while (read < len)
                 {
+                    var n = stream.Read(data, read, len - read);
+                    if (n <= 0) break;
+                    read += n;
+                }
+                if (read > 0)
+                {
+                    if (read < len) Array.Resize(ref data, read);
                     list.Add(new TLV { Type = kind, Value = data });
                 }
             }
