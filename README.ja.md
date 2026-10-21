@@ -3,7 +3,7 @@
 ![GitHub License](https://img.shields.io/github/license/NewLifeX/NewLife.JT808?logo=github)
 ![NuGet Downloads](https://img.shields.io/nuget/dt/NewLife.JT808?logo=nuget)
 ![NuGet](https://img.shields.io/nuget/v/NewLife.JT808?logo=nuget)
-![NuGet prerelease](https://img.shields.io/nuget/vpre/NewLife.JT808?label=dev%20nuget&logo=nuget)
+![NuGet prerelease](https://img.shields.io/nuget/vpre/NewLife.JT808?label=dev%20nuget&logo=nuget)
 
 [![test](https://github.com/NewLifeX/NewLife.JT808/actions/workflows/test.yml/badge.svg?branch=master)](https://github.com/NewLifeX/NewLife.JT808/actions/workflows/test.yml)
 
@@ -12,57 +12,158 @@
 [![TFM](https://img.shields.io/badge/TFM-5%20%28net45%20%E2%86%92%20net8.0%29-512BD4?logo=dotnet)](Newlife.JT808/NewLife.JT808.csproj)
 [![locales](https://img.shields.io/badge/locales-11-2ea44f?logo=dotnet)](Doc/多语言本地化.md)
 <!-- metrics:end -->
+![platform](https://img.shields.io/badge/platform-Windows%20%7C%20Linux%20%7C%20macOS-blue)
+[![contributors](https://img.shields.io/github/contributors/NewLifeX/NewLife.JT808?logo=github)](https://github.com/NewLifeX/NewLife.JT808/graphs/contributors)
 
 <!-- lang:start -->
 🌐 [English](README.md) | [简体中文](README.zh-CN.md) | [繁體中文](README.zh-TW.md) | [Español](README.es.md) | [Deutsch](README.de.md) | [Français](README.fr.md) | [Português](README.pt.md) | [Русский](README.ru.md) | [한국어](README.ko.md) | [العربية](README.ar.md)
 <!-- lang:end -->
 
-> この翻訳は遅れている場合があります。[English README](README.md) を参照してください。
+> 本翻訳は遅れる場合があります。[English README](README.md) を参照してください。
 
-JT/T 808 車両位置情報プロトコルの完全実装です。2011/2013/2019 の各バージョンに対応し、70 以上の標準メッセージ本文、蘇標/粤標の主動安全拡張、JT/T 1078 音声・映像メッセージ、JT/T 19056 ドライブレコーダープロトコル、メッセージキュー連携を提供します。
+JT/T 808 車両位置情報プロトコルの完全実装です。2011/2013/2019 の各バージョンに対応し、70 以上の標準メッセージ本文、SuBiao（江蘇省）と YueBiao（広東省）の主動安全拡張、JT/T 1078 音声・映像メッセージ、JT/T 19056 ドライブレコーダープロトコル、メッセージキュー連携を提供します。
+
+ソースコード： https://github.com/NewLifeX/NewLife.JT808  
+NuGet：[NewLife.JT808](https://www.nuget.org/packages/NewLife.JT808)  
+ドキュメント：[要件定義](Doc/需求文档.md) / [アーキテクチャ](Doc/架构设计.md) / [機能一覧](Doc/功能清单.md) / [ユーザーガイド](Doc/使用文档.md) / [ローカライズ](Doc/多语言本地化.md)
 
 ## 主な特長
 
-- **プロトコル完全対応**：0x7E デリミタ、0x7D エスケープ、XOR チェックサム、分割パケット再結合
-- **豊富なメッセージ**：70 以上の標準メッセージ本文。上り・下りを網羅
-- **3 バージョン互換**：`Version` と `[JT2011]`/`[JT2019]` によるフィールド自動適応
-- **2 種類のシリアライズ**：属性駆動と `IAccessor` による手動制御
-- **TLV/KLV**：汎用コーデックと強い型付き辞書変換
-- **ネットワーク層**：`JTCodec` と `JT808Client` による自動ルーティング
-- **AOT 対応**：NativeAOT スモークプロジェクトで主要経路を検証
-- **多言語**：11 言語の実行時ローカライズ。英語原文にフォールバック
+- **プロトコル完全対応**：0x7E デリミタ、0x7D エスケープ、XOR チェックサム、サブパケット再結合を含む JT/T 808-2011/2013/2019 のフレーム解析
+- **豊富なメッセージ本文**：端末の上りとプラットフォームの下りを網羅する 70 以上の標準メッセージ本文（0x0001〜0x8A00）
+- **3 バージョン互換**：`Version` フィールドと `[JT2011]`/`[JT2019]` 属性によるフィールドの自動適応
+- **2 つのシリアライズ方式**：単純な本文は属性駆動リフレクション、手動制御が必要な複雑な本文は `IAccessor`
+- **TLV/KLV 解析**：Type-Length-Value と Kind-Length-Value のコーデックを内蔵し、強く型付けされた辞書変換に対応
+- **ネットワーク層**：TCP 粘着パケットコーデック `JTCodec` と、ハンドラーの自動ルーティングを備えた `JT808Client`
+- **SuBiao 拡張**：ADAS/DSM/TPMS/BSD 主動安全警報、周辺機器状態、添付ファイルプロトコル
+- **YueBiao 拡張**：専用警報報告（0x1FC4）、USB パススルー、位置拡張情報、ベンダーパラメータを備えた広東省主動安全標準
+- **JT/T 1078 基礎**：音声・映像メッセージ本文のモデルと列挙型
+- **ドライブレコーダー**：JT/T 19056 の上り・下りデータパケットコーデック
+- **BCD エンコーディング**：BCD 文字列とタイムスタンプ用のカスタムシリアライズ属性
+- **GBK エンコーディング**：`CodePagesEncodingProvider` の自動登録を伴う GBK 文字列コーデックを内蔵
+- **Web API 管理**：統合コマンド配信、オンラインセッション管理、ブラックリスト、トークン認証
+- **メッセージキュー抽象化**：`IMessageBus` がプロデューサー／コンシューマー、セッションイベント、下りハンドラーを生成します。`RedisMessageBus` は内蔵の内部トランスポートであり、`JT808.Server` の RocketMQ/Kafka アダプターは `JT808:Messaging` 構成スイッチを通じて組み込まれます
+- **クラスタコマンド配信**：`ClusterState` はオンラインセッション、ノードハートビート、ブラックリストを Redis 経由で共有し、端末を保有するノードへコマンドをルーティングします。`ICommandBus` はカスタムトランスポート用の拡張ポイントとして維持されます
+- **クライアント堅牢化**：自動再接続、設定可能なハートビート、送受信カウンター
+- **マルチフレームワーク対応**：`net45 / net461 / netstandard2.0 / netstandard2.1 / net8.0`
+- **AOT 対応**：コーデック、ファクトリ、シリアライズの各経路を網羅する NativeAOT スモークプロジェクト
+- **ローカライズ**：そのまま使える 11 言語の実行時ローカライズ、英語原文へのフォールバック、AOT セーフなテーブル
+- **RocketMQ 連携**：`JT808.Server` プロジェクト内のプロデューサー／コンシューマーアダプター（NuGet パッケージには含まれません）。Alibaba Cloud、Huawei Cloud、Tencent Cloud、ACL 認証に対応
+- **Kafka 連携**：`JT808.Server` プロジェクト内のプロデューサー／コンシューマーアダプター（NuGet パッケージには含まれません）。`Confluent.Kafka` をベースに、コンシューマーグループと ACK に対応
 
 ## 対応プロトコルバージョン
 
 | バージョン | 識別子 | 説明 |
-|-----------|--------|------|
-| JT/T 808-2011 | `Version=0` | 初期バージョン。一部メッセージ構造が異なる |
-| JT/T 808-2013 | `Version=0` | 現在最も広く使われているバージョン |
-| JT/T 808-2019 | `Version=1` | 最新バージョン。新しいフィールドとメッセージを追加 |
+|---------|------|-------------|
+| JT/T 808-2011 | `Version=0` | 初期バージョン。一部のメッセージレイアウトが異なる |
+| JT/T 808-2013 | `Version=0` | 現在最も広く導入されているバージョン |
+| JT/T 808-2019 | `Version=1` | 最新バージョン。新しいフィールドとメッセージ種別を追加 |
 
-## インストール
+## メッセージマトリクス
 
-```bash
-dotnet add package NewLife.JT808
-```
+| # | メッセージ ID | 名称 | 方向 | 実装済み |
+|:---:|:------:|---------|:----:|:----:|
+| 1 | 0x0001 | 端末汎用応答 | 上り | ✅ |
+| 2 | 0x8001 | プラットフォーム汎用応答 | 下り | ✅ |
+| 3 | 0x0002 | 端末ハートビート | 上り | ✅ |
+| 4 | 0x8003 | サブパケット再送要求 | 下り | ✅ |
+| 5 | 0x0004 | サーバー時刻照会要求 | 上り | ✅ |
+| 6 | 0x0100 | 端末登録 | 上り | ✅ |
+| 7 | 0x8100 | 端末登録応答 | 下り | ✅ |
+| 8 | 0x0003 | 端末登録解除 | 上り | ✅ |
+| 9 | 0x0102 | 端末認証 | 上り | ✅ |
+| 10 | 0x8103 | 端末パラメータ設定 | 下り | ✅ |
+| 11 | 0x8104 | 端末パラメータ照会 | 下り | ✅ |
+| 12 | 0x0104 | 端末パラメータ照会応答 | 上り | ✅ |
+| 13 | 0x8105 | 端末制御 | 下り | ✅ |
+| 14 | 0x8106 | 指定端末パラメータ照会 | 下り | ✅ |
+| 15 | 0x8107 | 端末属性照会 | 下り | ✅ |
+| 16 | 0x0107 | 端末属性照会応答 | 上り | ✅ |
+| 17 | 0x8108 | 端末アップグレードパッケージ配信 | 下り | ✅ |
+| 18 | 0x0108 | 端末アップグレード結果通知 | 上り | ✅ |
+| 19 | 0x0200 | 位置情報報告 | 上り | ✅ |
+| 20 | 0x8201 | 位置情報照会 | 下り | ✅ |
+| 21 | 0x0201 | 位置情報照会応答 | 上り | ✅ |
+| 22 | 0x8202 | 一時位置追跡制御 | 下り | ✅ |
+| 23 | 0x8203 | 警報イベントの手動確認 | 下り | ✅ |
+| 24 | 0x8300 | テキストメッセージ配信 | 下り | ✅ |
+| 25 | 0x8301 | イベント設定 | 下り | ✅ |
+| 26 | 0x0301 | イベント報告 | 上り | ✅ |
+| 27 | 0x8302 | 質問配信 | 下り | ✅ |
+| 28 | 0x0302 | 質問応答 | 上り | ✅ |
+| 29 | 0x8303 | 情報オンデマンドメニュー設定 | 下り | ✅ |
+| 30 | 0x0303 | 情報オンデマンド／キャンセル | 上り | ✅ |
+| 31 | 0x8304 | 情報サービス | 下り | ✅ |
+| 32 | 0x8400 | 電話コールバック | 下り | ✅ |
+| 33 | 0x8401 | 電話帳設定 | 下り | ✅ |
+| 34 | 0x8500 | 車両制御 | 下り | ✅ |
+| 35 | 0x0500 | 車両制御応答 | 上り | ✅ |
+| 36 | 0x8600 | 円形エリア設定 | 下り | ✅ |
+| 37 | 0x8601 | 円形エリア削除 | 下り | ✅ |
+| 38 | 0x8602 | 矩形エリア設定 | 下り | ✅ |
+| 39 | 0x8603 | 矩形エリア削除 | 下り | ✅ |
+| 40 | 0x8604 | 多角形エリア設定 | 下り | ✅ |
+| 41 | 0x8605 | 多角形エリア削除 | 下り | ✅ |
+| 42 | 0x8606 | ルート設定 | 下り | ✅ |
+| 43 | 0x8607 | ルート削除 | 下り | ✅ |
+| 44 | 0x8608 | エリアまたはルートデータの照会 | 下り | ✅ |
+| 45 | 0x0608 | エリアまたはルートデータの照会応答 | 上り | ✅ |
+| 46 | 0x8700 | ドライブレコーダーデータ収集コマンド | 下り | ✅ |
+| 47 | 0x0700 | ドライブレコーダーデータアップロード | 上り | ✅ |
+| 48 | 0x8701 | ドライブレコーダーパラメータ配信コマンド | 下り | ✅ |
+| 49 | 0x0701 | 電子運送伝票の報告 | 上り | ✅ |
+| 50 | 0x8702 | 運転者身元情報の報告要求 | 下り | ✅ |
+| 51 | 0x0702 | 運転者身元情報の報告 | 上り | ✅ |
+| 52 | 0x0704 | 位置データの一括アップロード | 上り | ✅ |
+| 53 | 0x0705 | CAN バスデータのアップロード | 上り | ✅ |
+| 54 | 0x0800 | マルチメディアイベント報告 | 上り | ✅ |
+| 55 | 0x0801 | マルチメディアデータのアップロード | 上り | ✅ |
+| 56 | 0x8800 | マルチメディアデータのアップロード応答 | 下り | ✅ |
+| 57 | 0x8801 | カメラ即時撮影コマンド | 下り | ✅ |
+| 58 | 0x0805 | カメラ即時撮影コマンド応答 | 上り | ✅ |
+| 59 | 0x8802 | 保存済みマルチメディアデータの検索 | 下り | ✅ |
+| 60 | 0x0802 | 保存済みマルチメディアデータの検索応答 | 上り | ✅ |
+| 61 | 0x8803 | 保存済みマルチメディアデータのアップロード | 下り | ✅ |
+| 62 | 0x8804 | 録音開始コマンド | 下り | ✅ |
+| 63 | 0x8805 | 単一保存マルチメディアデータの検索アップロード | 下り | ✅ |
+| 64 | 0x8900 | 下りデータパススルー | 下り | ✅ |
+| 65 | 0x0900 | 上りデータパススルー | 上り | ✅ |
+| 66 | 0x0901 | 圧縮データの報告 | 上り | ✅ |
+| 67 | 0x8A00 | プラットフォーム RSA 公開鍵 | 下り | ✅ |
+| 68 | 0x0005 | 端末サブパケット再送要求 | 上り | ✅ |
+| 69 | 0x8204 | リンク検出 | 下り | ✅ |
+| 70 | 0x6006 | テキストメッセージ配信応答 | 上り | ✅ |
+| 71 | 0x1080 | カスタムメッセージ | — | ✅ |
 
 ## クイックスタート
 
+### NuGet パッケージのインストール
+
 ```bash
 dotnet add package NewLife.JT808
 ```
+
+### 上りメッセージの解析
 
 ```csharp
 using NewLife.JT808.Protocols;
 using NewLife.JT808.Models;
 
+// Scan the assembly and register every message type
 var factory = MessageFactory.Instance;
 factory.Init();
 
-var jtMessage = new JTMessage();
-jtMessage.Read(new MemoryStream(raw), null);
+// Raw bytes reported by the terminal
+var raw = new Byte[] { 0x7E, 0x02, 0x00, /* ... */, 0x7E };
 
-if (factory.Parse(jtMessage) is T0200 position)
+// Decode the JTMessage frame
+var jtMessage = new JTMessage();
+var stream = new MemoryStream(raw);
+jtMessage.Read(stream, null);
+
+// Materialize the strongly-typed body by message ID
+var body = factory.Parse(jtMessage);
+if (body is T0200 position)
 {
     Console.WriteLine($"Latitude={position.Latitude / 1_000_000.0}");
     Console.WriteLine($"Longitude={position.Longitude / 1_000_000.0}");
@@ -70,13 +171,99 @@ if (factory.Parse(jtMessage) is T0200 position)
 }
 ```
 
-## リンク
+### 下りメッセージの構築
 
-- ソースコード: https://github.com/NewLifeX/NewLife.JT808
-- NuGet: https://www.nuget.org/packages/NewLife.JT808
-- ドキュメント: [English](README.md) | [简体中文](README.zh-CN.md)
+```csharp
+// Build a platform general response
+var t8001 = new T8001
+{
+    Sequence = jtMessage.Sequence,
+    Kind = jtMessage.Kind,
+    Result = ResultKinds.Success
+};
 
-> NewLife Team · https://newlifex.com
+// Serialize the body
+var ms = new MemoryStream();
+var writer = Helper.CreateWriter(ms, jtMessage);
+writer.TryWrite(null, ref t8001);
+
+// Wrap it in a JTMessage frame
+var reply = new JTMessage
+{
+    Kind = MessageKinds.平台通用应答,
+    Mobile = jtMessage.Mobile,
+    Sequence = (UInt16)(jtMessage.Sequence + 1),
+    Payload = new ArrayPacket(ms.ToArray()),
+    Reply = false
+};
+
+// Emit the complete frame
+var outMs = new MemoryStream();
+reply.Write(outMs, null);
+var frameBytes = outMs.ToArray();
+```
+
+### 複雑なメッセージ本文を手動でシリアライズする（IAccessor）
+
+```csharp
+[MessageKind(MessageKinds.位置信息汇报)]
+public class T0200 : IAccessor
+{
+    public PositionAlarms Alarm { get; set; }
+    public PositionStatus Status { get; set; }
+    public Int32 Latitude { get; set; }
+    public Int32 Longitude { get; set; }
+
+    public Boolean Read(Stream stream, Object context)
+    {
+        var reader = context as Binary ?? Helper.CreateReader(stream);
+        Alarm = (PositionAlarms)reader.ReadUInt32();
+        Status = (PositionStatus)reader.ReadUInt32();
+        Latitude = reader.ReadInt32();
+        Longitude = reader.ReadInt32();
+        // ... remaining fields
+        return true;
+    }
+
+    public Boolean Write(Stream stream, Object context)
+    {
+        var writer = context as Binary ?? Helper.CreateWriter(stream);
+        writer.Write((UInt32)Alarm);
+        writer.Write((UInt32)Status);
+        writer.Write(Latitude);
+        writer.Write(Longitude);
+        // ... remaining fields
+        return true;
+    }
+}
+```
+
+### ローカライズ
+
+このライブラリは 11 言語（簡体字中国語／繁体字中国語、英語、スペイン語、ドイツ語、日本語、フランス語、ポルトガル語、ロシア語、韓国語、アラビア語）の実行時ローカライズを同梱しています。メッセージは英語の原文をキーとしており、翻訳が存在しない場合は英語の原文にフォールバックします。
+
+```csharp
+using System.Globalization;
+using NewLife;
+
+// Follow the process UI culture by default; pin it explicitly if needed
+Localization.Culture = CultureInfo.GetCultureInfo("ja");
+
+// ASP.NET Core hosts can resolve the request language from Accept-Language
+using var scope = RequestCultureScope.Create(Request.Headers.AcceptLanguage);
+```
+
+### NativeAOT
+
+`MessageFactory.Init()` はプロトコルアセンブリを走査してメッセージ本文を検出します。NativeAOT やトリミングを適用したアプリでは、そのアセンブリを保持する必要があります：
+
+```xml
+<ItemGroup>
+  <TrimmerRootAssembly Include="NewLife.JT808" />
+</ItemGroup>
+```
+
+このリポジトリの `AotSmoke` プロジェクトは NativeAOT で発行し、Windows/Linux（x64 と arm64）で 16 のシナリオを実行します。
 
 ## エコシステムマップ
 

@@ -3,7 +3,7 @@
 ![GitHub License](https://img.shields.io/github/license/NewLifeX/NewLife.JT808?logo=github)
 ![NuGet Downloads](https://img.shields.io/nuget/dt/NewLife.JT808?logo=nuget)
 ![NuGet](https://img.shields.io/nuget/v/NewLife.JT808?logo=nuget)
-![NuGet prerelease](https://img.shields.io/nuget/vpre/NewLife.JT808?label=dev%20nuget&logo=nuget)
+![NuGet prerelease](https://img.shields.io/nuget/vpre/NewLife.JT808?label=dev%20nuget&logo=nuget)
 
 [![test](https://github.com/NewLifeX/NewLife.JT808/actions/workflows/test.yml/badge.svg?branch=master)](https://github.com/NewLifeX/NewLife.JT808/actions/workflows/test.yml)
 
@@ -12,6 +12,8 @@
 [![TFM](https://img.shields.io/badge/TFM-5%20%28net45%20%E2%86%92%20net8.0%29-512BD4?logo=dotnet)](Newlife.JT808/NewLife.JT808.csproj)
 [![locales](https://img.shields.io/badge/locales-11-2ea44f?logo=dotnet)](Doc/多语言本地化.md)
 <!-- metrics:end -->
+![platform](https://img.shields.io/badge/platform-Windows%20%7C%20Linux%20%7C%20macOS-blue)
+[![contributors](https://img.shields.io/github/contributors/NewLifeX/NewLife.JT808?logo=github)](https://github.com/NewLifeX/NewLife.JT808/graphs/contributors)
 
 <!-- lang:start -->
 🌐 [English](README.md) | [简体中文](README.zh-CN.md) | [繁體中文](README.zh-TW.md) | [Español](README.es.md) | [日本語](README.ja.md) | [Français](README.fr.md) | [Português](README.pt.md) | [Русский](README.ru.md) | [한국어](README.ko.md) | [العربية](README.ar.md)
@@ -19,50 +21,149 @@
 
 > Diese Übersetzung kann veraltet sein; maßgeblich ist das [English README](README.md).
 
-Vollständige Implementierung des JT/T 808-Fahrzeugortungsprotokolls für die Versionen 2011/2013/2019 mit über 70 standardisierten Nachrichtenkörpern, den SuBiao/YueBiao-Erweiterungen für aktive Sicherheit, JT/T 1078-Audio/Video-Nachrichten, dem JT/T 19056-Fahrtschreiberprotokoll und Message-Queue-Integration.
+Eine vollständige Implementierung des JT/T 808-Fahrzeugortungsprotokolls, die die Versionen 2011/2013/2019 mit über 70 standardisierten Nachrichtenkörpern, die Active-Safety-Erweiterungen SuBiao (Jiangsu) und YueBiao (Guangdong), JT/T 1078-Audio-/Video-Nachrichten, das JT/T 19056-Fahrtschreiberprotokoll sowie die Integration von Message-Queues abdeckt.
+
+Source: https://github.com/NewLifeX/NewLife.JT808  
+NuGet: [NewLife.JT808](https://www.nuget.org/packages/NewLife.JT808)  
+Docs: [Anforderungen](Doc/需求文档.md) / [Architektur](Doc/架构设计.md) / [Funktionsliste](Doc/功能清单.md) / [Benutzerhandbuch](Doc/使用文档.md) / [Lokalisierung](Doc/多语言本地化.md)
 
 ## Hauptmerkmale
 
-- **Vollständiges Protokoll**: 0x7E-Rahmen, 0x7D-Escaping, XOR-Prüfsumme und Teilpaket-Reassemblierung
-- **Umfangreiche Nachrichten**: über 70 Standardkörper für Uplink und Downlink
-- **Drei Versionen**: automatische Feldanpassung über `Version` und `[JT2011]`/`[JT2019]`
-- **Duale Serialisierung**: attributgesteuert sowie `IAccessor` für komplexe Körper
-- **TLV/KLV**: generische Codecs mit stark typisierten Wörterbüchern
-- **Netzwerkschicht**: `JTCodec` für Klebepakete und `JT808Client` mit automatischem Routing
-- **AOT-freundlich**: NativeAOT-Smoke-Projekt für die Kernpfade
-- **Lokalisierung**: 11 Laufzeitsprachen mit englischem Rückfall
+- **Vollständiges Protokoll**: Rahmung nach JT/T 808-2011/2013/2019 mit 0x7E-Begrenzern, 0x7D-Escaping, XOR-Prüfsumme und Reassemblierung von Teilpaketen
+- **Umfangreiche Nachrichtenkörper**: über 70 standardisierte Nachrichtenkörper (0x0001~0x8A00) für Uplink vom Terminal und Downlink von der Plattform
+- **Kompatibilität mit drei Versionen**: automatische Feldanpassung über das Feld `Version` sowie die Attribute `[JT2011]`/`[JT2019]`
+- **Zwei Serialisierungsmodi**: attributgesteuerte Reflexion für einfache Körper, `IAccessor` für komplexe Körper mit manueller Steuerung
+- **TLV/KLV-Analyse**: integrierte Type-Length-Value- und Kind-Length-Value-Codecs mit stark typisierter Wörterbuchkonvertierung
+- **Netzwerkschicht**: TCP-Klebepaket-Codec `JTCodec` und `JT808Client` mit automatischem Handler-Routing
+- **SuBiao-Erweiterung**: Active-Safety-Alarme ADAS/DSM/TPMS/BSD, Peripheriestatus und Anhangprotokoll
+- **YueBiao-Erweiterung**: Guangdong-Standard für aktive Sicherheit mit eigener Alarmmeldung (0x1FC4), USB-Pass-Through, Positionserweiterungen und Herstellerparametern
+- **JT/T 1078-Grundlagen**: Modelle und Enums für Audio-/Video-Nachrichtenkörper
+- **Fahrtschreiber**: Codec für Uplink- und Downlink-Pakete nach JT/T 19056
+- **BCD-Kodierung**: benutzerdefinierte Serialisierungsattribute für BCD-Zeichenketten und Zeitstempel
+- **GBK-Kodierung**: integrierter GBK-Zeichenketten-Codec mit automatischer Registrierung des `CodePagesEncodingProvider`
+- **Web-API-Verwaltung**: einheitliche Befehlszustellung, Verwaltung von Online-Sitzungen, Blacklist und Token-Authentifizierung
+- **Message-Queue-Abstraktion**: `IMessageBus` erzeugt Producer/Consumer, Sitzungsereignisse und Downlink-Handler; `RedisMessageBus` ist der integrierte interne Transport, während RocketMQ-/Kafka-Adapter im Projekt `JT808.Server` über den Konfigurationsschalter `JT808:Messaging` eingebunden werden
+- **Befehlszustellung im Cluster**: `ClusterState` teilt Online-Sitzungen, Knoten-Heartbeats und die Blacklist über Redis, leitet Befehle an den Knoten weiter, der das Terminal besitzt, und hält `ICommandBus` als Erweiterungspunkt für eigene Transporte bereit
+- **Gehärteter Client**: automatische Wiederverbindung, konfigurierbarer Heartbeat sowie Sende- und Empfangszähler
+- **Unterstützung mehrerer Frameworks**: `net45 / net461 / netstandard2.0 / netstandard2.1 / net8.0`
+- **AOT-freundlich**: NativeAOT-Smoke-Projekt für Codec-, Factory- und Serialisierungspfade
+- **Lokalisierung**: 11 Laufzeitsprachen sofort einsatzbereit, englischer Ausgangstext als Rückfall, AOT-sichere Tabellen
+- **RocketMQ-Integration**: Producer-/Consumer-Adapter im Projekt `JT808.Server` (nicht im NuGet-Paket enthalten) mit Unterstützung für Alibaba Cloud, Huawei Cloud, Tencent Cloud und ACL-Authentifizierung
+- **Kafka-Integration**: Producer-/Consumer-Adapter im Projekt `JT808.Server` (nicht im NuGet-Paket enthalten), basierend auf `Confluent.Kafka` mit Consumergruppen und ACK-Unterstützung
 
-## Protokollversionen
+## Unterstützte Protokollversionen
 
 | Version | Kennzeichen | Beschreibung |
 |---------|-------------|--------------|
-| JT/T 808-2011 | `Version=0` | Frühe Version mit abweichenden Nachrichtenlayouts |
+| JT/T 808-2011 | `Version=0` | Frühe Version mit einigen abweichenden Nachrichtenlayouts |
 | JT/T 808-2013 | `Version=0` | Am weitesten verbreitete Version |
-| JT/T 808-2019 | `Version=1` | Neueste Version mit neuen Feldern und Nachrichten |
+| JT/T 808-2019 | `Version=1` | Neueste Version mit neuen Feldern und Nachrichtentypen |
 
-## Installation
+## Nachrichtenmatrix
 
-```bash
-dotnet add package NewLife.JT808
-```
+| # | Nachrichten-ID | Name | Richtung | Fertig |
+|:---:|:------:|---------|:----:|:----:|
+| 1 | 0x0001 | Allgemeine Antwort des Terminals | Uplink | ✅ |
+| 2 | 0x8001 | Allgemeine Antwort der Plattform | Downlink | ✅ |
+| 3 | 0x0002 | Heartbeat des Terminals | Uplink | ✅ |
+| 4 | 0x8003 | Anforderung zur erneuten Übertragung von Teilpaketen | Downlink | ✅ |
+| 5 | 0x0004 | Anfrage nach der Serverzeit | Uplink | ✅ |
+| 6 | 0x0100 | Registrierung des Terminals | Uplink | ✅ |
+| 7 | 0x8100 | Antwort auf die Registrierung des Terminals | Downlink | ✅ |
+| 8 | 0x0003 | Abmeldung des Terminals | Uplink | ✅ |
+| 9 | 0x0102 | Authentifizierung des Terminals | Uplink | ✅ |
+| 10 | 0x8103 | Terminalparameter setzen | Downlink | ✅ |
+| 11 | 0x8104 | Terminalparameter abfragen | Downlink | ✅ |
+| 12 | 0x0104 | Antwort auf die Abfrage der Terminalparameter | Uplink | ✅ |
+| 13 | 0x8105 | Steuerung des Terminals | Downlink | ✅ |
+| 14 | 0x8106 | Bestimmte Terminalparameter abfragen | Downlink | ✅ |
+| 15 | 0x8107 | Terminalattribute abfragen | Downlink | ✅ |
+| 16 | 0x0107 | Antwort auf die Abfrage der Terminalattribute | Uplink | ✅ |
+| 17 | 0x8108 | Upgrade-Paket an das Terminal übermitteln | Downlink | ✅ |
+| 18 | 0x0108 | Benachrichtigung über das Upgrade-Ergebnis des Terminals | Uplink | ✅ |
+| 19 | 0x0200 | Positionsmeldung | Uplink | ✅ |
+| 20 | 0x8201 | Positionsabfrage | Downlink | ✅ |
+| 21 | 0x0201 | Antwort auf die Positionsabfrage | Uplink | ✅ |
+| 22 | 0x8202 | Steuerung der temporären Positionsverfolgung | Downlink | ✅ |
+| 23 | 0x8203 | Alarm manuell bestätigen | Downlink | ✅ |
+| 24 | 0x8300 | Textnachricht übermitteln | Downlink | ✅ |
+| 25 | 0x8301 | Ereignis einrichten | Downlink | ✅ |
+| 26 | 0x0301 | Ereignismeldung | Uplink | ✅ |
+| 27 | 0x8302 | Frage übermitteln | Downlink | ✅ |
+| 28 | 0x0302 | Antwort auf die Frage | Uplink | ✅ |
+| 29 | 0x8303 | On-Demand-Informationsmenü einrichten | Downlink | ✅ |
+| 30 | 0x0303 | On-Demand-Information / Abbrechen | Uplink | ✅ |
+| 31 | 0x8304 | Informationsdienst | Downlink | ✅ |
+| 32 | 0x8400 | Telefonrückruf | Downlink | ✅ |
+| 33 | 0x8401 | Telefonbuch setzen | Downlink | ✅ |
+| 34 | 0x8500 | Fahrzeugsteuerung | Downlink | ✅ |
+| 35 | 0x0500 | Antwort auf die Fahrzeugsteuerung | Uplink | ✅ |
+| 36 | 0x8600 | Kreisförmigen Bereich setzen | Downlink | ✅ |
+| 37 | 0x8601 | Kreisförmigen Bereich löschen | Downlink | ✅ |
+| 38 | 0x8602 | Rechteckigen Bereich setzen | Downlink | ✅ |
+| 39 | 0x8603 | Rechteckigen Bereich löschen | Downlink | ✅ |
+| 40 | 0x8604 | Polygonen Bereich setzen | Downlink | ✅ |
+| 41 | 0x8605 | Polygonen Bereich löschen | Downlink | ✅ |
+| 42 | 0x8606 | Route setzen | Downlink | ✅ |
+| 43 | 0x8607 | Route löschen | Downlink | ✅ |
+| 44 | 0x8608 | Bereichs- oder Routendaten abfragen | Downlink | ✅ |
+| 45 | 0x0608 | Antwort auf die Abfrage von Bereichs- oder Routendaten | Uplink | ✅ |
+| 46 | 0x8700 | Befehl zum Sammeln von Fahrtschreiberdaten | Downlink | ✅ |
+| 47 | 0x0700 | Hochladen von Fahrtschreiberdaten | Uplink | ✅ |
+| 48 | 0x8701 | Befehl zur Übermittlung von Fahrtschreiberparametern | Downlink | ✅ |
+| 49 | 0x0701 | Meldung des elektronischen Frachtbriefs | Uplink | ✅ |
+| 50 | 0x8702 | Anforderung zur Meldung der Fahreridentität | Downlink | ✅ |
+| 51 | 0x0702 | Meldung der Fahreridentitätsinformationen | Uplink | ✅ |
+| 52 | 0x0704 | Stapelweises Hochladen von Positionsdaten | Uplink | ✅ |
+| 53 | 0x0705 | Hochladen von CAN-Bus-Daten | Uplink | ✅ |
+| 54 | 0x0800 | Multimedia-Ereignismeldung | Uplink | ✅ |
+| 55 | 0x0801 | Hochladen von Multimediadaten | Uplink | ✅ |
+| 56 | 0x8800 | Antwort auf das Hochladen von Multimediadaten | Downlink | ✅ |
+| 57 | 0x8801 | Befehl zur sofortigen Aufnahme durch die Kamera | Downlink | ✅ |
+| 58 | 0x0805 | Antwort auf die sofortige Aufnahme durch die Kamera | Uplink | ✅ |
+| 59 | 0x8802 | Suche nach gespeicherten Multimediadaten | Downlink | ✅ |
+| 60 | 0x0802 | Antwort auf die Suche nach gespeicherten Multimediadaten | Uplink | ✅ |
+| 61 | 0x8803 | Hochladen gespeicherter Multimediadaten | Downlink | ✅ |
+| 62 | 0x8804 | Befehl zum Start der Aufzeichnung | Downlink | ✅ |
+| 63 | 0x8805 | Hochladen einzelner abgerufener gespeicherter Multimediadaten | Downlink | ✅ |
+| 64 | 0x8900 | Downstream-Pass-Through | Downlink | ✅ |
+| 65 | 0x0900 | Upstream-Pass-Through | Uplink | ✅ |
+| 66 | 0x0901 | Meldung komprimierter Daten | Uplink | ✅ |
+| 67 | 0x8A00 | Öffentlicher RSA-Schlüssel der Plattform | Downlink | ✅ |
+| 68 | 0x0005 | Anforderung des Terminals zur erneuten Übertragung von Teilpaketen | Uplink | ✅ |
+| 69 | 0x8204 | Verbindungserkennung | Downlink | ✅ |
+| 70 | 0x6006 | Antwort auf die Zustellung einer Textnachricht | Uplink | ✅ |
+| 71 | 0x1080 | Benutzerdefinierte Nachricht | — | ✅ |
 
 ## Schnellstart
 
+### NuGet-Paket installieren
+
 ```bash
 dotnet add package NewLife.JT808
 ```
+
+### Eine Uplink-Nachricht analysieren
 
 ```csharp
 using NewLife.JT808.Protocols;
 using NewLife.JT808.Models;
 
+// Scan the assembly and register every message type
 var factory = MessageFactory.Instance;
 factory.Init();
 
-var jtMessage = new JTMessage();
-jtMessage.Read(new MemoryStream(raw), null);
+// Raw bytes reported by the terminal
+var raw = new Byte[] { 0x7E, 0x02, 0x00, /* ... */, 0x7E };
 
-if (factory.Parse(jtMessage) is T0200 position)
+// Decode the JTMessage frame
+var jtMessage = new JTMessage();
+var stream = new MemoryStream(raw);
+jtMessage.Read(stream, null);
+
+// Materialize the strongly-typed body by message ID
+var body = factory.Parse(jtMessage);
+if (body is T0200 position)
 {
     Console.WriteLine($"Latitude={position.Latitude / 1_000_000.0}");
     Console.WriteLine($"Longitude={position.Longitude / 1_000_000.0}");
@@ -70,13 +171,99 @@ if (factory.Parse(jtMessage) is T0200 position)
 }
 ```
 
-## Links
+### Eine Downlink-Nachricht erstellen
 
-- Quellcode: https://github.com/NewLifeX/NewLife.JT808
-- NuGet: https://www.nuget.org/packages/NewLife.JT808
-- Dokumentation: [English](README.md) | [简体中文](README.zh-CN.md)
+```csharp
+// Build a platform general response
+var t8001 = new T8001
+{
+    Sequence = jtMessage.Sequence,
+    Kind = jtMessage.Kind,
+    Result = ResultKinds.Success
+};
 
-> NewLife Team · https://newlifex.com
+// Serialize the body
+var ms = new MemoryStream();
+var writer = Helper.CreateWriter(ms, jtMessage);
+writer.TryWrite(null, ref t8001);
+
+// Wrap it in a JTMessage frame
+var reply = new JTMessage
+{
+    Kind = MessageKinds.平台通用应答,
+    Mobile = jtMessage.Mobile,
+    Sequence = (UInt16)(jtMessage.Sequence + 1),
+    Payload = new ArrayPacket(ms.ToArray()),
+    Reply = false
+};
+
+// Emit the complete frame
+var outMs = new MemoryStream();
+reply.Write(outMs, null);
+var frameBytes = outMs.ToArray();
+```
+
+### Einen komplexen Nachrichtenkörper manuell serialisieren (IAccessor)
+
+```csharp
+[MessageKind(MessageKinds.位置信息汇报)]
+public class T0200 : IAccessor
+{
+    public PositionAlarms Alarm { get; set; }
+    public PositionStatus Status { get; set; }
+    public Int32 Latitude { get; set; }
+    public Int32 Longitude { get; set; }
+
+    public Boolean Read(Stream stream, Object context)
+    {
+        var reader = context as Binary ?? Helper.CreateReader(stream);
+        Alarm = (PositionAlarms)reader.ReadUInt32();
+        Status = (PositionStatus)reader.ReadUInt32();
+        Latitude = reader.ReadInt32();
+        Longitude = reader.ReadInt32();
+        // ... remaining fields
+        return true;
+    }
+
+    public Boolean Write(Stream stream, Object context)
+    {
+        var writer = context as Binary ?? Helper.CreateWriter(stream);
+        writer.Write((UInt32)Alarm);
+        writer.Write((UInt32)Status);
+        writer.Write(Latitude);
+        writer.Write(Longitude);
+        // ... remaining fields
+        return true;
+    }
+}
+```
+
+### Lokalisierung
+
+Die Bibliothek enthält 11 Laufzeitsprachen (vereinfachtes und traditionelles Chinesisch, Englisch, Spanisch, Deutsch, Japanisch, Französisch, Portugiesisch, Russisch, Koreanisch und Arabisch). Nachrichten werden über den englischen Ausgangstext adressiert und fallen darauf zurück, wenn eine Übersetzung fehlt.
+
+```csharp
+using System.Globalization;
+using NewLife;
+
+// Follow the process UI culture by default; pin it explicitly if needed
+Localization.Culture = CultureInfo.GetCultureInfo("ja");
+
+// ASP.NET Core hosts can resolve the request language from Accept-Language
+using var scope = RequestCultureScope.Create(Request.Headers.AcceptLanguage);
+```
+
+### NativeAOT
+
+`MessageFactory.Init()` ermittelt die Nachrichtenkörper durch Scannen der Protokollassembly. NativeAOT- oder getrimmte Anwendungen müssen diese Assembly beibehalten:
+
+```xml
+<ItemGroup>
+  <TrimmerRootAssembly Include="NewLife.JT808" />
+</ItemGroup>
+```
+
+Das Projekt `AotSmoke` in diesem Repository wird mit NativeAOT veröffentlicht und führt unter Windows/Linux (x64 und arm64) 16 Szenarien aus.
 
 ## Ökosystem-Karte
 
