@@ -17,6 +17,6 @@
     <PackageReference Include="Avalonia.Desktop" Version="11.2.3" />
     <PackageReference Include="Avalonia.ReactiveUI" Version="11.2.3" />
     <PackageReference Include="Avalonia.Themes.Fluent" Version="11.2.3" />
-    <PackageReference Include="NewLife.Stardust" Version="3.10.2026.1018-beta1738" />
+    <PackageReference Include="NewLife.Stardust" Version="3.10.2026.1021-beta0432" />
   </ItemGroup>
 </Project>
