@@ -3,8 +3,8 @@
 	<PropertyGroup>
 		<TargetFrameworks>net45;net461;netstandard2.0;netstandard2.1;net8.0</TargetFrameworks>
 		<RootNamespace>NewLife.JT808</RootNamespace>
-		<AssemblyTitle>JT808协议</AssemblyTitle>
-		<Description>JT/T 808车辆定位协议完整实现，支持2011/2013/2019版本</Description>
+		<AssemblyTitle>JT808 Protocol Library</AssemblyTitle>
+		<Description>Complete implementation of the JT/T 808 vehicle positioning protocol, covering the 2011, 2013 and 2019 versions.</Description>
 		<Company>新生命开发团队</Company>
 		<Copyright>©2002-2026 新生命开发团队</Copyright>
 		<VersionPrefix>1.1</VersionPrefix>
@@ -23,6 +23,7 @@
 	<PropertyGroup>
 		<PackageId>$(AssemblyName)</PackageId>
 		<Authors>$(Company)</Authors>
+		<PackageDescription>Complete implementation of the JT/T 808 vehicle positioning protocol, covering the 2011, 2013 and 2019 versions. JT/T 808 车辆定位协议完整实现，支持 2011、2013 与 2019 版本；内置粤标/苏标扩展、JT/T 1078 音视频与行车记录仪数据包，原生 AOT 就绪并内置 11 种语言运行时消息。</PackageDescription>
 		<PackageProjectUrl>https://newlifex.com</PackageProjectUrl>
 		<PackageIcon>leaf.png</PackageIcon>
 		<RepositoryUrl>https://github.com/NewLifeX/NewLife.JT808</RepositoryUrl>

@@ -4,6 +4,7 @@ using System.Reflection;
 using NewLife;
 using NewLife.Data;
 using NewLife.JT808.Protocols;
+using NewLife.Log;
 using NewLife.Reflection;
 
 namespace XUnitTest.Protocols;
@@ -513,18 +514,94 @@ public class ProtocolCoverageTests
 
     #region 多语言
     [Fact]
-    [DisplayName("多语言_十一种语言已注册")]
+    [DisplayName("多语言_十一种语言已注册且自有词条可翻译")]
     public void Localization_AllLanguagesRegistered()
     {
         var cultures = new[] { "zh-Hans", "zh-Hant", "ja", "ko", "de", "fr", "es", "pt", "ru", "ar", "en" };
-        foreach (var name in cultures)
+        var saved = Localization.Culture;
+        try
         {
-            Assert.True(Localization.IsSupported(CultureInfo.GetCultureInfo(name)), $"缺少语言表：{name}");
+            foreach (var name in cultures)
+            {
+                var culture = CultureInfo.GetCultureInfo(name);
+                Assert.True(Localization.IsSupported(culture), $"缺少语言表：{name}");
+
+                // Core 自带全部语言，IsSupported 无法证明本库词表已注册；
+                // 必须用本库自有词条验证译文确实生效。
+                Localization.Culture = culture;
+                var text = Localization.Translate("Heartbeat => {0}", 1);
+                if (name == "en")
+                    Assert.Equal("Heartbeat => 1", text);
+                else
+                    Assert.NotEqual("Heartbeat => 1", text);
+            }
+        }
+        finally
+        {
+            Localization.Culture = saved;
         }
 
         // 区域变体按父级匹配
         Assert.True(Localization.IsSupported(CultureInfo.GetCultureInfo("zh-CN")));
         Assert.True(Localization.IsSupported(CultureInfo.GetCultureInfo("zh-TW")));
+    }
+
+    [Fact]
+    [DisplayName("多语言_程序集标题与描述按语言翻译")]
+    public void Localization_AssemblyMetadataTranslated()
+    {
+        var asm = typeof(JTMessage).Assembly;
+        var title = asm.GetCustomAttribute<AssemblyTitleAttribute>()?.Title;
+        var description = asm.GetCustomAttribute<AssemblyDescriptionAttribute>()?.Description;
+        Assert.False(title.IsNullOrEmpty());
+        Assert.False(description.IsNullOrEmpty());
+
+        var saved = Localization.Culture;
+        try
+        {
+            Localization.Culture = CultureInfo.GetCultureInfo("zh-Hans");
+            Assert.Equal("JT/T 808 协议库", Localization.Translate(title!));
+            Assert.Contains("车辆定位", Localization.Translate(description!));
+
+            Localization.Culture = CultureInfo.GetCultureInfo("ja");
+            Assert.Contains("プロトコル", Localization.Translate(title!));
+        }
+        finally
+        {
+            Localization.Culture = saved;
+        }
+    }
+
+    [Fact]
+    [DisplayName("多语言_日志消息随 LogCulture 翻译")]
+    public void Localization_LogMessageTranslated()
+    {
+        var savedCulture = Localization.Culture;
+        var savedLog = Localization.LogCulture;
+        try
+        {
+            // 日志翻译走 Logger.FormatMessage，与真实日志输出同一路径
+            Localization.Culture = CultureInfo.GetCultureInfo("en");
+            Localization.LogCulture = CultureInfo.GetCultureInfo("zh-Hans");
+            Assert.Equal("心跳 => 7", Logger.FormatMessage(null, "Heartbeat => {0}", [7]));
+
+            Localization.LogCulture = CultureInfo.GetCultureInfo("ja");
+            Assert.Contains("ハートビート", Logger.FormatMessage(null, "Heartbeat => {0}", [7]));
+
+            // 固定英文日志语言时不受界面语言影响
+            Localization.LogCulture = CultureInfo.GetCultureInfo("en");
+            Assert.Equal("Heartbeat => 7", Logger.FormatMessage(null, "Heartbeat => {0}", [7]));
+
+            // 未指定日志语言时跟随 Localization.Culture
+            Localization.LogCulture = null;
+            Localization.Culture = CultureInfo.GetCultureInfo("de");
+            Assert.Contains("Herzschlag", Logger.FormatMessage(null, "Heartbeat => {0}", [7]));
+        }
+        finally
+        {
+            Localization.Culture = savedCulture;
+            Localization.LogCulture = savedLog;
+        }
     }
 
     [Fact]

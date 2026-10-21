@@ -328,7 +328,7 @@ public class ClusterState
     public IProducerConsumer<JTCommand> GetCommandQueue(String? node = null)
     {
         node ??= Node;
-        if (node.IsNullOrEmpty()) throw new InvalidOperationException("Cluster node is not set.");
+        if (node.IsNullOrEmpty()) throw new InvalidOperationException(L.T("Cluster node is not set."));
 
         return Cache.GetQueue<JTCommand>(GetCommandTopic(node));
     }

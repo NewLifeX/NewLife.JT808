@@ -47,7 +47,7 @@ public class MemoryMessageBus : IMessageBus
     /// <returns>队列实例</returns>
     public DefaultMsgQueue<T> GetQueue<T>(String topic)
     {
-        if (topic.IsNullOrEmpty()) throw new ArgumentException("Topic is required.", nameof(topic));
+        if (topic.IsNullOrEmpty()) throw new ArgumentException(L.T("Topic is required."), nameof(topic));
 
         var key = topic + "|" + typeof(T).FullName;
         return (DefaultMsgQueue<T>)_queues.GetOrAdd(key, _ => new DefaultMsgQueue<T>(topic));

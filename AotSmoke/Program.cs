@@ -1,8 +1,10 @@
 using System.Globalization;
+using System.Reflection;
 using NewLife;
 using NewLife.Data;
 using NewLife.JT808.Models;
 using NewLife.JT808.Protocols;
+using NewLife.Log;
 using NewLife.Serialization;
 using NewLife.Reflection;
 
@@ -207,26 +209,47 @@ Run("KLV 写读往返", () =>
     if (dic.Count != 3) throw new InvalidOperationException($"条目数量错误：{dic.Count}");
 });
 
-Run("多语言 11 种语言可用", () =>
-{
-    foreach (var name in new[] { "zh-Hans", "zh-Hant", "en", "es", "de", "ja", "fr", "pt", "ru", "ko", "ar" })
-    {
-        if (!Localization.IsSupported(CultureInfo.GetCultureInfo(name))) throw new InvalidOperationException($"缺少语言：{name}");
-    }
-});
-
-Run("多语言 异常消息按语言翻译", () =>
+Run("多语言 11 种语言自有词条可用", () =>
 {
     var saved = Localization.Culture;
     try
     {
-        Localization.Culture = CultureInfo.GetCultureInfo("ja");
-        var text = Localization.Translate("Unsupported type [{0}].", typeof(Int32));
-        if (!text.Contains("未サポート")) throw new InvalidOperationException($"未翻译：{text}");
+        foreach (var name in new[] { "zh-Hans", "zh-Hant", "en", "es", "de", "ja", "fr", "pt", "ru", "ko", "ar" })
+        {
+            var culture = CultureInfo.GetCultureInfo(name);
+            if (!Localization.IsSupported(culture)) throw new InvalidOperationException($"缺少语言：{name}");
+
+            // Core 自带全部语言，必须用本库自有词条验证词表已注册
+            Localization.Culture = culture;
+            var text = Localization.Translate("Heartbeat => {0}", 1);
+            if (name == "en" ? text != "Heartbeat => 1" : text == "Heartbeat => 1")
+                throw new InvalidOperationException($"词表未生效：{name} => {text}");
+        }
     }
     finally
     {
         Localization.Culture = saved;
+    }
+});
+
+Run("多语言 程序集元数据与日志翻译", () =>
+{
+    var saved = Localization.Culture;
+    var savedLog = Localization.LogCulture;
+    try
+    {
+        var title = typeof(JTMessage).Assembly.GetCustomAttribute<AssemblyTitleAttribute>()?.Title ?? "";
+        Localization.Culture = CultureInfo.GetCultureInfo("zh-Hans");
+        if (Localization.Translate(title) != "JT/T 808 协议库") throw new InvalidOperationException($"标题未翻译：{title}");
+
+        Localization.LogCulture = CultureInfo.GetCultureInfo("zh-Hans");
+        var log = Logger.FormatMessage(null, "Heartbeat => {0}", [7]);
+        if (log != "心跳 => 7") throw new InvalidOperationException($"日志未翻译：{log}");
+    }
+    finally
+    {
+        Localization.Culture = saved;
+        Localization.LogCulture = savedLog;
     }
 });
 
