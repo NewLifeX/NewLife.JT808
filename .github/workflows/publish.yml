@@ -46,7 +46,7 @@ jobs:
 
     - name: Verify package layout
       shell: pwsh
-      run: pwsh -NoProfile -File ./check-package.ps1
+      run: pwsh -NoProfile -File ./Tools/Scripts/check-package.ps1
 
     - name: Upload package
       uses: actions/upload-artifact@v4

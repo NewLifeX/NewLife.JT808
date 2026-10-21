@@ -2,8 +2,8 @@
 # 打包脚本改动、目标框架增删、csproj 改名都会让发布包悄悄缺东西，这里在推送前拦下。
 #
 # 用法：
-#   pwsh -File check-package.ps1                          # 校验 out 目录下最新的 nupkg
-#   pwsh -File check-package.ps1 -Path out -Project Newlife.JT808\NewLife.JT808.csproj
+#   pwsh -File Tools/Scripts/check-package.ps1                          # 校验 out 目录下最新的 nupkg
+#   pwsh -File Tools/Scripts/check-package.ps1 -Path out -Project Newlife.JT808\NewLife.JT808.csproj
 param(
     [String]$Path = "out",
     [String]$Project = "Newlife.JT808\NewLife.JT808.csproj",
@@ -12,7 +12,8 @@ param(
 
 $ErrorActionPreference = "Stop"
 
-$root = $PSScriptRoot
+# 脚本位于 Tools\Scripts，仓库根目录在其上两级
+$root = Split-Path -Parent (Split-Path -Parent $PSScriptRoot)
 
 $projPath = if ([IO.Path]::IsPathRooted($Project)) { $Project } else { Join-Path $root $Project }
 if (!(Test-Path -LiteralPath $projPath)) {

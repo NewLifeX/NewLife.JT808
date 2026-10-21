@@ -4,11 +4,12 @@
 # 会随版本变化的数字，不再散落在 11 份 README 里手工维护。
 #
 # 用法：
-#   pwsh -File sync-readme-metrics.ps1           # 按配置重写指标块
-#   pwsh -File sync-readme-metrics.ps1 -Check    # 只校验不写入，不一致退出码 1（CI 使用）
+#   pwsh -File Tools/Scripts/sync-readme-metrics.ps1           # 按配置重写指标块
+#   pwsh -File Tools/Scripts/sync-readme-metrics.ps1 -Check    # 只校验不写入，不一致退出码 1（CI 使用）
 param(
     [Switch]$Check,
-    [String]$Root = $PSScriptRoot,
+    # 默认仓库根：脚本位于 Tools\Scripts，在其上两级；下游复用可显式传入 -Root
+    [String]$Root = (Split-Path -Parent (Split-Path -Parent $PSScriptRoot)),
     [String]$Config = "readme-metrics.json"
 )
 

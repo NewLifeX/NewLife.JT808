@@ -1,14 +1,15 @@
-# 多语言词表一致性校验：键集合、占位符、格式说明符
-# 以基准语言文件（默认 zh-Hans.yml）为准，所有语言必须提供完全相同的键集合
+# 多语言词表一致性校验：键集合、占位符、格式说明符、孤儿键、源码消息回填
+# 以基准语言文件（默认 zh-Hans.yml）为准，所有语言必须提供完全相同的键集合；
+# 源文范围含 .cs 与 .csproj：程序集标题/描述等元数据写在 csproj 中，同样是词表源文。
 #
 # 用法：
-#   pwsh -File check-locales.ps1                                      # Core 默认目录
-#   pwsh -File check-locales.ps1 -LocaleDir src\Lib\Locales -SourceDir src\Lib
-#   pwsh -File check-locales.ps1 -LocaleDir src\Lib\Locales -SkipOrphan   # 下游只想校验词表内部一致性
+#   pwsh -File Tools/Scripts/check-locales.ps1                                      # 本仓默认目录
+#   pwsh -File Tools/Scripts/check-locales.ps1 -LocaleDir src\Lib\Locales -SourceDir src\Lib
+#   pwsh -File Tools/Scripts/check-locales.ps1 -LocaleDir src\Lib\Locales -SkipOrphan   # 下游只想校验词表内部一致性
 param(
-    [String]$LocaleDir = "NewLife.Core\Locales",
+    [String]$LocaleDir = "Newlife.JT808\Locales",
     [String]$Baseline = "zh-Hans.yml",
-    [String[]]$SourceDir = @("NewLife.Core", "NewLife.Core.SourceGenerator"),
+    [String[]]$SourceDir = @("Newlife.JT808", "JT808.Server"),
     [Switch]$SkipOrphan
 )
 
@@ -17,7 +18,8 @@ $ErrorActionPreference = "Stop"
 # 兼容 pwsh -File 调用：逗号分隔的多个目录在该模式下会作为单个字符串传入
 $SourceDir = @($SourceDir | ForEach-Object { $_ -split '[,;]' } | ForEach-Object { $_.Trim() } | Where-Object { $_ })
 
-$root = $PSScriptRoot
+# 脚本位于 Tools\Scripts，仓库根目录在其上两级
+$root = Split-Path -Parent (Split-Path -Parent $PSScriptRoot)
 $localeDir = if ([IO.Path]::IsPathRooted($LocaleDir)) { $LocaleDir } else { Join-Path $root $LocaleDir }
 if (!(Test-Path $localeDir)) {
     Write-Host "未找到语言目录：$localeDir" -ForegroundColor Red
@@ -138,7 +140,7 @@ if (!$SkipOrphan) {
         if ([IO.Path]::IsPathRooted($_)) { $_ } else { Join-Path $root $_ }
     } | Where-Object { Test-Path $_ })
 
-    $sourceText = ($sourceDirs | ForEach-Object { Get-ChildItem $_ -Recurse -Filter *.cs } |
+    $sourceText = ($sourceDirs | ForEach-Object { Get-ChildItem $_ -Recurse -Include *.cs, *.csproj } |
         Where-Object { $_.FullName -notmatch '\\(obj|bin|Locales)\\' } |
         ForEach-Object { [IO.File]::ReadAllText($_.FullName) }) -join "`n"
 
@@ -154,6 +156,25 @@ if (!$SkipOrphan) {
 
 if ($allErrors.Count -gt 0) {
     foreach ($o in $orphans) { Write-Host "孤儿键（源码中找不到）：$o" -ForegroundColor Red }
+}
+
+# 源码消息回填：显式调用 L.T / Localization.Translate 的字面量必须有词条，否则该处永远只能得到英文
+if (!$SkipOrphan) {
+    $callPattern = '(?:L\.T|L\.TLog|Localization\.Translate(?:ForLog)?)\s*\(\s*(?:[A-Za-z_][\w\.]*\s*,\s*)?"((?:[^"\\]|\\.)*)"'
+    $missingMessages = [Collections.Generic.SortedSet[String]]::new([StringComparer]::Ordinal)
+    foreach ($file in ($sourceDirs | ForEach-Object { Get-ChildItem $_ -Recurse -Filter *.cs } |
+        Where-Object { $_.FullName -notmatch '\\(obj|bin|Locales)\\' })) {
+        $text = [IO.File]::ReadAllText($file.FullName)
+        foreach ($m in [regex]::Matches($text, $callPattern)) {
+            $literal = $m.Groups[1].Value.Replace('\"', '"').Replace('\\', '\').Replace('\n', "`n").Replace('\r', "`r").Replace('\t', "`t")
+            if ($literal.Length -eq 0 -or $reference.Entries.Contains($literal)) { continue }
+            [void]$missingMessages.Add($literal)
+        }
+    }
+    foreach ($key in $missingMessages) {
+        $allErrors += "缺少词条（源码已调用 L.T）：$key"
+        Write-Host "缺少词条（源码已调用 L.T）：$key" -ForegroundColor Red
+    }
 }
 
 $count = (Get-ChildItem $localeDir -Filter *.yml).Count

@@ -52,7 +52,7 @@ jobs:
 
     - name: Check locale tables
       shell: pwsh
-      run: pwsh -NoProfile -File ./check-locales.ps1 -LocaleDir Newlife.JT808/Locales -SourceDir Newlife.JT808,JT808.Server
+      run: pwsh -NoProfile -File ./Tools/Scripts/check-locales.ps1 -LocaleDir Newlife.JT808/Locales -SourceDir Newlife.JT808,JT808.Server
 
     - name: Upload test results
       if: always()
