@@ -34,6 +34,8 @@ namespace NewLife.JT808.Protocols
                 var count = stream.Read(data, 0, len);
                 if (count > 0)
                 {
+                    // 声明长度大于实际可读字节时按实际长度截断，避免尾部零填充被当成有效数据
+                    if (count < len) Array.Resize(ref data, count);
                     list.Add(new KLV { Kind = (Byte)kind, Value = data });
                 }
             }
@@ -41,6 +43,9 @@ namespace NewLife.JT808.Protocols
             return list;
         }
 
+        /// <summary>从字节数组解析KLV值</summary>
+        /// <param name="data">KLV字节数组</param>
+        /// <returns>KLV列表</returns>
         public static IList<KLV> Read(Byte[] data) => Read(new MemoryStream(data));
 
         /// <summary>列表式KLV转为字典</summary>
@@ -72,6 +77,9 @@ namespace NewLife.JT808.Protocols
             return dic;
         }
 
+        /// <summary>将KLV列表写入数据流</summary>
+        /// <param name="stream">目标数据流</param>
+        /// <param name="list">KLV列表</param>
         public static void Write(Stream stream, IList<KLV> list)
         {
             foreach (var item in list)

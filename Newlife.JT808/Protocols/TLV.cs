@@ -57,6 +57,9 @@ namespace NewLife.JT808.Protocols
             return list;
         }
 
+        /// <summary>从字节数组解析TLV值</summary>
+        /// <param name="data">TLV字节数组</param>
+        /// <returns>TLV列表</returns>
         public static IList<TLV> Read(byte[] data) => Read(new MemoryStream(data));
 
         /// <summary>列表式TLV转为字典</summary>
@@ -88,6 +91,9 @@ namespace NewLife.JT808.Protocols
             return dic;
         }
 
+        /// <summary>将TLV列表写入数据流</summary>
+        /// <param name="stream">目标数据流</param>
+        /// <param name="list">TLV列表</param>
         public static void Write(Stream stream, IList<TLV> list)
         {
             foreach (var item in list)

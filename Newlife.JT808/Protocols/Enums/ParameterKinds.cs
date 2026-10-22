@@ -138,43 +138,74 @@
         疲劳预警差值 = 0x005C,
         /// <summary>碰撞报警参数</summary>
         碰撞报警参数 = 0x005D,
+        /// <summary>侧翻报警参数</summary>
         侧翻报警参数 = 0x005E,
 
+        /// <summary>定时拍照控制</summary>
         定时拍照控制 = 0x0064,
+        /// <summary>定距拍照控制</summary>
         定距拍照控制 = 0x0065,
 
+        /// <summary>图像质量</summary>
         图像质量 = 0x0070,
+        /// <summary>亮度</summary>
         亮度 = 0x0071,
+        /// <summary>对比度</summary>
         对比度 = 0x0072,
+        /// <summary>饱和度</summary>
         饱和度 = 0x0073,
+        /// <summary>色度</summary>
         色度 = 0x0074,
 
         #region JT1078
+        /// <summary>音视频参数</summary>
         音视频参数 = 0x0075,
+        /// <summary>音视频通道列表</summary>
         音视频通道列表 = 0x0076,
+        /// <summary>单独视频通道</summary>
         单独视频通道 = 0x0077,
+        /// <summary>特殊报警录像</summary>
         特殊报警录像 = 0x0079,
+        /// <summary>视频报警屏蔽字</summary>
         视频报警屏蔽字 = 0x007A,
+        /// <summary>图像分析报警</summary>
         图像分析报警 = 0x007B,
+        /// <summary>终端休眠唤醒模式</summary>
         终端休眠唤醒模式 = 0x007C,
         #endregion
 
+        /// <summary>里程</summary>
         里程 = 0x0080,
+        /// <summary>省份</summary>
         省份 = 0x0081,
+        /// <summary>城市</summary>
         城市 = 0x0082,
+        /// <summary>号牌</summary>
         号牌 = 0x0083,
+        /// <summary>车牌颜色</summary>
         颜色 = 0x0084,
 
+        /// <summary>GNSS定位模式</summary>
         GNSS模式 = 0x0090,
+        /// <summary>GNSS串口波特率</summary>
         GNSS波特率 = 0x0091,
+        /// <summary>GNSS输出频率</summary>
         GNSS输出频率 = 0x0092,
+        /// <summary>GNSS采集频率</summary>
         GNSS采集频率 = 0x0093,
+        /// <summary>GNSS上传方式</summary>
         GNSS上传方式 = 0x0094,
+        /// <summary>GNSS上传设置</summary>
         GNSS上传设置 = 0x0095,
 
+        /// <summary>CAN1采集间隔</summary>
         CAN1采集间隔 = 0x0100,
+        /// <summary>CAN1上传间隔</summary>
         CAN1上传间隔 = 0x0101,
+        /// <summary>CAN2采集间隔</summary>
         CAN2采集间隔 = 0x0102,
+        /// <summary>CAN2上传间隔</summary>
         CAN2上传间隔 = 0x0103,
+        /// <summary>CAN总线ID</summary>
         CAN总线ID = 0x0110,
     }

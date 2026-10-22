@@ -45,6 +45,29 @@ public class TLVKLVTests
     }
 
     [Fact]
+    [DisplayName("KLV_截断数据_按实际长度截取")]
+    public void KLV_Read_Truncated()
+    {
+        // 声明长度 8，实际只有 3 字节
+        var data = new Byte[] { 0x01, 0x08, 0xAA, 0xBB, 0xCC };
+        var items = KLV.Read(data);
+        Assert.Single(items);
+        Assert.Equal(3, items[0].Value.Length);
+        Assert.Equal(new Byte[] { 0xAA, 0xBB, 0xCC }, items[0].Value);
+    }
+
+    [Fact]
+    [DisplayName("TLV_截断数据_按实际长度截取")]
+    public void TLV_Read_Truncated()
+    {
+        // 类型 4 字节 + 长度 1 字节，声明长度 8，实际只有 3 字节
+        var data = new Byte[] { 0x00, 0x00, 0x01, 0x00, 0x08, 0xAA, 0xBB, 0xCC };
+        var items = TLV.Read(data);
+        Assert.Single(items);
+        Assert.Equal(3, items[0].Value.Length);
+    }
+
+    [Fact]
     [DisplayName("TLV_Write_验证输出")]
     public void TLV_Write_ProducesOutput()
     {
