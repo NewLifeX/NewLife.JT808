@@ -1,8 +1,8 @@
 using Microsoft.Extensions.Hosting;
-using Microsoft.Extensions.Hosting;
 using NewLife;
 using NewLife.Log;
 using NewLife.Threading;
+using XCode;
 
 namespace JT808.Server.HostedServices;
 
@@ -33,6 +33,12 @@ public class ClearHostedService : IHostedService
     {
         try
         {
+            // 标记全部实体缓存过期，下次访问时异步刷新
+            foreach (var factory in EntityFactory.Entities.Values)
+            {
+                factory.Session.ClearCache("定时清理");
+            }
+
             // 触发 GC 释放内存
             GC.Collect();
             GC.WaitForPendingFinalizers();
