@@ -85,10 +85,28 @@ public class PositionController
     }
 
     [MessageKind(MessageKinds.位置信息查询)]
-    public Object OnQueryPosition(JT808Session session, JTMessage message)
+    public Object? OnQueryPosition(JT808Session session, JTMessage message)
     {
         XTrace.WriteLine("位置查询：Mobile={0}", message.Mobile);
-        // TODO: 返回位置信息应答
-        return null;
+
+        // 以设备在线状态中的实时位置应答；未登记或不在线的终端不返回
+        var device = Device.FindByMobile(message.Mobile);
+        if (device == null) return null;
+
+        var online = DeviceOnline.FindByDeviceId(device.Id);
+        if (online == null) return null;
+
+        return new T0201
+        {
+            Sequence = message.Sequence,
+            Position = new T0200
+            {
+                Latitude = online.Latitude,
+                Longitude = online.Longitude,
+                Speed = (UInt16)online.Speed,
+                Direction = (UInt16)online.Direction,
+                GPSTime = online.HeartbeatTime,
+            },
+        };
     }
 }
