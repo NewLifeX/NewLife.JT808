@@ -7,5 +7,5 @@ namespace JT808.Web.Areas.Safety;
 [DisplayName("主动安全")]
 public class SafetyArea : AreaBase
 {
-    public SafetyArea() : base(nameof(SafetyArea).TrimEnd("Area")) { }
+    public SafetyArea() : base(nameof(SafetyArea).TrimSuffix("Area")) { }
 }
