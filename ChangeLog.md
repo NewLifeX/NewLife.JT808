@@ -1,5 +1,40 @@
 # NewLife.JT808 版本更新记录
 
+## v1.1.2026.1024 (2026-10-24)
+
+### 协议编解码
+- **位置查询应答**：新增 0x0201 位置信息查询应答消息体
+- **围栏与路线**：补齐 0x8600/0x8602/0x8604/0x8606 设置消息的行标字节编解码
+- **消息体建模修正**：多媒体检索、拍摄应答等消息体字段对齐标准
+- **边界缺陷修复**：KLV 截断、TLV 越界、分包字段顺序与 1 基序号、T0801/T8401/T1FC4 编解码、T0705 时间格式、AlarmDevice 空值
+- **帧读写加固**：转义帧长度计算、帧边界校验、消息工厂并发初始化
+- **苏标/记录仪**：附件帧与行车记录仪数据块定位对齐
+
+### 集群与消息总线
+- **集群共享状态**：管理 API 与网关改为基于 Redis 共享在线会话、节点心跳与黑名单，指令路由到终端所在节点
+- **消息总线**：消息队列抽象接入 `IMessageBus`，外部 RocketMQ/Kafka 通过 `JT808:Messaging` 配置开关启用
+- **适配器分层**：RocketMQ/Kafka 适配器迁至 `JT808.Server`，不随 NuGet 包发布
+- **黑名单**：设备强制断开并限制自动重连次数
+
+### NativeAOT 与多语言
+- **NativeAOT**：新增 `net8.0` 目标与 `IsAotCompatible`，`AotSmoke` 16 场景覆盖帧编解码、消息工厂、TLV/KLV、多语言与 JSON
+- **运行时本地化**：11 种语言、44 条词条；程序集标题/描述与 NuGet 描述本地化
+- **日志与异常翻译**：经 `L.T`/`Logger.FormatMessage` 按 `CurrentUICulture` 翻译，英文源文兜底
+- **AOT CI**：win-x64/linux-x64/linux-arm64 原生冒烟与 IL 告警门禁
+
+### 测试
+- **协议全覆盖**：新增 `ProtocolCoverageTests` 遍历全部消息体往返，全套 172 个用例
+- **多运行时**：net8.0/net9.0/net10.0 三运行时全部通过
+- **补充用例**：内存队列、粤标透传、消息工厂、终端注册与鉴权版本字段
+
+### 工程与发布
+- **解决方案**：迁移 `slnx` 格式，测试 CI 覆盖 Windows/Linux 双平台
+- **发布链路**：改为 Ubuntu runner，同时推送 NuGet.org 与 GitHub Packages，tag 发布时创建 GitHub Release 并附加 `nupkg/snupkg`
+- **质量门禁**：新增 `Tools/Scripts/check-package.ps1` 包内容校验与 README/词表校验脚本
+- **文档**：README 徽章与语言切换行按 Core 规范生成，11 语种全文翻译，生态版图与团队介绍对齐 NewLife.Core
+
+---
+
 ## v1.1.2026.0713 (2026-07-13)
 
 ### Web API 管理接口

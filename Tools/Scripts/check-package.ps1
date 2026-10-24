@@ -3,10 +3,10 @@
 #
 # 用法：
 #   pwsh -File Tools/Scripts/check-package.ps1                          # 校验 out 目录下最新的 nupkg
-#   pwsh -File Tools/Scripts/check-package.ps1 -Path out -Project Newlife.JT808\NewLife.JT808.csproj
+#   pwsh -File Tools/Scripts/check-package.ps1 -Path out -Project Newlife.JT808/NewLife.JT808.csproj
 param(
     [String]$Path = "out",
-    [String]$Project = "Newlife.JT808\NewLife.JT808.csproj",
+    [String]$Project = "Newlife.JT808/NewLife.JT808.csproj",
     [String]$PackageId = "NewLife.JT808"
 )
 

@@ -29,7 +29,7 @@
 		<RepositoryUrl>https://github.com/NewLifeX/NewLife.JT808</RepositoryUrl>
 		<RepositoryType>git</RepositoryType>
 		<PackageTags>物联网;IoT;车联网;GPS;北斗;JT808;JT/T808;新生命团队;NewLife;$(AssemblyName)</PackageTags>
-		<PackageReleaseNotes>新增 Web API 管理接口（统一下发指令/会话管理/黑名单/Token 鉴权）；新增消息队列抽象接口与默认内存实现；新增跨服务器指令下发（Stardust 事件总线）；新增客户端自动重连与心跳管理；重组协议类结构（提取 Interfaces/Attributes/Enums 子目录）；39/39 测试全部通过</PackageReleaseNotes>
+		<PackageReleaseNotes>新增 0x0201 位置查询应答与围栏/路线消息行标字节编解码；集群共享状态改为 Redis 承载在线会话/节点心跳/黑名单；消息队列接入 IMessageBus 并支持外部 RocketMQ/Kafka；新增 net8.0 目标与 NativeAOT 支持（AotSmoke 16 场景）；11 种语言运行时本地化与程序集元数据本地化；修复 KLV 截断、TLV 越界、分包序号、T0801/T8401/T1FC4 编解码等缺陷；172/172 测试用例通过</PackageReleaseNotes>
 		<PackageLicenseExpression>MIT</PackageLicenseExpression>
 		<PublishRepositoryUrl>true</PublishRepositoryUrl>
 		<EmbedUntrackedSources>true</EmbedUntrackedSources>
@@ -55,7 +55,7 @@
 	</ItemGroup>
 
 	<ItemGroup>
-		<PackageReference Include="NewLife.Core" Version="12.0.2026.1021-beta0321" />
+		<PackageReference Include="NewLife.Core" Version="12.0.2026.1024" />
 	</ItemGroup>
 
 	<!-- 发布包支持 NativeAOT：net8.0+ 才启用 AOT/裁剪分析器，旧目标框架保持原样 -->
