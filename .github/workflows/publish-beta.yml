@@ -76,9 +76,8 @@ jobs:
 
     - name: Publish to NuGet
       if: github.event_name != 'pull_request'
-      run: |
-        dotnet nuget push ./out/*.nupkg --skip-duplicate --source https://api.nuget.org/v3/index.json --api-key ${{ secrets.nugetKey }}
-        dotnet nuget push ./out/*.snupkg --skip-duplicate --source https://api.nuget.org/v3/index.json --api-key ${{ secrets.nugetKey }}
+      # 推送 nupkg 时会自动带上同目录的 snupkg 符号包，无需再单独推送
+      run: dotnet nuget push ./out/*.nupkg --skip-duplicate --source https://api.nuget.org/v3/index.json --api-key ${{ secrets.nugetKey }}
 
     - name: Publish to GitHub Packages
       if: github.event_name != 'pull_request'
