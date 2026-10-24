@@ -1,11 +1,12 @@
 # NewLife.JT808 - JT/T 808 Vehicle Tracking Protocol
 
-![GitHub License](https://img.shields.io/github/license/NewLifeX/NewLife.JT808?logo=github)
+![License: MIT](https://img.shields.io/badge/license-MIT-blue.svg?logo=github)
 ![NuGet Downloads](https://img.shields.io/nuget/dt/NewLife.JT808?logo=nuget)
 ![NuGet](https://img.shields.io/nuget/v/NewLife.JT808?logo=nuget)
 ![NuGet prerelease](https://img.shields.io/nuget/vpre/NewLife.JT808?label=dev%20nuget&logo=nuget)
 
-[![test](https://github.com/NewLifeX/NewLife.JT808/actions/workflows/test.yml/badge.svg?branch=master)](https://github.com/NewLifeX/NewLife.JT808/actions/workflows/test.yml)
+[![aot](https://img.shields.io/github/actions/workflow/status/NewLifeX/NewLife.JT808/aot.yml?branch=master&label=aot&logo=dotnet)](https://github.com/NewLifeX/NewLife.JT808/actions/workflows/aot.yml)
+[![test](https://img.shields.io/github/actions/workflow/status/NewLifeX/NewLife.JT808/test.yml?branch=master&label=test&logo=github)](https://github.com/NewLifeX/NewLife.JT808/actions/workflows/test.yml)
 
 <!-- metrics:start -->
 [![AOT smoke](https://img.shields.io/badge/AOT%20smoke-16%2F16-brightgreen?logo=dotnet)](AotSmoke/Program.cs)
@@ -329,3 +330,9 @@ Website: https://newlifex.com · Open source organization: https://github.com/Ne
 ![智能大石头](https://newlifex.com/stone.jpg)
 
 </details>
+
+## License
+
+This project is licensed under [MIT](LICENSE); you may use, modify and redistribute it freely as long as the copyright notice is retained.
+
+> If this project is helpful to you, welcome to Star it, share it with your team, or provide improvement suggestions via Issue/PR.

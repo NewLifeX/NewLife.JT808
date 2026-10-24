@@ -8,9 +8,11 @@
 		<Company>新生命开发团队</Company>
 		<Copyright>©2002-2026 新生命开发团队</Copyright>
 		<VersionPrefix>1.1</VersionPrefix>
-		<VersionSuffix>$([System.DateTime]::Now.ToString(`yyyy.MMdd`))</VersionSuffix>
+		<!-- FileVersion 必须是纯数字四段，不能带 -beta 等预发布后缀；构建日期单独记录 -->
+		<VersionBuild>$([System.DateTime]::Now.ToString(`yyyy.MMdd`))</VersionBuild>
+		<VersionSuffix>$(VersionBuild)</VersionSuffix>
 		<Version>$(VersionPrefix).$(VersionSuffix)</Version>
-		<FileVersion>$(Version)</FileVersion>
+		<FileVersion>$(VersionPrefix).$(VersionBuild)</FileVersion>
 		<AssemblyVersion>$(VersionPrefix).*</AssemblyVersion>
 		<Deterministic>false</Deterministic>
 		<OutputPath>..\Bin</OutputPath>

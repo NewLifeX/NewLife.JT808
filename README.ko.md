@@ -1,11 +1,12 @@
 # NewLife.JT808 - JT/T 808 차량 추적 프로토콜
 
-![GitHub License](https://img.shields.io/github/license/NewLifeX/NewLife.JT808?logo=github)
+![License: MIT](https://img.shields.io/badge/license-MIT-blue.svg?logo=github)
 ![NuGet Downloads](https://img.shields.io/nuget/dt/NewLife.JT808?logo=nuget)
 ![NuGet](https://img.shields.io/nuget/v/NewLife.JT808?logo=nuget)
 ![NuGet prerelease](https://img.shields.io/nuget/vpre/NewLife.JT808?label=dev%20nuget&logo=nuget)
 
-[![test](https://github.com/NewLifeX/NewLife.JT808/actions/workflows/test.yml/badge.svg?branch=master)](https://github.com/NewLifeX/NewLife.JT808/actions/workflows/test.yml)
+[![aot](https://img.shields.io/github/actions/workflow/status/NewLifeX/NewLife.JT808/aot.yml?branch=master&label=aot&logo=dotnet)](https://github.com/NewLifeX/NewLife.JT808/actions/workflows/aot.yml)
+[![test](https://img.shields.io/github/actions/workflow/status/NewLifeX/NewLife.JT808/test.yml?branch=master&label=test&logo=github)](https://github.com/NewLifeX/NewLife.JT808/actions/workflows/test.yml)
 
 <!-- metrics:start -->
 [![AOT smoke](https://img.shields.io/badge/AOT%20smoke-16%2F16-brightgreen?logo=dotnet)](AotSmoke/Program.cs)
@@ -331,3 +332,9 @@ NewLife는 독립적으로 버전이 관리되는 오픈소스 프로젝트의 �
 ![智能大石头](https://newlifex.com/stone.jpg)
 
 </details>
+
+## 라이선스
+
+이 프로젝트는 [MIT](LICENSE) 라이선스로 배포됩니다. 저작권 고지를 유지하는 조건으로 자유롭게 사용, 수정, 재배포할 수 있습니다.
+
+> 이 프로젝트가 도움이 되었다면 Star를 눌러 주시고, 팀에 공유하거나 Issue/PR로 개선 사항을 제안해 주세요.
